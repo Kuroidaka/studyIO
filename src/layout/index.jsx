@@ -1,5 +1,5 @@
 
-import Sidebar from "./Component/Sidebar";
+import Sidebar from "./component/Sidebar";
 import { Fragment } from "react";
 
 const DefaultLayout = ( p ) => {
