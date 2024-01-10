@@ -1,6 +1,6 @@
 const Sidebar = () => {
     return ( 
-        <>hello world</>
+        <></>
      );
 }
  

@@ -1,13 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import { routes } from './Routes/route';
 import GlobalStyles from './GlobalStyle'
-
+import './App.css'; // Liên kết đến file CSS
 
 function App() {
 
   return (
-    <>
-    
+    <div className="App">
     <GlobalStyles />
     <Routes>
         {routes.map((route, idx) => {
@@ -19,7 +18,7 @@ function App() {
                   ></Route>
                 )})}
       </Routes>
-    </> 
+    </div> 
   )
 }
 
