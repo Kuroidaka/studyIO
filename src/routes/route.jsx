@@ -1,7 +1,7 @@
 import { Navigate } from "react-router"
 
 import DefaultLayout from "../Layout/index.jsx"
-import ChatPage from "../Page/chat/index.jsx"
+import ChatPage from "../page/chat/chat.jsx"
 import paths from "./path"
 
 

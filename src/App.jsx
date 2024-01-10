@@ -1,11 +1,14 @@
 import { Routes, Route } from "react-router-dom";
 import { routes } from './Routes/route';
+import GlobalStyles from './GlobalStyle'
 
 
 function App() {
 
   return (
     <>
+    
+    <GlobalStyles />
     <Routes>
         {routes.map((route, idx) => {
           return (<Route 
