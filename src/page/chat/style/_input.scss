@@ -11,11 +11,10 @@
         height: 100%;
         .Content {
             // height: fit-content;
-            align-items: button;
             width: 200px;
             border: 1px solid white;
             border-radius: 10px;
-            padding: 10px;
+            padding: 3px 9px 4px;
             margin-right: 1em;
 
             .Content_head {
@@ -29,6 +28,8 @@
                     justify-content: center;
                     align-items: center;
                     font-size: larger;
+                    font-size: 1rem;
+                    font-weight: 700;
                 }
 
                 .add_button {
@@ -37,7 +38,33 @@
                     justify-content: center;
                     align-items: center;
                     font-size: larger;
-                    cursor: pointer;
+                    
+
+                    label[for="fileInput"] {
+                        display: flex;
+                        justify-content: center;
+                        cursor: pointer;
+                        svg {
+                            width: 15px;
+                        }
+                        div {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 1rem;
+                            font-weight: 700;
+                        }
+
+                        &:hover {
+                            svg {
+                                color: var(--second-color);
+                            }
+                            div {
+                                color: var(--second-color);
+                            }
+                        }
+                    
+                    }
                 }
             }
 
@@ -62,7 +89,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    padding-right: 5px;
+                    padding: 0 5px;
 
                     width: fit-content;
                     color: #BBBBBB;
@@ -70,6 +97,20 @@
                     .delete_button{
                         display: flex;
                         cursor: pointer;
+                        svg {
+                            width: 14px;
+                        }
+                    }
+                    .file_name {
+                        font-size: 1.1rem;
+                        margin-left: 4px;
+                    }
+                    span {
+                        height: 100%;
+                        display: flex;
+                        svg {
+                            width: 9px;
+                        }
                     }
                 }
             }
@@ -114,19 +155,24 @@
                 .file_info {
                     display: flex;
                     align-items: center;
-                    margin-top: 12px;
-                    // padding: 1em;
+                    margin-top: 7px;
                     width: 100%;
-                    padding: 10px;
+                    padding: 6px;
                     border: none;
                     border-radius: 10px;
                     position: relative;
                     background-color: #3E4165;
+                    
+                    svg {
+                        width: 15px;
+                        color: white;
+                    }
 
                     .file_name {
                         flex: 1;
                         color: white;
                         margin-left: 5px;
+                        font-size: 1rem;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
@@ -145,10 +191,26 @@
 
         .Input_area {
             display: flex;
+            gap:10px;
             justify-content: space-between;
             // border: 1px solid white;
             border-radius: 20px;
-            padding: 12px;
+            padding: 9px 10px;
+
+            .attach-btn-wrapper{
+                display: flex;
+                cursor: pointer;
+                width: 30px;
+                height: 30px;
+                justify-content: center;
+                align-items: center;
+                border-radius: 10px;
+                background-color: var(--second-color);
+
+                svg {
+                    width: 16px;
+                }
+            }
 
             input {
                 background-color: rgb(255, 255, 255, 0.0);
@@ -164,6 +226,8 @@
             }
 
             #send_button {
+                display: flex;
+                align-items: center;
                 cursor: pointer;
             }
         }

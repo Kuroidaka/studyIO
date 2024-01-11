@@ -4,7 +4,7 @@ const GlobalStyles = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
     :root {
         --primary-color: #1A1A22;
-        --second-color: #9F9F9F;
+        --second-color: #596bc4;
         --third-color: #5F6399;
         --selected-color: #3E4165;
 
