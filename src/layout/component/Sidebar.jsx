@@ -15,8 +15,7 @@ const Sidebar = () => {
                             <i className="fas fa-ellipsis-h" />
                         </div>
                     </div>
-                    
-
+        
                     <div className="bar">
                         <li className="item"><a href="">History 2</a></li>
                         <div className="setting">
