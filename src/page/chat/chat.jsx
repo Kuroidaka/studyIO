@@ -4,7 +4,6 @@ import InputBox from "./input/index";
 const ChatPage = () => {
     return ( 
         <> 
-        Chat page
         <InputContainer>
             <InputBox />
         </InputContainer>
@@ -15,7 +14,7 @@ const ChatPage = () => {
 export default ChatPage;
 
 const InputContainer = styled.div`
-    width: 800px;
+    width: 100%;
     height: 300px;
     background-color: #127e5a;
 `
