@@ -12,10 +12,67 @@
         .Content {
             // height: fit-content;
             align-items: button;
+            width: 200px;
             border: 1px solid white;
             border-radius: 10px;
             padding: 10px;
             margin-right: 1em;
+
+            .Content_head {
+                display: flex;
+                justify-content: space-between;
+                padding-bottom: 2px;
+
+                .p1 {
+                    // border: 1px solid red;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: larger;
+                }
+
+                .add_button {
+                    // border: 1px solid red;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-size: larger;
+                    cursor: pointer;
+                }
+            }
+
+            hr {
+                border: none;
+                height: 1px;
+                background-color: white;
+            }
+
+            .file_uploaded_area {
+                // border: 1px solid red;
+                margin-top: 5px;
+                // height: 52px;
+                max-height: 52px;  
+                overflow-y: auto; 
+
+                // scroll-behavior: auto;
+                .file_uploaded_container {
+                    // border: 1px solid red;
+                    border-radius: 5px;
+                    background-color: #3E4165;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding-right: 5px;
+
+                    width: fit-content;
+                    color: #BBBBBB;
+                    margin-bottom: 3px;
+                    .delete_button{
+                        display: flex;
+                        cursor: pointer;
+                    }
+                }
+            }
         }
 
         #Icon_Upload {
@@ -28,6 +85,7 @@
             border-radius: 10px;
             padding: 10px;
             margin-right: 1em;
+            cursor: pointer;
         }
 
     }
@@ -46,9 +104,9 @@
 
             .file_container {
                 position: relative;
-                width: 100px;
+                width: 110px;
                 // border: 1px solid red;
-                margin-right: 5px;
+                margin-right: 2px;
                 display: flex;
                 align-items: center;
                 border-radius: 5px;
@@ -103,6 +161,10 @@
             input:focus {
                 outline: none;
                 border: none;
+            }
+
+            #send_button {
+                cursor: pointer;
             }
         }
     }

@@ -1,8 +1,10 @@
 import styled from 'styled-components';
-import { Edit, User , Tv } from 'react-feather';
+import { Edit } from 'react-feather';
 import InputBox from "./input/index";
 
 const ChatPage = () => {
+    
+
     return ( 
         <Container>
             <div className='chat-box'> 
@@ -12,174 +14,177 @@ const ChatPage = () => {
                 </div>
 
                 <BoxChat>
-                    <div className="conversation">
-
-                        <div className='chat-msg human-chat'>
-                            <div className='icon'>
-                                <div className='human-icon-wrapper'>
-                                    <User className='human-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"You"}</p>
-                                <div className='human-text'>
-                                    <p>{"Cộng là gì"}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='chat-msg bot-chat'>
-                            <div className='icon'>
-                                <div className='bot-icon-wrapper'>
-                                    <Tv className='bot-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"StudyIO"}</p>
-                                <div className='bot-text'>
-                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                                    <ol>
-                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                                    </ol>
-                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
-                                </div>
-                            </div>
-                        </div>   
-                        <div className='chat-msg human-chat'>
-                            <div className='icon'>
-                                <div className='human-icon-wrapper'>
-                                    <User className='human-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"You"}</p>
-                                <div className='human-text'>
-                                    <p>{"Cộng là gì"}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='chat-msg bot-chat'>
-                            <div className='icon'>
-                                <div className='bot-icon-wrapper'>
-                                    <Tv className='bot-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"StudyIO"}</p>
-                                <div className='bot-text'>
-                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                                    <ol>
-                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                                    </ol>
-                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
-                                </div>
-                            </div>
-                        </div>   
-                        <div className='chat-msg human-chat'>
-                            <div className='icon'>
-                                <div className='human-icon-wrapper'>
-                                    <User className='human-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"You"}</p>
-                                <div className='human-text'>
-                                    <p>{"Cộng là gì"}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='chat-msg bot-chat'>
-                            <div className='icon'>
-                                <div className='bot-icon-wrapper'>
-                                    <Tv className='bot-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"StudyIO"}</p>
-                                <div className='bot-text'>
-                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                                    <ol>
-                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                                    </ol>
-                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
-                                </div>
-                            </div>
-                        </div>   
-                        <div className='chat-msg human-chat'>
-                            <div className='icon'>
-                                <div className='human-icon-wrapper'>
-                                    <User className='human-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"You"}</p>
-                                <div className='human-text'>
-                                    <p>{"Cộng là gì"}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='chat-msg bot-chat'>
-                            <div className='icon'>
-                                <div className='bot-icon-wrapper'>
-                                    <Tv className='bot-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"StudyIO"}</p>
-                                <div className='bot-text'>
-                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                                    <ol>
-                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                                    </ol>
-                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
-                                </div>
-                            </div>
-                        </div>   
-                        <div className='chat-msg human-chat'>
-                            <div className='icon'>
-                                <div className='human-icon-wrapper'>
-                                    <User className='human-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"You"}</p>
-                                <div className='human-text'>
-                                    <p>{"Cộng là gì"}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='chat-msg bot-chat'>
-                            <div className='icon'>
-                                <div className='bot-icon-wrapper'>
-                                    <Tv className='bot-icon'/>
-                                </div>
-                            </div>
-                            <div className="chat-content">
-                                <p className='chat-person'>{"StudyIO"}</p>
-                                <div className='bot-text'>
-                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                                    <ol>
-                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                                    </ol>
-                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
-                                </div>
-                            </div>
-                        </div>   
+                    <div className='start-screen'>
+                        <p>What can I help you?</p>
                     </div>
+                    {/* <div className="conversation">
+                        
+                        <div className='chat-msg human-chat'>
+                            <div className='icon'>
+                                <div className='human-icon-wrapper'>
+                                    <User className='human-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"You"}</p>
+                                <div className='human-text'>
+                                    <p>{"Cộng là gì"}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='chat-msg bot-chat'>
+                            <div className='icon'>
+                                <div className='bot-icon-wrapper'>
+                                    <Tv className='bot-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"StudyIO"}</p>
+                                <div className='bot-text'>
+                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
+                                    <ol>
+                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
+                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
+                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
+                                    </ol>
+                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
+                                </div>
+                            </div>
+                        </div>   
+                        <div className='chat-msg human-chat'>
+                            <div className='icon'>
+                                <div className='human-icon-wrapper'>
+                                    <User className='human-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"You"}</p>
+                                <div className='human-text'>
+                                    <p>{"Cộng là gì"}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='chat-msg bot-chat'>
+                            <div className='icon'>
+                                <div className='bot-icon-wrapper'>
+                                    <Tv className='bot-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"StudyIO"}</p>
+                                <div className='bot-text'>
+                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
+                                    <ol>
+                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
+                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
+                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
+                                    </ol>
+                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
+                                </div>
+                            </div>
+                        </div>   
+                        <div className='chat-msg human-chat'>
+                            <div className='icon'>
+                                <div className='human-icon-wrapper'>
+                                    <User className='human-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"You"}</p>
+                                <div className='human-text'>
+                                    <p>{"Cộng là gì"}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='chat-msg bot-chat'>
+                            <div className='icon'>
+                                <div className='bot-icon-wrapper'>
+                                    <Tv className='bot-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"StudyIO"}</p>
+                                <div className='bot-text'>
+                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
+                                    <ol>
+                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
+                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
+                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
+                                    </ol>
+                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
+                                </div>
+                            </div>
+                        </div>   
+                        <div className='chat-msg human-chat'>
+                            <div className='icon'>
+                                <div className='human-icon-wrapper'>
+                                    <User className='human-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"You"}</p>
+                                <div className='human-text'>
+                                    <p>{"Cộng là gì"}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='chat-msg bot-chat'>
+                            <div className='icon'>
+                                <div className='bot-icon-wrapper'>
+                                    <Tv className='bot-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"StudyIO"}</p>
+                                <div className='bot-text'>
+                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
+                                    <ol>
+                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
+                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
+                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
+                                    </ol>
+                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
+                                </div>
+                            </div>
+                        </div>   
+                        <div className='chat-msg human-chat'>
+                            <div className='icon'>
+                                <div className='human-icon-wrapper'>
+                                    <User className='human-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"You"}</p>
+                                <div className='human-text'>
+                                    <p>{"Cộng là gì"}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='chat-msg bot-chat'>
+                            <div className='icon'>
+                                <div className='bot-icon-wrapper'>
+                                    <Tv className='bot-icon'/>
+                                </div>
+                            </div>
+                            <div className="chat-content">
+                                <p className='chat-person'>{"StudyIO"}</p>
+                                <div className='bot-text'>
+                                    <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
+                                    <ol>
+                                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
+                                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
+                                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
+                                    </ol>
+                                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
+                                </div>
+                            </div>
+                        </div>  
+                    </div> */}
                 </BoxChat> 
 
                 <InputContainer>
@@ -229,7 +234,18 @@ const BoxChat = styled.div `
     width: 100%;
     height: 84vh;
     
-
+    .start-screen{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 80%;
+        p {
+            font-size: 30px; /* Kích thước chữ to hơn */
+            color: #fff; /* Màu trắng */
+            font-weight: bold; /* Đậm đặc chữ */
+        }
+    }
     .conversation {
         display: flex;
         flex-direction: column;

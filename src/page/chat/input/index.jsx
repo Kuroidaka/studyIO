@@ -1,5 +1,5 @@
 import {
-    Upload, Send, File1, Image, Delete,
+    Upload, Send, File1, File2_2, Image, Image2, Delete, Delete2, AttachFile
 } from "../../../layout/component/Icons/index";
 import '../style/index.scss'
 
@@ -8,7 +8,27 @@ const InputBox = () => {
         <div className='Input'>
             <div className='File_uploaded'>
                 <div className='Content'>
-                    <p>Content</p>
+                    <div className='Content_head'>
+                        <div className='p1'>Files</div>
+                        <div className='add_button'>
+                            <AttachFile />Add
+                        </div>
+                    </div>
+                    <hr />
+                    <div className='file_uploaded_area'>
+                        <div className='file_uploaded_container'>
+                            <span className='delete_button'> <Delete2 /></span> <Image2 />&nbsp;
+                            <p className="file_name">kasdfhi.png</p>
+                        </div>
+                        <div className='file_uploaded_container'>
+                            <span className='delete_button'> <Delete2 /></span> <File2_2 />&nbsp;
+                            <p className="file_name">kadhafsohsddfhi.pdf</p>
+                        </div>
+                        <div className='file_uploaded_container'>
+                            <span className='delete_button'> <Delete2 /></span> <File2_2 />&nbsp;
+                            <p className="file_name">kadhafsohsddfhi.pdf</p>
+                        </div>
+                    </div>
 
                 </div>
                 <div id="Icon_Upload">
@@ -39,7 +59,7 @@ const InputBox = () => {
                 </div>
                 <div className='Input_area'>
                     <input type="text" placeholder="Input your prompt..." />
-                    <Send />
+                    <span id='send_button'><Send /></span>
                 </div>
             </div>
         </div>
