@@ -1,24 +1,25 @@
 import { Routes, Route } from "react-router-dom";
-import { routes } from './Routes/route';
+import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
-import './App.css'; // Liên kết đến file CSS
 
 function App() {
 
   return (
-    <div className="App">
-    <GlobalStyles />
-    <Routes>
+    <>
+
+      <GlobalStyles />
+      <Routes>
         {routes.map((route, idx) => {
-          return (<Route 
-                    key={idx}
-                    exact={route.exact}
-                    path={route.path}
-                    element={route.page}
-                  ></Route>
-                )})}
+          return (<Route
+            key={idx}
+            exact={route.exact}
+            path={route.path}
+            element={route.page}
+          ></Route>
+          )
+        })}
       </Routes>
-    </div> 
+    </>
   )
 }
 
