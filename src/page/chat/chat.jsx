@@ -15,7 +15,10 @@ const ChatPage = () => {
 
                 <BoxChat>
                     <div className="conversation">
-
+                        <div className='start-screen'>
+                            <p>What can I help you?</p>
+                        </div>
+                        {/* 
                         <div className='chat-msg human-chat'>
                             <div className='icon'>
                                 <div className='human-icon-wrapper'>
@@ -180,7 +183,7 @@ const ChatPage = () => {
                                     <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p>
                                 </div>
                             </div>
-                        </div>   
+                        </div>   */}
                     </div>
                 </BoxChat> 
 
@@ -231,6 +234,13 @@ const BoxChat = styled.div `
     width: 100%;
     height: 84vh;
     
+    .start-screen p {
+        font-size: 50px; /* Kích thước chữ to hơn */
+        color: #fff; /* Màu trắng */
+        font-weight: bold; /* Đậm đặc chữ */
+        margin-left: 140px;
+        margin-top: 130px;
+        }
 
     .conversation {
         display: flex;
