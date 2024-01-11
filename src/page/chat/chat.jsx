@@ -1,22 +1,9 @@
-<<<<<<< HEAD
-import './chat.css';
-import { Edit, User , Tv, ChevronLeft, ChevronRight} from 'react-feather';
-import React, { useState } from 'react';
-
-=======
 import styled from 'styled-components';
 import { Edit, User , Tv } from 'react-feather';
 import InputBox from "./input/index";
->>>>>>> f4876c714018efb75a0beef9158af7b887bf3684
 
 const ChatPage = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isChevronRight, setIsChevronRight] = useState(true);
-
-    const handleChevronClick = () => {
-    setIsChevronRight(prevState => !prevState);
-    setSidebarOpen(prevState => !prevState)
-    };
+    
 
     return ( 
         <Container>
@@ -29,12 +16,6 @@ const ChatPage = () => {
                 <BoxChat>
                     <div className="conversation">
 
-<<<<<<< HEAD
-            <div className='chevron' onClick={handleChevronClick}>
-                {isChevronRight ? <ChevronRight className='chevron-icon' /> : <ChevronLeft className='chevron-icon' />}
-            </div>
-        </div>
-=======
                         <div className='chat-msg human-chat'>
                             <div className='icon'>
                                 <div className='human-icon-wrapper'>
@@ -208,7 +189,6 @@ const ChatPage = () => {
                 </InputContainer>
             </div>
         </Container>
->>>>>>> f4876c714018efb75a0beef9158af7b887bf3684
      );
 }
  
