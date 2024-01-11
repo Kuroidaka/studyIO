@@ -1,0 +1,61 @@
+.cover{
+    color: var(--white-text);
+    background-color: var(--primary-color);
+    height: 100vw;
+    width:350px;
+    line-height: 2.5;
+    padding: 10px 30px;
+
+    h2{
+        color: #ffff;
+        font-weight: 600;
+        font-size: 40px;
+    }
+
+    .sidebar{
+        .title{
+            color: var(--second-color);
+            font-size: 25px;
+            margin-bottom: 20px;
+            margin-left: 10px
+        }
+        li{
+            list-style: none;
+            height: 50px; 
+        }
+        .bar{
+            display: flex;
+            position: relative;
+
+            .setting{
+                position: absolute;
+                left: 250px;
+                margin-top: 10px;  
+                display: none;
+            }
+            .item a{
+                font-size: 20px;
+                padding: 12px
+            }
+
+        }
+        .bar:hover .setting{
+            display:block;
+            cursor: pointer;
+        }
+        .bar:hover{
+            background-color: #5F6399;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .Dropdown{
+            width: 160px;
+            padding: 10px;
+            border-radius: 10px;
+            position: absolute;
+            left: 280px;
+            background-color: #313131;
+        }
+        
+    }
+}

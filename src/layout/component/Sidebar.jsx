@@ -1,37 +1,83 @@
-
-// import styled from "styled-components";
-// const StyledComponent = styled.div`
-//     color: red;
-// `
-
-
+import menu from "./Dropdown";
 const Sidebar = () => {
     return ( 
         <>
-          <div className="cover">
+            <div className="cover">
                 <h2>History</h2>
                 <ul className="sidebar">
                     <li className="title">Today</li>
-                    <li><a href="">History 1</a></li>
-                    <li><a href="">History 2</a></li>
-                    <li><a href="">History 3</a></li>
+                    <div className="bar">
+                        <li className="item"><a href="">History 1</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+                    
 
+                    <div className="bar">
+                        <li className="item"><a href="">History 2</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+                    
+                    <div className="bar">
+                        <li className="item"><a href="">History 3</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+                    
                     <li className="title">Previous 2 days</li>
-                    <li><a href="">History 1</a></li>
-                    <li><a href="">History 2</a></li>
-                    <li><a href="">History 3</a></li>
+                    <div className="bar">
+                        <li className="item"><a href="">History 1</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+
+                    <div className="bar">
+                        <li className="item"><a href="">History 2</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+                    
+                    <div className="bar">
+                        <li className="item"><a href="">History 3</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
 
                     <li className="title">Previous 7 days</li>
-                    <li><a href="">History 1</a></li>
-                    <li><a href="">History 2</a></li>
-                    <li><a href="">History 3</a></li>
+                    <div className="bar">
+                        <li className="item"><a href="">History 1</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+
+                    <div className="bar">
+                        <li className="item"><a href="">History 2</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
+                    
+                    <div className="bar">
+                        <li className="item"><a href="">History 3</a></li>
+                        <div className="setting">
+                            <i className="fas fa-ellipsis-h" />
+                        </div>
+                    </div>
                 </ul>
-        </div>
+            </div>
         </>
-
-
      );
 }
- 
+
+
+
 export default Sidebar;
 

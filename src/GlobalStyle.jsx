@@ -49,7 +49,6 @@ const GlobalStyles = createGlobalStyle`
     a {
         color: var(--text-color);
         text-decoration: none;
-        font-size: 20px;
     }
 
     .select-none {
@@ -81,28 +80,7 @@ const GlobalStyles = createGlobalStyle`
             white-space: -moz-pre-wrap;
         }
     }
-    h2{
-        color: #ffff;
-        font-weight: 600;
-        font-size: 40px;
-    }
-    .cover{
-        color: var(--white-text);
-        background-color: var(--primary-color);
-        height: 100vw;
-        width:350px;
-        line-height: 2;
-        padding: 10px 40px;
-        
-    }
-    .title{
-        color: var(--second-color);
-        font-size: 25px;
-    }
-    li{
-        list-style: none;
-        
-    }
+
 `
 
 export default GlobalStyles;
