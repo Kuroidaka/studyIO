@@ -5,19 +5,21 @@ import GlobalStyles from './GlobalStyle'
 function App() {
 
   return (
-    <div>
-    <GlobalStyles />
-    <Routes>
+    <>
+
+      <GlobalStyles />
+      <Routes>
         {routes.map((route, idx) => {
-          return (<Route 
-                    key={idx}
-                    exact={route.exact}
-                    path={route.path}
-                    element={route.page}
-                  ></Route>
-                )})}
+          return (<Route
+            key={idx}
+            exact={route.exact}
+            path={route.path}
+            element={route.page}
+          ></Route>
+          )
+        })}
       </Routes>
-    </div> 
+    </>
   )
 }
 
