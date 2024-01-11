@@ -1,6 +1,6 @@
 import {
     Upload, Send, File1, File2_2, Image, Image2, Delete, Delete2, AttachFile
-} from "../../../layout/component/Icons/index";
+} from "../../../assets/Icons/index";
 import '../style/index.scss'
 
 const InputBox = () => {
