@@ -1,8 +1,17 @@
 import './chat.css';
 import { Edit, User , Tv, ChevronLeft, ChevronRight} from 'react-feather';
+import React, { useState } from 'react';
 
 
 const ChatPage = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [isChevronRight, setIsChevronRight] = useState(true);
+
+    const handleChevronClick = () => {
+    setIsChevronRight(prevState => !prevState);
+    setSidebarOpen(prevState => !prevState)
+    };
+
     return ( 
         <div className='chat-page'> 
             <div className='title'>
@@ -35,7 +44,9 @@ const ChatPage = () => {
                 </div>
             </div>   
 
-            <div className='chevron'><ChevronRight className='chevron-icon'/></div>
+            <div className='chevron' onClick={handleChevronClick}>
+                {isChevronRight ? <ChevronRight className='chevron-icon' /> : <ChevronLeft className='chevron-icon' />}
+            </div>
         </div>
      );
 }
