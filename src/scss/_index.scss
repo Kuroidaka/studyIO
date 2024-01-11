@@ -49,9 +49,11 @@
             }
 
             .file_uploaded_area {
-                border: 1px solid red;
+                // border: 1px solid red;
                 margin-top: 5px;
-                height: 52px;
+                // height: 52px;
+                max-height: 52px;  
+                overflow-y: auto; 
 
                 // scroll-behavior: auto;
                 .file_uploaded_container {
