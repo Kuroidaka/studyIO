@@ -9,6 +9,7 @@ const GlobalStyles = createGlobalStyle`
 
         --white-text: #ffff;
         --black-text: #1e1e1e;
+        --text-color: #ffff;
     }
     
     *, *:before, *:after {
@@ -48,6 +49,7 @@ const GlobalStyles = createGlobalStyle`
     a {
         color: var(--text-color);
         text-decoration: none;
+        font-size: 20px;
     }
 
     .select-none {
@@ -79,6 +81,7 @@ const GlobalStyles = createGlobalStyle`
             white-space: -moz-pre-wrap;
         }
     }
+
 `
 
 export default GlobalStyles;

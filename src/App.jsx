@@ -1,12 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import { routes } from './Routes/route';
+import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
-import './App.css'; // Liên kết đến file CSS
 
 function App() {
 
   return (
-    <div className="App">
+    <div>
     <GlobalStyles />
     <Routes>
         {routes.map((route, idx) => {
