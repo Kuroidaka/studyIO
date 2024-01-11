@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Edit, User , Tv } from 'react-feather';
+import { Edit } from 'react-feather';
 import InputBox from "./input/index";
 
 const ChatPage = () => {
@@ -234,14 +234,18 @@ const BoxChat = styled.div `
     width: 100%;
     height: 84vh;
     
-    .start-screen p {
-        font-size: 50px; /* Kích thước chữ to hơn */
-        color: #fff; /* Màu trắng */
-        font-weight: bold; /* Đậm đặc chữ */
-        margin-left: 140px;
-        margin-top: 130px;
+    .start-screen{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 80%;
+        p {
+            font-size: 30px; /* Kích thước chữ to hơn */
+            color: #fff; /* Màu trắng */
+            font-weight: bold; /* Đậm đặc chữ */
         }
-
+    }
     .conversation {
         display: flex;
         flex-direction: column;
