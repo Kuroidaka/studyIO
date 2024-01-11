@@ -1,6 +1,6 @@
 
+import styled from "styled-components";
 import Sidebar from "./component/Sidebar";
-import { Fragment } from "react";
 
 const DefaultLayout = ( p ) => {
     const { children } = p
@@ -14,15 +14,25 @@ const DefaultLayoutComponent = (p) => {
     const { children } = p
 
     return (
-       <Fragment>
+       <Container>
             <div className="body">
                 <Sidebar />
                 <div className="page-content">
                     {children}
                 </div>
             </div>
-       </Fragment>
+       </Container>
     )
 }
  
 export default DefaultLayout;
+
+const Container = styled.div`
+    width: 100vw;
+    height: 100vh;
+    .body {
+        display: flex;
+        width: 100%;
+        height: 100%;
+    }
+`
