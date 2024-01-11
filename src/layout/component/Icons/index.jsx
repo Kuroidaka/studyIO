@@ -25,13 +25,24 @@ const Delete = () => {
 const AttachFile = () => {
     return <MdAttachFile size={22} />;
 };
-
+const Delete2 = () => {
+    return <TiDelete size={16} />;
+};
+const Image2 = () => {
+    return <FaImage size={16} />;
+};
+const File2_2 = () => {
+    return <FaFile size={16} />;
+};
 export {
     Upload,
     Send,
     File1,
     File2,
+    File2_2,
     Image,
+    Image2,
     Delete,
+    Delete2,
     AttachFile,
 };
