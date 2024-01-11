@@ -1,13 +1,14 @@
 .Input {
     display: flex;
     align-items: end;
-    padding: 1em 10%;
+    padding: 0.2em 10%;
+    height: 100%;
     // justify-content: space-around;
     background-color: #292A38;
     color: white;
-    border: 1px solid red;
 
     .File_uploaded {
+        height: 100%;
         .Content {
             // height: fit-content;
             align-items: button;
@@ -33,6 +34,7 @@
 
     .Input_content {
         width: 100%;
+        height: 100%;
         border: 1px solid white;
         border-radius: 20px;
 
@@ -88,7 +90,6 @@
             justify-content: space-between;
             // border: 1px solid white;
             border-radius: 20px;
-            margin-top: 5px;
             padding: 12px;
 
             input {
