@@ -1,6 +1,6 @@
 
 import styled from "styled-components";
-import Sidebar from "./component/Sidebar";
+import Sidebar from "./component/sidebar/Sidebar";
 import { ChevronRight, ChevronLeft } from 'react-feather';
 import { useState } from "react";
 
@@ -25,18 +25,20 @@ const DefaultLayoutComponent = (p) => {
 
     return (
        <Container>
-            <div className="body">
-                {sidebarOpen && <Sidebar />}
-                <div className="page-content">
-                    <div className="icon-wrapper" onClick={handleChevronClick}>
-                        {isChevronRight
-                        ? <ChevronRight className='chevron-icon'/>
-                        : <ChevronLeft className='chevron-icon'/>
-                        }
-                    </div>
-                    {children}
+        
+        <div className="body">
+            {sidebarOpen && <Sidebar />}
+            <div className="page-content">
+                <div className="icon-wrapper" onClick={handleChevronClick}>
+                    {isChevronRight
+                    ? <ChevronRight className='chevron-icon'/>
+                    : <ChevronLeft className='chevron-icon'/>
+                    }
                 </div>
+                {children}
             </div>
+        </div>
+    
        </Container>
     )
 }
@@ -46,6 +48,8 @@ export default DefaultLayout;
 const Container = styled.div`
     width: 100vw;
     height: 100vh;
+
+
     .body {
         display: flex;
         width: 100%;
@@ -80,5 +84,6 @@ const Container = styled.div`
         }
 
     }
+    
 
 `

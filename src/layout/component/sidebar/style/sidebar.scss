@@ -7,6 +7,7 @@
         width: 100%;
         height: 100%;
         padding: 10px 30px;
+        position: relative;
 
         h2{
             color: #ffff;
@@ -15,9 +16,12 @@
         }
 
         .conversation-list{
-            height: 90vh;
+            height: 83vh;
             margin-top: 18px;
-            overflow-y: scroll;
+            
+            &[aria-hidden="true"]  { overflow-y: scroll; }
+            &[aria-hidden="false"] { overflow-y: visible; }
+
             .title{
                 color: var(--second-color);
                 font-size: 10px;
@@ -36,7 +40,7 @@
                 }
                 .day-ref-list {
     
-                    li{
+                    .conversation{
                         display: flex;
                         position: relative;
                         height: 30px;
@@ -68,7 +72,7 @@
                             }
                         }
                         
-                        &:hover {
+                        &:not(.selected):hover {
                             background-color: var(--third-color);
                             
                             box-sizing: border-box;

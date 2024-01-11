@@ -34,7 +34,9 @@ const GlobalStyles = createGlobalStyle`
         width: 100%;
         line-height: 1.5;
         letter-spacing: .01rem;
+        overflow: hidden;
         height: -webkit-fill-available;
+        
     }
     body {
         ::-webkit-scrollbar{
@@ -46,6 +48,7 @@ const GlobalStyles = createGlobalStyle`
         font-family: Montserrat,Helvetica,Arial,sans-serif;
         font-weight: 400;
         min-height: -webkit-fill-available;
+
     }
     a {
         color: var(--text-color);
