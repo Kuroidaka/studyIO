@@ -1,0 +1,111 @@
+.Input {
+    display: flex;
+    align-items: end;
+    padding: 0.2em 10%;
+    height: 100%;
+    // justify-content: space-around;
+    background-color: #292A38;
+    color: white;
+
+    .File_uploaded {
+        height: 100%;
+        .Content {
+            // height: fit-content;
+            align-items: button;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-right: 1em;
+        }
+
+        #Icon_Upload {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-right: 1em;
+        }
+
+    }
+
+    .Input_content {
+        width: 100%;
+        height: 100%;
+        border: 1px solid white;
+        border-radius: 20px;
+
+        .File_area {
+            // border: 1px solid red;
+            padding: 0 10px;
+            display: flex;
+            color: #292A38;
+
+            .file_container {
+                position: relative;
+                width: 100px;
+                // border: 1px solid red;
+                margin-right: 5px;
+                display: flex;
+                align-items: center;
+                border-radius: 5px;
+
+                .file_info {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 12px;
+                    // padding: 1em;
+                    width: 100%;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 10px;
+                    position: relative;
+                    background-color: #3E4165;
+
+                    .file_name {
+                        flex: 1;
+                        color: white;
+                        margin-left: 5px;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                #Delete_icon {
+                    cursor: pointer;
+                    position: absolute;
+                    top: 3px;
+                    right: -6px;
+                    color: #f7f7f7;
+                }
+            }
+        }
+
+        .Input_area {
+            display: flex;
+            justify-content: space-between;
+            // border: 1px solid white;
+            border-radius: 20px;
+            padding: 12px;
+
+            input {
+                background-color: rgb(255, 255, 255, 0.0);
+                color: white;
+                border: none;
+                width: 95%;
+                padding: 2px;
+            }
+
+            input:focus {
+                outline: none;
+                border: none;
+            }
+        }
+    }
+
+    ;
+}
