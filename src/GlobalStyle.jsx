@@ -41,7 +41,7 @@ const GlobalStyles = createGlobalStyle`
         }
         color: #626262;
         text-rendering: optimizeSpeed;
-        background-color: #FCFCFC;
+        background-color: #292A38;
         font-family: Montserrat,Helvetica,Arial,sans-serif;
         font-weight: 400;
         min-height: -webkit-fill-available;

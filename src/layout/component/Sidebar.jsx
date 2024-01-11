@@ -1,7 +1,10 @@
 import menu from "./Dropdown";
+import './style/sidebar.scss'
+
 const Sidebar = () => {
+
     return ( 
-        <>
+        <div className="container">
             <div className="cover">
                 <h2>History</h2>
                 <ul className="sidebar">
@@ -73,11 +76,10 @@ const Sidebar = () => {
                     </div>
                 </ul>
             </div>
-        </>
+        </div>
      );
 }
 
 
 
 export default Sidebar;
-

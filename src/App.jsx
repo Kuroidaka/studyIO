@@ -2,14 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
 
-
-
 function App() {
 
   return (
-    <>
-    
-    <GlobalStyles/>
+    <div>
+    <GlobalStyles />
     <Routes>
         {routes.map((route, idx) => {
           return (<Route 
@@ -20,8 +17,7 @@ function App() {
                   ></Route>
                 )})}
       </Routes>
-      
-    </> 
+    </div> 
   )
 }
 
