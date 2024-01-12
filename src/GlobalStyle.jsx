@@ -22,10 +22,10 @@ const GlobalStyles = createGlobalStyle`
         margin: 0;
 
         @media screen and (min-width: 769px) {
-            font-size: 1.3rem;          
+            font-size: 1.1rem;          
         }
         @media screen and (max-width: 768px) {
-            font-size: 1.6rem;
+            font-size: 1.3rem;
         }
     }
     html {
