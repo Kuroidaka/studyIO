@@ -1,12 +1,15 @@
 
 import '../style/index.scss'
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import DocsUploaded from "./Docs";
 import Input from './Input';
 import conversationApi from '../../../api/conversation';
-const InputBox = (p) => {
-    const { conId } = p
-  
+import ConversationContext from '../../../context/Conversation.Context';
+const InputBox = () => {
+
+    const { updatedCon, selectedCon, updateLastCon } = useContext(ConversationContext);
+
+    // file docs for upload at the input box
     const [filesDocs, setFilesDocs] = useState([
         { id: 1, type: 'image', name: 'phong_canh.png' },
         { id: 2, type: 'file', name: 'tai_lieu.pdf' },
@@ -50,13 +53,33 @@ const InputBox = (p) => {
         const data ={
             text: inputValue,
             sender: "user",
-            conversationId: conId || ""
+            conversationId: selectedCon.id || ""
         }
+        updatedCon({
+            id:selectedCon.id,
+            dayRef: selectedCon.dayRef,
+            newMsg: {
+                "id": "temp-id",
+                "createdAt": new Date().toISOString(),
+                "updatedAt": new Date().toISOString(),
+                "text": inputValue,
+                "sender": "user",
+                "senderID": "-1",
+                "conversationId": selectedCon.id
+            },
+        })
+
         // console.log(data)
         await sendChat(data)
         .then(res => {
             if(res.statusText === "OK"){
                 console.log(res.data.data)
+                updatedCon({
+                    id: selectedCon.id,
+                    dayRef: selectedCon.dayRef,
+                    newMsg: res.data.data.bot,
+                    newCon: res.data.data.newConversation
+                })
             }
         })
 

@@ -8,8 +8,10 @@ export const ConversationProvider = (p) => {
     const { children } = p
 
     const [list, setList] = useState([])
-    const [selectedCon, setSelectedCon] = useState({id: -1, dayRef: null})
+    const [selectedCon, setSelectedCon] = useState({id: "", dayRef: null})
     const [isLoading, setIsLoading] = useState(true);
+    const [currentMsgList, setCurrentMsgList] = useState([]);
+    
 
     useEffect(() => {
         getCon()
@@ -29,9 +31,15 @@ export const ConversationProvider = (p) => {
         });
     }
 
-    const deleteCon = ({id, dayRef}) => {
+    const deleteCon = async ({id, dayRef}) => {
 
         const day = list.find(item => item.dayRef === dayRef);
+        if(id === selectedCon.id){ //delete id vs current screen id
+            setSelectedCon({id: "", dayRef: null})
+            setCurrentMsgList([])
+
+        }
+
           
         if (day) {
             const originalLength = day.conversationList.length;
@@ -47,17 +55,86 @@ export const ConversationProvider = (p) => {
         console.log('No conversations found for the given day.');
         }
           
-        // conversationApi.deleteConversation(id)
-        // .then(res => {
-        //     if(res.statusText === "OK"){
-        //         console.log(res.data.data)
-        //     }
-        // })
+        await conversationApi.delChat({ conversationId: id })
+        .then(res => {
+            if(res.statusText === "OK"){
+                console.log(res.data.data)
+            }
+        })
 
     }
 
-    const selectCon = ({id, dayRef}) => {
+    const updatedCon = async ({id, dayRef, newMsg, newCon}) => {
+
+        // update current msg list screen
+        setCurrentMsgList(prev => [...prev, newMsg])
+
+        // update conversation list with conversation id
+        const day = list.find(item => item.dayRef === dayRef);
+        if (day) {
+            const conversation = day.conversationList.find(con => con.id === id);
+            if (conversation) {
+                conversation.messages = [...conversation.messages, newMsg];
+                setList([...list]);
+                console.log('Conversation updated successfully.');
+            } else {
+                console.log('No conversation found with the given id.');
+            }
+        } else {
+           if(newCon && newCon.length > 0) {
+            console.log("push", id, dayRef, newMsg, newCon)
+
+            setList(prevList => {
+                return prevList.map(item => {
+                  if (item.dayRef === "Today") {
+                    return {
+                      ...item,
+                      conversationList: [newCon[0],...item.conversationList]
+                    };
+                  } else {
+                    return item;
+                  }
+                });
+            });
+
+            setSelectedCon({id: newCon[0].id, dayRef: "Today"})
+
+           }
+        }
+    }
+
+    const updateLastCon = async ({ newConversation }) => {
+        setList(prevList => {
+            return prevList.map(item => {
+              if (item.dayRef === "Today") {
+                return {
+                  ...item,
+                  conversationList: [newConversation, ...item.conversationList]
+                }
+              } else {
+                return item;
+              }
+            });
+        });
+    }
+
+    const selectCon = async ({id, dayRef}) => {
         setSelectedCon({id, dayRef})
+        console.log("slec", id)
+        const day = list.find(item => item.dayRef === dayRef);
+        
+        if (day) {
+            const conversation = day.conversationList.find(con => con.id === id);
+            
+            if (conversation) {
+                setCurrentMsgList(conversation.messages)
+                
+            } else {
+                console.log('No conversation found with the given id.');
+            }
+        } else {
+            console.log('No conversations found for the given day.');
+        }
     }
 
 
@@ -68,7 +145,11 @@ export const ConversationProvider = (p) => {
         isLoading,
         selectedCon,
         selectCon,
-        deleteCon
+        deleteCon,
+        updatedCon,
+        updateLastCon,
+        currentMsgList,
+        setCurrentMsgList
     }
 
     return (

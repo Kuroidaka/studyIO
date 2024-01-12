@@ -22,15 +22,14 @@ const GlobalStyles = createGlobalStyle`
         margin: 0;
 
         @media screen and (min-width: 769px) {
-            font-size: 1.1rem;          
+            font-size: 1.3rem;          
         }
         @media screen and (max-width: 768px) {
-            font-size: 1.3rem;
+            font-size: 1.6rem;
         }
     }
     html {
-        font-size: 62.5%;
-        font-size: 10px;
+        font-size: 80.5%;
         width: 100%;
         line-height: 1.5;
         letter-spacing: .01rem;

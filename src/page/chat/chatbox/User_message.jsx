@@ -1,11 +1,21 @@
 import styled from "styled-components";
 import { User } from 'react-feather';
+import { useEffect, useRef } from "react";
 
 const UserMsg = (p) => {
 
     const { text } = p;
+
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(scrollToBottom, [text]);
+
     return ( 
-    <Container className='chat-msg human-chat'>
+    <Container className='chat-msg human-chat' ref={messagesEndRef}>
         <div className='icon'>
             <div className='human-icon-wrapper'>
                 <User className='human-icon'/>
@@ -48,13 +58,13 @@ const Container = styled.div`
     .chat-content{
         margin-left: 18px;
         p.chat-person {
-            font-size: 15px;
+            font-size: 20px;
             font-weight: bold;
         }
         .human-text {
 
             p {
-                font-size: 10px;
+                font-size: 15px;
                 font-weight: 500;
                 margin-top: 10px;
             }

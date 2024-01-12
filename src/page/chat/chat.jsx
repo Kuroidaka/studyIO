@@ -9,28 +9,13 @@ import ConversationContext from '../../context/Conversation.Context';
 
 const ChatPage = () => {
     
-    const { conList, selectedCon } = useContext(ConversationContext);  
+    const { conList, selectedCon, setCurrentMsgList } = useContext(ConversationContext);  
     
     
     const [conversationData, setConversationData] = useState({});
     
     useEffect(() => {
-        const search = selectedCon
-        
-        const day = conList.find(item => item.dayRef === search.dayRef);
-        
-        if (day) {
-        const conversation = day.conversationList.find(con => con.id === search.id);
-        
-            if (conversation) {
-                setConversationData(conversation)
-            } else {
-                console.log('No conversation found with the given id.');
-            }
-        } else {
-            console.log('No conversations found for the given day.');
-        }
-
+       
     }, [selectedCon]);
 
     const chatBoxProps = {
