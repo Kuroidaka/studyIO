@@ -48,7 +48,7 @@ const SidebarNav = (p) => {
             )}
             visible={dropdown}
             onClickOutside={() => dropDown.close()}
-            offset={[-10, 0]}
+            offset={[45, -14]}
             placement= 'right'
         >
             <div className="setting">

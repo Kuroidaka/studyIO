@@ -1,0 +1,140 @@
+.Input {
+  display: flex;
+  align-items: end;
+  padding: 0.2em 10%;
+  height: 100%;
+  background-color: #292A38;
+  color: white;
+}
+.Input .File_uploaded {
+  height: 100%;
+}
+.Input .File_uploaded .Content {
+  align-items: button;
+  width: 200px;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 1em;
+}
+.Input .File_uploaded .Content .Content_head {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 2px;
+}
+.Input .File_uploaded .Content .Content_head .p1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+}
+.Input .File_uploaded .Content .Content_head .add_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  cursor: pointer;
+}
+.Input .File_uploaded .Content hr {
+  border: none;
+  height: 1px;
+  background-color: white;
+}
+.Input .File_uploaded .Content .file_uploaded_area {
+  margin-top: 5px;
+  max-height: 52px;
+  overflow-y: auto;
+}
+.Input .File_uploaded .Content .file_uploaded_area .file_uploaded_container {
+  border-radius: 5px;
+  background-color: #3E4165;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 5px;
+  width: -moz-fit-content;
+  width: fit-content;
+  color: #BBBBBB;
+  margin-bottom: 3px;
+}
+.Input .File_uploaded .Content .file_uploaded_area .file_uploaded_container .delete_button {
+  display: flex;
+  cursor: pointer;
+}
+.Input .File_uploaded #Icon_Upload {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-right: 1em;
+  cursor: pointer;
+}
+.Input .Input_content {
+  width: 100%;
+  height: 100%;
+  border: 1px solid white;
+  border-radius: 20px;
+}
+.Input .Input_content .File_area {
+  padding: 0 10px;
+  display: flex;
+  color: #292A38;
+}
+.Input .Input_content .File_area .file_container {
+  position: relative;
+  width: 110px;
+  margin-right: 2px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+}
+.Input .Input_content .File_area .file_container .file_info {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  position: relative;
+  background-color: #3E4165;
+}
+.Input .Input_content .File_area .file_container .file_info .file_name {
+  flex: 1;
+  color: white;
+  margin-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.Input .Input_content .File_area .file_container #Delete_icon {
+  cursor: pointer;
+  position: absolute;
+  top: 3px;
+  right: -6px;
+  color: #f7f7f7;
+}
+.Input .Input_content .Input_area {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 20px;
+  padding: 12px;
+}
+.Input .Input_content .Input_area input {
+  background-color: rgba(255, 255, 255, 0);
+  color: white;
+  border: none;
+  width: 95%;
+  padding: 2px;
+}
+.Input .Input_content .Input_area input:focus {
+  outline: none;
+  border: none;
+}
+.Input .Input_content .Input_area #send_button {
+  cursor: pointer;
+}/*# sourceMappingURL=index.css.map */
