@@ -9,7 +9,7 @@ import ConversationContext from '../../context/Conversation.Context';
 
 const ChatPage = () => {
     
-    const { conList, isLoading, selectedCon } = useContext(ConversationContext);  
+    const { conList, selectedCon } = useContext(ConversationContext);  
     
     
     const [conversationData, setConversationData] = useState({});
@@ -40,6 +40,10 @@ const ChatPage = () => {
         msgList: conversationData.messages,
     }
     
+    const inputBoxProps = {
+        conId: conversationData.id,
+    }
+
     return ( 
         <Container>
             <div className='chat-box'> 
@@ -60,7 +64,7 @@ const ChatPage = () => {
                 </BoxChatContainer> 
 
                 <InputContainer>
-                    <InputBox />
+                    <InputBox {...inputBoxProps}/>
                 </InputContainer>
             </div>
         </Container>
