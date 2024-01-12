@@ -28,10 +28,12 @@ const Dropdown = styled.div`
     padding: 10px;
     border-radius: 10px;
     background-color: #313131;
-
+    margin-top: 106px;
+    margin-left: -12px;
     .dropdown {
 
         ul {
+            
             li {
                 display: flex;
                 align-items: center;
@@ -40,11 +42,13 @@ const Dropdown = styled.div`
                 cursor: pointer;
                 &:hover {
                     background-color: #4d4d4d;
+                    
                 }
                 p {
                     margin-left: 10px;
                     color: white;
                     font-size: 15px;
+                    margin-top: 9px;
                 }
             }
         }
@@ -54,8 +58,8 @@ const Dropdown = styled.div`
 const Icon = styled.i`
     font-size: 20px;
 `
-
 export default Menu;
+
 
 
 

@@ -24,7 +24,7 @@
 
             .title{
                 color: var(--second-color);
-                font-size: 10px;
+                font-size: 20px;
                 margin-bottom: 3px;
                 margin-left: 10px;
                 line-height: 20px;
@@ -47,6 +47,7 @@
                         align-items: center;
                         justify-content: space-between;
                         border-radius: 5px;
+                        
 
                         .setting{
                             display: none;
@@ -61,7 +62,7 @@
                             display: flex;
                             align-items: center;
                             p {
-                                font-size: 13px;
+                                font-size: 14px;
                             }
                         }
 
