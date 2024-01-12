@@ -39,12 +39,11 @@ export const ConversationProvider = (p) => {
             setCurrentMsgList([])
 
         }
-
-          
+        console.log("day", day)
         if (day) {
             const originalLength = day.conversationList.length;
             day.conversationList = day.conversationList.filter(con => con.id !== id);
-            
+            setList([...list]);
             if (day.conversationList.length !== originalLength) {
               console.log('Conversation deleted successfully.');
 

@@ -7,7 +7,8 @@ const Menu = (p) => {
 
     const { deleteCon } = useContext(ConversationContext);
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        e.stopPropagation();
         console.log('delete', conID, dayRef);
         close()
         deleteCon({id: conID, dayRef: dayRef})

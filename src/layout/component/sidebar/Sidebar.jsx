@@ -12,15 +12,13 @@ const Sidebar = (p) => {
         selectedCon,
         selectCon
     } = p
-    const [sidebarList, setSidebarList] = useState(conList)
 
     const hdlSelCon = ({id, dayRef}) => {
+        console.log("select side bar")
         selectCon({id, dayRef})
     }
 
-    useEffect(() => {
-        setSidebarList(conList)
-    }, [conList])
+    console.log("reload sidebar")
 
     return ( 
         <div className="container">
@@ -31,9 +29,9 @@ const Sidebar = (p) => {
                 <>Loading</> 
             ) : (
             <div className="conversation-list" aria-hidden="true">
-            {(sidebarList && sidebarList.length > 0 ) ?
+            {(conList && conList.length > 0 ) ?
                 (
-                    sidebarList.map((item, index) => (
+                    conList.map((item, index) => (
                         <div className="day-ref-section" key={index}>
                            {item.conversationList.length > 0 && <h4 className="title">{item.dayRef}</h4>}
                             <ul className="day-ref-list">

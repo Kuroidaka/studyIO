@@ -48,7 +48,10 @@ const SidebarNav = (p) => {
     
 
     return ( 
-    <li  className={ `conversation ${selectedCon.id == conversation.id ? `selected` : ""}`} onClick={() => hdlSelCon({id: conversation.id, dayRef: dayRef})}>
+    <li className={ `conversation ${selectedCon.id == conversation.id ? `selected` : ""}`} 
+        onClick={() => {
+            hdlSelCon({id: conversation.id, dayRef: dayRef})}
+        }>
         <div className="item">
         <p>{conversation.name}</p>
         </div>
