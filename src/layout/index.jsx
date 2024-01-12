@@ -1,33 +1,54 @@
 
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import Sidebar from "./component/sidebar/Sidebar";
 import { ChevronRight, ChevronLeft } from 'react-feather';
-import { useState } from "react";
+
+import Sidebar from "./component/sidebar/Sidebar";
+import ConversationContext from '../context/Conversation.Context';
+import { ConversationProvider } from "../context/Conversation.Context";
 
 const DefaultLayout = ( p ) => {
     const { children } = p
 
     return (
-        <DefaultLayoutComponent>{children}</DefaultLayoutComponent>
+        
+        <ConversationProvider>
+            <DefaultLayoutComponent>{children}</DefaultLayoutComponent>
+        </ConversationProvider>
+       
     )
 }
 
 const DefaultLayoutComponent = (p) => {
     const { children } = p
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [isChevronRight, setIsChevronRight] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [isChevronRight, setIsChevronRight] = useState(false);
 
     const handleChevronClick = () => {
         setIsChevronRight(prevState => !prevState);
         setSidebarOpen(prevState => !prevState)
     };
+    
+    // conversation
+    const { conList, getConList, isLoading, selectedCon, selectCon } = useContext(ConversationContext);
+
+    useEffect(() => {
+        getConList();
+    }, []);
+
+    const sidebarProps = {
+        isLoading,
+        conList,
+        selectedCon,
+        selectCon
+    }
 
     return (
        <Container>
         
         <div className="body">
-            {sidebarOpen && <Sidebar />}
+            {sidebarOpen && <Sidebar {...sidebarProps}/>}
             <div className="page-content">
                 <div className="icon-wrapper" onClick={handleChevronClick}>
                     {isChevronRight

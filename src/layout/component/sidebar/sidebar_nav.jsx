@@ -7,7 +7,8 @@ const SidebarNav = (p) => {
     const {
         conversation,
         selectedCon,
-        hdlSelCon
+        hdlSelCon,
+        dayRef
     } = p
 
     const [dropdown, setDropdown] = useState(false)
@@ -35,7 +36,7 @@ const SidebarNav = (p) => {
     }
 
     return ( 
-    <li  className={ `conversation ${selectedCon == conversation.id ? `selected` : ""}`} onClick={() => hdlSelCon(conversation.id)}>
+    <li  className={ `conversation ${selectedCon.id == conversation.id ? `selected` : ""}`} onClick={() => hdlSelCon({id: conversation.id, dayRef: dayRef})}>
         <div className="item">
         <p>{conversation.name}</p>
         </div>
@@ -48,7 +49,7 @@ const SidebarNav = (p) => {
             )}
             visible={dropdown}
             onClickOutside={() => dropDown.close()}
-            offset={[-10, 0]}
+            offset={[45, -14]}
             placement= 'right'
         >
             <div className="setting">

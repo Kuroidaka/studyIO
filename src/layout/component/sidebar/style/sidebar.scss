@@ -13,6 +13,7 @@
             color: #ffff;
             font-size: 22px;
             line-height: 32px;
+            margin-left: 10px;
         }
 
         .conversation-list{
@@ -41,6 +42,7 @@
                 .day-ref-list {
     
                     .conversation{
+                        cursor: pointer;
                         display: flex;
                         position: relative;
                         height: 30px;
@@ -68,7 +70,7 @@
                         &.selected{
                             background-color: var(--selected-color);
                             .setting{
-                                display: block;
+                                display: flex;
                             }
                         }
                         
@@ -77,11 +79,15 @@
                             
                             box-sizing: border-box;
                             .setting{
-                                display: block;
+                                display: flex;
                                 cursor: pointer;
                             }
                         }
                     }
+                }
+
+                h4.title {
+                    user-select: none;
                 }
             }
 

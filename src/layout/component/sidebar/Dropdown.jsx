@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 const Menu = () => {
@@ -28,9 +27,10 @@ const Dropdown = styled.div`
     padding: 10px;
     border-radius: 10px;
     background-color: #313131;
-
-    .dropdown {
-
+    // margin-top: 64px;
+    // margin-left: -10px;
+    .dropdown{
+        
         ul {
             li {
                 display: flex;
