@@ -3,6 +3,8 @@ import {
 } from "../../../assets/Icons/index";
 import '../style/index.scss'
 import { useState } from 'react';
+import { motion } from "framer-motion";
+
 const InputBox = () => {
     const [inputValue, setInputValue] = useState('');
     // const [showContent, setShowContent] = useState(false);
@@ -94,8 +96,13 @@ const InputBox = () => {
                         <div className='p1'>Files</div>
                         <div className='add_button'>
                             <label htmlFor="fileInput">
-                                <AttachFile />
-                                <div>Add</div>
+                                <motion.div
+                                    whileHover={{ y: -5 }} // Khi hover, icon sẽ di chuyển lên 5px
+                                >
+                                    <AttachFile />
+                                    <div>Add</div>
+                                </motion.div>
+
                             </label>
                             <input
                                 type="file"
@@ -201,7 +208,11 @@ const InputBox = () => {
                 </div> */}
                 <div className='Input_area'>
                     <label className="attach-btn-wrapper" htmlFor="img_file-Input">
+                    <motion.div
+                        whileHover={{ y: -3 }} // Khi hover, icon sẽ di chuyển lên 5px
+                    >
                         <AttachFile />
+                    </motion.div>
                             <input
                                 type="file"
                                 id="img_file-Input"
