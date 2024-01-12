@@ -3,16 +3,18 @@ import styled from 'styled-components';
 import UserMsg from './User_message';
 import BotMsg from './Bot_message';
 import EmptyBox from './EmptyBox';
+import { useContext } from 'react';
+import ConversationContext from '../../../context/Conversation.Context';
 
-const ChatBox = (p) => {
-    const {
-        msgList
-    } = p
+const ChatBox = () => {
 
-    return ( 
+
+    const { currentMsgList} = useContext(ConversationContext);  
+
+    return (
         <Conversation>
-        {msgList ? (
-                msgList.map((msg, index) => (
+        {currentMsgList && currentMsgList.length > 0  ? (
+                currentMsgList.map((msg, index) => (
                     msg.sender === "user" ? (
                         <UserMsg key={index} text={msg.text}  />
                     ) : (
@@ -40,7 +42,7 @@ const Conversation = styled.div`
     margin: 40px;
     height: 100%;
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
     overflow-y: scroll;
     overflow-x: hidden;
     -ms-overflow-style: none;  /* IE and Edge */
@@ -55,7 +57,7 @@ const Conversation = styled.div`
 
     /*chat*/
     .chat-msg + .chat-msg {
-        margin-top: 20px;
+        margin-top: 40px;
     }
 
     .chat-msg:last-child {

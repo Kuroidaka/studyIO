@@ -9,37 +9,10 @@ import ConversationContext from '../../context/Conversation.Context';
 
 const ChatPage = () => {
     
-    const { conList, isLoading, selectedCon } = useContext(ConversationContext);  
+    const { conList, selectedCon, setCurrentMsgList } = useContext(ConversationContext);  
     
-    
-    const [conversationData, setConversationData] = useState({});
-    
-    useEffect(() => {
-        console.log(selectedCon);
 
-        const search = selectedCon
-        
-        const day = conList.find(item => item.dayRef === search.dayRef);
-        
-        if (day) {
-        const conversation = day.conversationList.find(con => con.id === search.id);
-        
-            if (conversation) {
-                console.log(conversation);
-                setConversationData(conversation)
-            } else {
-                console.log('No conversation found with the given id.');
-            }
-        } else {
-            console.log('No conversations found for the given day.');
-        }
 
-    }, [selectedCon]);
-
-    const chatBoxProps = {
-        msgList: conversationData.messages,
-    }
-    
     return ( 
         <Container>
             <div className='chat-box'> 
@@ -56,7 +29,7 @@ const ChatPage = () => {
                 </motion.div>
 
                 <BoxChatContainer>
-                    <ChatBox {...chatBoxProps}/>
+                    <ChatBox/>
                 </BoxChatContainer> 
 
                 <InputContainer>

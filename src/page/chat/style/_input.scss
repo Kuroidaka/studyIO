@@ -103,7 +103,19 @@
                     .delete_button {
                         display: flex;
                         cursor: pointer;
+                        svg {
+                            width: 14px;
+                        }
 
+                        &:hover {
+                            color: white;
+                        }
+                    }
+                    .load_button {
+                        display: flex;
+                        cursor: pointer;
+                        width: 10px;
+                        
                         svg {
                             width: 14px;
                         }
@@ -245,6 +257,9 @@
                 transition: all 0.3s ease-in-out;
                 // background-color: var(--second-color);
 
+                & > span {
+                    display: flex;
+                }
                 svg {
                     width: 16px;
                 }
