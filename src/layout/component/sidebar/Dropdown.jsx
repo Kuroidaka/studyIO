@@ -1,6 +1,17 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import ConversationContext from "../../../context/Conversation.Context";
 
-const Menu = () => {
+const Menu = (p) => {
+    const { conID, dayRef, close } = p
+
+    const { deleteCon } = useContext(ConversationContext);
+
+    const handleDelete = () => {
+        console.log('delete', conID, dayRef);
+        close()
+        deleteCon({id: conID, dayRef: dayRef})
+    }
 
     return(
     <div>
@@ -11,7 +22,7 @@ const Menu = () => {
                         <Icon><i className="fa-solid fa-pen"></i></Icon>
                         <p>Rename</p>
                     </li>
-                    <li>
+                    <li onClick={handleDelete}>
                         <Icon><i className="fa-regular fa-trash-can"></i></Icon>
                         <p>Delete</p>
                     </li>
@@ -27,6 +38,7 @@ const Dropdown = styled.div`
     padding: 10px;
     border-radius: 10px;
     background-color: #313131;
+    z-index: 1000;
     // margin-top: 64px;
     // margin-left: -10px;
     .dropdown{

@@ -17,7 +17,7 @@
         }
 
         .conversation-list{
-            height: 83vh;
+            height: 80%;
             margin-top: 18px;
             
             &[aria-hidden="true"]  { overflow-y: scroll; }
@@ -76,6 +76,16 @@
                             background-color: var(--selected-color);
                             .setting{
                                 display: flex;
+                            }
+                        }
+
+                        &.hover-effect {
+                            background-color: var(--third-color);
+                            
+                            box-sizing: border-box;
+                            .setting{
+                                display: flex;
+                                cursor: pointer;
                             }
                         }
                         

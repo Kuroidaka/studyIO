@@ -15,8 +15,6 @@ const ChatPage = () => {
     const [conversationData, setConversationData] = useState({});
     
     useEffect(() => {
-        console.log(selectedCon);
-
         const search = selectedCon
         
         const day = conList.find(item => item.dayRef === search.dayRef);
@@ -25,7 +23,6 @@ const ChatPage = () => {
         const conversation = day.conversationList.find(con => con.id === search.id);
         
             if (conversation) {
-                console.log(conversation);
                 setConversationData(conversation)
             } else {
                 console.log('No conversation found with the given id.');

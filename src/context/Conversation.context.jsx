@@ -29,6 +29,33 @@ export const ConversationProvider = (p) => {
         });
     }
 
+    const deleteCon = ({id, dayRef}) => {
+
+        const day = list.find(item => item.dayRef === dayRef);
+          
+        if (day) {
+            const originalLength = day.conversationList.length;
+            day.conversationList = day.conversationList.filter(con => con.id !== id);
+            
+            if (day.conversationList.length !== originalLength) {
+              console.log('Conversation deleted successfully.');
+
+            } else {
+              console.log('No conversation found with the given id.');
+            }
+        } else {
+        console.log('No conversations found for the given day.');
+        }
+          
+        // conversationApi.deleteConversation(id)
+        // .then(res => {
+        //     if(res.statusText === "OK"){
+        //         console.log(res.data.data)
+        //     }
+        // })
+
+    }
+
     const selectCon = ({id, dayRef}) => {
         setSelectedCon({id, dayRef})
     }
@@ -40,7 +67,8 @@ export const ConversationProvider = (p) => {
         getConList: getCon,
         isLoading,
         selectedCon,
-        selectCon
+        selectCon,
+        deleteCon
     }
 
     return (
