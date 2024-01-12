@@ -6,16 +6,17 @@ import { ChevronRight, ChevronLeft } from 'react-feather';
 import Sidebar from "./component/sidebar/Sidebar";
 import ConversationContext from '../context/Conversation.Context';
 import { ConversationProvider } from "../context/Conversation.Context";
+import { FileProvider } from "../context/File.Context";
 
 const DefaultLayout = ( p ) => {
     const { children } = p
 
     return (
-        
-        <ConversationProvider>
-            <DefaultLayoutComponent>{children}</DefaultLayoutComponent>
-        </ConversationProvider>
-       
+        <FileProvider>
+            <ConversationProvider>
+                <DefaultLayoutComponent>{children}</DefaultLayoutComponent>
+            </ConversationProvider>
+        </FileProvider>
     )
 }
 
@@ -31,11 +32,7 @@ const DefaultLayoutComponent = (p) => {
     };
     
     // conversation
-    const { conList, getConList, isLoading, selectedCon, selectCon } = useContext(ConversationContext);
-
-    useEffect(() => {
-        getConList();
-    }, []);
+    const { conList, isLoading, selectedCon, selectCon } = useContext(ConversationContext);
 
     const sidebarProps = {
         isLoading,

@@ -6,10 +6,8 @@ import EmptyBox from './EmptyBox';
 import { useContext } from 'react';
 import ConversationContext from '../../../context/Conversation.Context';
 
-const ChatBox = (p) => {
-    const {
-        msgList
-    } = p
+const ChatBox = () => {
+
 
     const { currentMsgList} = useContext(ConversationContext);  
 

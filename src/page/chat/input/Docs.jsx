@@ -2,11 +2,13 @@ import { useState } from "react";
 import {
     Upload, File2_2, Image2, Delete2, AttachFile
 } from "../../../assets/Icons/index";
+import Load from "../../../component/Load";
 
 const DocsUploaded = (p) => {
-    const { filesDocs, setFilesDocs, handleUploadFile } = p
+    const { filesDocs, setFilesDocs, handleUploadFile, delFile, isLoadingFile } = p
 
     const [hoveredFile, setHoveredFile] = useState(null);
+    const [selectFile, setSelectFile] = useState(null);
 
     const handleMouseEnter = (id) => {
         setHoveredFile(id);
@@ -17,18 +19,19 @@ const DocsUploaded = (p) => {
     };
 
 
-    const handleDeleteClick = (id) => {
-        // Xoá file theo id
-        const updatedFiles = filesDocs.filter(file => file.id !== id);
-        setFilesDocs(updatedFiles);
-        // if (updatedFiles.length === 0) {
-        //     setShowContent(false);
-        // }
+    const handleDeleteClick = (name) => {
+        // Xoá file theo name
+        setSelectFile(name);
+        const callBack = () => {
+            const updatedFiles = filesDocs.filter(file => file.name !== name);
+            setFilesDocs(updatedFiles);
+        }
+        delFile(name, callBack)
     };
 
     return (
         <div className="File_uploaded">
-        {filesDocs.length > 0 ? (
+        {filesDocs && filesDocs.length > 0 ? (
             <div className="Content">
             <div className="Content_head">
                 <div className="p1">Files</div>
@@ -36,11 +39,12 @@ const DocsUploaded = (p) => {
                 <label htmlFor="fileInput">
                     <AttachFile />
                     <div>Add</div>
+                    
                 </label>
                 <input
                     type="file"
                     id="fileInput"
-                    accept=".pdf,.docx,.pptx,"
+                    accept=".pdf,.docx,.pptx"
                     style={{ display: 'none' }}
                     onChange={(e) => handleUploadFile(e, 'docs')}
                     multiple
@@ -56,23 +60,29 @@ const DocsUploaded = (p) => {
                     onMouseEnter={() => handleMouseEnter(file.id)}
                     onMouseLeave={handleMouseLeave}
                 >
-                    {hoveredFile === file.id ? (
-                    <span
-                        className="delete_button"
-                        onClick={() => handleDeleteClick(file.id)}
-                    >
-                        <Delete2 />
-                    </span>
-                    ) : file.type === 'image' ? (
-                    <span>
-                        <Image2 />
-                    </span>
+                    {
+                    (isLoadingFile && selectFile === file.name) ? 
+                    (
+                        <span className="load_button">
+                            <Load type="small"/>
+                        </span>
                     ) : (
-                    <span>
-                        {' '}
-                        <File2_2 />
-                    </span>
-                    )}
+                        hoveredFile === file.id ? (
+                        <span
+                            className="delete_button"
+                            onClick={() => handleDeleteClick(file.name)}
+                        >
+                            <Delete2 />
+                        </span>
+                        ) : (
+                            <span>
+                                <File2_2 />
+                            </span>
+                        ) 
+                    )
+
+  
+                    }
 
                     <p className="file_name">{file.name}</p>
                 </div>
@@ -101,6 +111,7 @@ const DocsUploaded = (p) => {
             <input
                 type="file"
                 id="fileInput"
+                accept=".pdf,.docx,.pptx"
                 style={{ display: 'none' }}
                 onChange={(e) => handleUploadFile(e, 'docs')}
                 multiple

@@ -5,22 +5,20 @@ import DocsUploaded from "./Docs";
 import Input from './Input';
 import conversationApi from '../../../api/conversation';
 import ConversationContext from '../../../context/Conversation.Context';
+import FileContext from '../../../context/File.Context';
+
 const InputBox = () => {
 
-    const { updatedCon, selectedCon, updateLastCon } = useContext(ConversationContext);
-
-    // file docs for upload at the input box
-    const [filesDocs, setFilesDocs] = useState([
-        { id: 1, type: 'image', name: 'phong_canh.png' },
-        { id: 2, type: 'file', name: 'tai_lieu.pdf' },
-        { id: 3, type: 'file', name: 'chinh_sach_moi.pdf' }
-    ]);
+    const { updatedCon, selectedCon } = useContext(ConversationContext);
+    const { filesDocs, setFilesDocs, delFile, isLoadingFile } = useContext(FileContext);
 
     // file image for upload at the input box
-    const [filesImages, setFilesImages] = useState([
-        { id: 1, type: 'image', name: 'phong_canh.png' },
-        { id: 3, type: 'file', name: 'chinh_sach_moi.pdf' }
-    ])
+    const [filesImages, setFilesImages] = useState(
+    [
+        // { id: 1, type: 'image', name: 'phong_canh.png' },
+        // { id: 3, type: 'file', name: 'chinh_sach_moi.pdf' }
+    ]
+    )
 
     const handleUploadFile = (event, fileType) => {
         
@@ -28,6 +26,14 @@ const InputBox = () => {
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
             const newFile = { id: Date.now() + i, type: 'file', name: file.name };
+
+            // const formData = new FormData();
+            // formData.append(file);
+            // const fileDocs = {
+            //     name: file.name,
+            //     size: file.size
+            // }
+            console.log(file)
             fileType ==="docs" 
                 ? setFilesDocs(prevFiles => [...prevFiles, newFile])
                 : setFilesImages(prevFiles => [...prevFiles, newFile]);
@@ -78,14 +84,15 @@ const InputBox = () => {
                     id: selectedCon.id,
                     dayRef: selectedCon.dayRef,
                     newMsg: res.data.data.bot,
-                    newCon: res.data.data.newConversation
+                    newCon: res.data.data.newConversation,
+                    isNewConversation: res.data.data.isNewConversation
                 })
             }
         })
 
     };
 
-    const docsProp = { filesDocs, handleUploadFile, setFilesDocs }
+    const docsProp = { filesDocs, handleUploadFile, setFilesDocs, delFile, isLoadingFile }
     const inputProp = { filesImages, handleUploadFile, setFilesImages, handleSend }
 
     return (

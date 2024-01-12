@@ -11,20 +11,7 @@ const ChatPage = () => {
     
     const { conList, selectedCon, setCurrentMsgList } = useContext(ConversationContext);  
     
-    
-    const [conversationData, setConversationData] = useState({});
-    
-    useEffect(() => {
-       
-    }, [selectedCon]);
 
-    const chatBoxProps = {
-        msgList: conversationData.messages,
-    }
-    
-    const inputBoxProps = {
-        conId: conversationData.id,
-    }
 
     return ( 
         <Container>
@@ -42,11 +29,11 @@ const ChatPage = () => {
                 </motion.div>
 
                 <BoxChatContainer>
-                    <ChatBox {...chatBoxProps}/>
+                    <ChatBox/>
                 </BoxChatContainer> 
 
                 <InputContainer>
-                    <InputBox {...inputBoxProps}/>
+                    <InputBox />
                 </InputContainer>
             </div>
         </Container>

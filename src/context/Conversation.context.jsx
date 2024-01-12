@@ -21,7 +21,6 @@ export const ConversationProvider = (p) => {
         setIsLoading(true); // Set loading to true when the API call starts
         conversationApi.getConversation()
         .then(({data}) => {
-            console.log(data.data);
             setList(data.data);
             setIsLoading(false); // Set loading to false when the API call finishes
         })
@@ -39,7 +38,7 @@ export const ConversationProvider = (p) => {
             setCurrentMsgList([])
 
         }
-        console.log("day", day)
+
         if (day) {
             const originalLength = day.conversationList.length;
             day.conversationList = day.conversationList.filter(con => con.id !== id);
@@ -63,28 +62,16 @@ export const ConversationProvider = (p) => {
 
     }
 
-    const updatedCon = async ({id, dayRef, newMsg, newCon}) => {
+    const updatedCon = async ({id, dayRef, newMsg, newCon, isNewConversation}) => {
 
-        // update current msg list screen
+        // update current msg list screen 
         setCurrentMsgList(prev => [...prev, newMsg])
 
-        // update conversation list with conversation id
-        const day = list.find(item => item.dayRef === dayRef);
-        if (day) {
-            const conversation = day.conversationList.find(con => con.id === id);
-            if (conversation) {
-                conversation.messages = [...conversation.messages, newMsg];
-                setList([...list]);
-                console.log('Conversation updated successfully.');
-            } else {
-                console.log('No conversation found with the given id.');
-            }
-        } else {
-           if(newCon && newCon.length > 0) {
-            console.log("push", id, dayRef, newMsg, newCon)
-
+        // if is new conversation for Bot
+        if(newCon && newCon.length > 0 && isNewConversation)  {
             setList(prevList => {
                 return prevList.map(item => {
+                    console.log("item", item)
                   if (item.dayRef === "Today") {
                     return {
                       ...item,
@@ -97,9 +84,20 @@ export const ConversationProvider = (p) => {
             });
 
             setSelectedCon({id: newCon[0].id, dayRef: "Today"})
+           } else {
+            const day = list.find(item => item.dayRef === dayRef);
 
+                if (day) {
+                    const conversation = day.conversationList.find(con => con.id === id);
+                    if (conversation) {
+                        conversation.messages = [...conversation.messages, newMsg];
+                        setList([...list]);
+                        console.log('Conversation updated successfully.');
+                    } else {
+                        console.log('No conversation found with the given id.');
+                    }
+                }
            }
-        }
     }
 
     const updateLastCon = async ({ newConversation }) => {
@@ -119,7 +117,6 @@ export const ConversationProvider = (p) => {
 
     const selectCon = async ({id, dayRef}) => {
         setSelectedCon({id, dayRef})
-        console.log("slec", id)
         const day = list.find(item => item.dayRef === dayRef);
         
         if (day) {
