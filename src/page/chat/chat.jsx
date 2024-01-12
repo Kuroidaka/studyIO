@@ -1,8 +1,10 @@
-import styled from 'styled-components';
 import { Edit } from 'react-feather';
-import InputBox from "./input/index";
-import ChatBox from './chatbox';
+import styled from 'styled-components';
 import { useContext, useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+
+import ChatBox from './chatbox';
+import InputBox from "./input/index";
 import ConversationContext from '../../context/Conversation.Context';
 
 const ChatPage = () => {
@@ -41,10 +43,17 @@ const ChatPage = () => {
     return ( 
         <Container>
             <div className='chat-box'> 
-                <div className='title'>
-                    <Edit className='Edit-icon' />
-                    <h1>StudyIO</h1>
-                </div>
+
+                <motion.div 
+                    className='title'
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}>
+                    <motion.div className='Edit-icon'>
+                        <Edit />
+                    </motion.div>
+                    <motion.h1>StudyIO</motion.h1>
+                </motion.div>
 
                 <BoxChatContainer>
                     <ChatBox {...chatBoxProps}/>
@@ -76,14 +85,17 @@ const Container = styled.div`
         margin-left: 40px;
         height: 8vh;
         h1 {
-            margin-left: 20px; /* Thay đổi khoảng cách giữa Edit và chữ StudyIO */
+            margin-left: 5px; /* Thay đổi khoảng cách giữa Edit và chữ StudyIO */
             font-size: 20px;   /* Thay đổi kích thước của chữ StudyIO */
             font-style: 'Montserrat';
+            margin-top: 2px;
         }
     
         .Edit-icon {
             width: 35px;
             height: 35px;
+            margin-left: 15px;
+            margin-top: 10px;
         }
     }
     
