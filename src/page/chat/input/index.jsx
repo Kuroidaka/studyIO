@@ -1,4 +1,3 @@
-
 import '../style/index.scss'
 import { useContext, useState } from 'react';
 import DocsUploaded from "./Docs";

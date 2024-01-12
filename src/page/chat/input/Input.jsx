@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
     Send, File1, Image, Delete, AttachFile
 } from "../../../assets/Icons/index";
+import { motion } from "framer-motion";
 
 const Input = (p) => {
     const { filesImages, handleUploadFile, setFilesImages, handleSend } = p
@@ -74,8 +75,11 @@ const Input = (p) => {
             </div>
         </div> */}
         <div className="Input_area">
-            <label className="attach-btn-wrapper" htmlFor="img_file-Input">
-            <AttachFile />
+            <label className="attach-btn-wrapper" htmlFor="img_file-Input"
+              
+            >
+                <motion.span whileHover={{ y: -3 }} ><AttachFile /></motion.span>
+
             <input
                 type="file"
                 id="img_file-Input"

@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import {
-    Upload, File2_2, Image2, Delete2, AttachFile
+    Upload, File2_2, Delete2, AttachFile
 } from "../../../assets/Icons/index";
 import Load from "../../../component/Load";
 
@@ -37,8 +38,12 @@ const DocsUploaded = (p) => {
                 <div className="p1">Files</div>
                 <div className="add_button">
                 <label htmlFor="fileInput">
-                    <AttachFile />
-                    <div>Add</div>
+                    <motion.div
+                        whileHover={{ y: -5 }} // Khi hover, icon sẽ di chuyển lên 5px
+                    >
+                        <AttachFile />
+                        <div>Add</div>
+                    </motion.div>
                     
                 </label>
                 <input
@@ -107,6 +112,7 @@ const DocsUploaded = (p) => {
             <div id="Icon_Upload">
             <label htmlFor="fileInput">
                 <Upload />
+                
             </label>
             <input
                 type="file"

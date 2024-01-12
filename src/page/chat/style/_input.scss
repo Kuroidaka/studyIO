@@ -257,6 +257,9 @@
                 transition: all 0.3s ease-in-out;
                 // background-color: var(--second-color);
 
+                & > span {
+                    display: flex;
+                }
                 svg {
                     width: 16px;
                 }
