@@ -9,6 +9,7 @@
 
     .File_uploaded {
         height: 100%;
+
         .Content {
             // height: fit-content;
             width: 200px;
@@ -38,15 +39,17 @@
                     justify-content: center;
                     align-items: center;
                     font-size: larger;
-                    
+
 
                     label[for="fileInput"] {
                         display: flex;
                         justify-content: center;
                         cursor: pointer;
+
                         svg {
                             width: 15px;
                         }
+
                         div {
                             display: flex;
                             justify-content: center;
@@ -59,11 +62,12 @@
                             svg {
                                 color: var(--second-color);
                             }
+
                             div {
                                 color: var(--second-color);
                             }
                         }
-                    
+
                     }
                 }
             }
@@ -77,11 +81,9 @@
             .file_uploaded_area {
                 // border: 1px solid red;
                 margin-top: 5px;
-                // height: 52px;
-                max-height: 52px;  
-                overflow-y: auto; 
+                max-height: 52px;
+                overflow-y: auto;
 
-                // scroll-behavior: auto;
                 .file_uploaded_container {
                     // border: 1px solid red;
                     border-radius: 5px;
@@ -94,23 +96,40 @@
                     width: fit-content;
                     color: #BBBBBB;
                     margin-bottom: 3px;
-                    .delete_button{
+
+                    .delete_button {
                         display: flex;
                         cursor: pointer;
+
                         svg {
                             width: 14px;
                         }
+
+                        &:hover {
+                            color: white;
+                        }
                     }
+
                     .file_name {
                         font-size: 1.1rem;
                         margin-left: 4px;
                     }
+
                     span {
                         height: 100%;
                         display: flex;
+
                         svg {
                             width: 9px;
                         }
+                    }
+
+                    &:hover {
+                        .file_name {
+                            color: white;
+                        }
+
+                        background-color: var(--second-color);
                     }
                 }
             }
@@ -127,7 +146,13 @@
             padding: 10px;
             margin-right: 1em;
             cursor: pointer;
+
+            &:hover {
+                background-color: var(--second-color);
+                border-color: var(--second-color);
+            }
         }
+
 
     }
 
@@ -162,7 +187,7 @@
                     border-radius: 10px;
                     position: relative;
                     background-color: #3E4165;
-                    
+
                     svg {
                         width: 15px;
                         color: white;
@@ -170,13 +195,14 @@
 
                     .file_name {
                         flex: 1;
-                        color: white;
+                        color: #BBBBBB;
                         margin-left: 5px;
                         font-size: 1rem;
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;
                     }
+
                 }
 
                 #Delete_icon {
@@ -184,31 +210,53 @@
                     position: absolute;
                     top: 3px;
                     right: -6px;
-                    color: #f7f7f7;
+                    color: #BBBBBB;
+
+                    &:hover {
+                        color: white;
+                    }
+
                 }
+
+                &:hover {
+                    .file_name {
+                        color: white;
+                    }
+
+                    .file_info {
+                        background-color: var(--second-color);
+                    }
+                }
+
             }
         }
 
         .Input_area {
             display: flex;
-            gap:10px;
+            gap: 10px;
             justify-content: space-between;
             // border: 1px solid white;
             border-radius: 20px;
             padding: 9px 10px;
 
-            .attach-btn-wrapper{
+            .attach-btn-wrapper {
                 display: flex;
                 cursor: pointer;
                 width: 30px;
                 height: 30px;
                 justify-content: center;
                 align-items: center;
+                border: 1px solid white;
                 border-radius: 10px;
-                background-color: var(--second-color);
+                // background-color: var(--second-color);
 
                 svg {
                     width: 16px;
+                }
+
+                &:hover {
+                    background-color: var(--second-color);
+                    border-color: var(--second-color);
                 }
             }
 
@@ -229,6 +277,10 @@
                 display: flex;
                 align-items: center;
                 cursor: pointer;
+
+                &:hover {
+                    color: var(--second-color);
+                }
             }
         }
     }
