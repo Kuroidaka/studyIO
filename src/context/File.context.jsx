@@ -48,16 +48,14 @@ export const FileProvider = (p) => {
         deleteDB()
     }
 
-    const uploadFile = async (file, callBack) => {
+    const uploadFile = async (formData, ) => {
     
-            const uploadDB = async () => {
+            const uploadDB = async (formData) => {
                 setIsLoading(true); 
-                return fileApi.uploadFile(file)
+                return fileApi.uploadFile(formData)
                 .then((data) => {
                     console.log(data.data);
-                    setList(data.data);
                     setIsLoading(false); // Set loading to false when the API call finishes
-                    callBack()
                 })
                 .catch((error) => {
                     console.error(error);
@@ -65,7 +63,7 @@ export const FileProvider = (p) => {
                 });
             }
     
-            uploadDB() 
+            uploadDB(formData) 
     }
 
     const contextValue = {
