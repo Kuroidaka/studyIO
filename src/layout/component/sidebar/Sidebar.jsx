@@ -28,8 +28,9 @@ const Sidebar = (p) => {
             (
                 <>
                     <div className="body">
-                        <div className="spinner"></div>
-                        <p>Loading</p>
+                        <div className="spinner-wrapper">
+                            <div className="spinner"></div>
+                        </div>
                     </div>
                 </> 
             ) : (

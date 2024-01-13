@@ -1,5 +1,19 @@
 export default function convertStringToHtml(input) {
     // Split the input string by line breaks
+
+    const checkIsImgLink = () => {
+        const urlRegex = /(http[s]?:\/\/){0,1}(\w+:\w+@){0,1}([a-zA-Z0-9.-]+)(:[0-9]+){0,1}(\/[a-zA-Z0-9.-]+)*\/?/;
+        const url = input.match(urlRegex);
+
+        const imageRegex = /\.(jpeg|jpg|gif|png)$/;
+        const isImage = imageRegex.test(url[0]);
+        console.log(isImage); // Outputs: true
+        return isImage;
+    }
+    
+    if(checkIsImgLink(input)) 
+        return `<img src="${input}" alt=""/>`;
+
     var lines = input.split('\n');
 
     // Initialize an empty string to store the final HTML

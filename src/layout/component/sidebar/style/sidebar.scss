@@ -6,7 +6,7 @@
         background-color: var(--primary-color);
         width: 100%;
         height: 100%;
-        padding: 10px 30px;
+        padding: 10px 18px;
         position: relative;
 
         h2{
@@ -45,22 +45,50 @@
                         cursor: pointer;
                         display: flex;
                         position: relative;
+                        margin: 7px 0;
                         height: 30px;
                         align-items: center;
                         justify-content: space-between;
                         border-radius: 5px;
-
+                        transition: all 0.3s ease-in-out;
                         .setting{
                             display: none;
-                            margin-right: 12px;
-                            svg {
-                                font-size: 1.9rem;
+                            height: 100%;
+                            align-items: center;
+                            position: absolute;
+                            right: 0;
+                            justify-content: center;
+                            width: 34%;
+                            
+                            
+
+                            .icon-wrapper {
+                                height: 100%;
+                                display: flex;
+                                width: 100%;
+                                padding-right: 10px;
+                                border-bottom-right-radius: 5px;
+                                border-top-right-radius: 5px;
+                                align-items: center;
+                                justify-content: center;
+                                background: var(--selected-color);
+                                svg {
+                                    background-color: white;
+                                    font-size: 1.9rem;
+                                    transition: all 0.3s ease-in-out;
+                                }
+                            }
+
+                            .gradient-overlay {
+                                background: linear-gradient(to right, transparent, var(--selected-color));
+                                width: 100%;
+                                height: 100%;
                             }
                         }
                         .item {
                             height: 100%;
                             padding: 0px 10px;
-                            width: 86%;
+                            width: 100%;
                             display: flex;
                             align-items: center;
                             p {
@@ -69,6 +97,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 width: 100%;
+                                color: #ebebeb;
                             }
                         }
 
@@ -96,6 +125,19 @@
                             .setting{
                                 display: flex;
                                 cursor: pointer;
+
+                                .icon-wrapper {
+      
+                                    background: var(--third-color);
+                                    svg {
+                                        background-color: white;
+                                    }
+                                }
+    
+                                .gradient-overlay {
+                                    background: linear-gradient(to right, transparent, var(--third-color));
+
+                                }
                             }
                         }
                     }
@@ -109,20 +151,30 @@
         .body{
             display: flex;
             text-align: center;
-            .spinner{
-                width: 25px;
-                height: 25px;
-                display: inline-block;
-                border: 4px solid white;
-                border-radius: 50%;
-                border-top: 4px solid #ff8000;
-                animation: spinner 1.5s linear infinite;
-            }
-            @keyframes spinner {
-                to {
-                  transform: rotate(360deg);
+
+            .spinner-wrapper {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .spinner{
+                    width: 35px;
+                    height: 35px;
+                    display: inline-block;
+                    border: 4px solid white;
+                    border-radius: 50%;
+                    border-top: 4px solid #ff8000;
+                    animation: spinner 1.5s linear infinite;
                 }
-              }
+                @keyframes spinner {
+                    to {
+                      transform: rotate(360deg);
+                    }
+                  }
+
+            }
             p{
                 margin-left: 5px;
             }

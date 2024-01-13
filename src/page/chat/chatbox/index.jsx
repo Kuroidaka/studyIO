@@ -34,12 +34,11 @@ const ChatBox = () => {
 export default ChatBox;
 
 const Conversation = styled.div`
-
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    margin: 40px;
+    margin: 18px;
     height: 100%;
     width: 100%;
     max-width: 700px;
