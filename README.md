@@ -21,32 +21,18 @@ This Application to Support Student Learning that enhances the learning process,
 - Redis, MySQL
 - OpenAI API Key
 ### Installation
-#### Front End: React.js + Vite
+#### Back End: Note.js, Redis, MySQL
 1. Install the Node.js and npm:
 Ensure that Node.js and npm (Node Package Manager) are installed on your machine. You can download and install them from the official website: <a href="https://nodejs.org/en" target="_blank">Node.js</a>.
 2. Clone the repository:
 ```sh
-git clone https://github.com/idaka123/studyIO
+git clone https://github.com/idaka123/Virtual_Assistant_Raine
 ```
 3. Install the dependencies:
 ```sh
 npm install
 ```
-3. Run the project:
-```sh
-npm run dev
-```
-4. Now when you navigate to http://localhost:3001 you will see web response.
-#### Back End: Note.js, Redis, MySQL
-1. Clone the repository:
-```sh
-git clone https://github.com/idaka123/Virtual_Assistant_Raine
-```
-2. Install the dependencies:
-```sh
-npm install
-```
-3. Install Redis:
+4. Install Redis:
 ##### On MacOS:
 ```sh
 brew install redis
@@ -54,7 +40,7 @@ brew install redis
 ##### On Windows:
 - Download Redis from the <a href="https://redis.io/download/" target="_blank">official Redis download page</a>.
 - Extract the downloaded file and run redis-server.exe.
-4. Install MySQL:
+5. Install MySQL:
 ##### On MacOS:
 ```sh
 brew install mysql
@@ -63,7 +49,7 @@ brew services start mysql
 ##### On Windows:
 - Download MySQL Installer from the <a href="https://www.mysql.com/downloads/" target="_blank">official MySQL download page</a>.
 - Run the installer and follow the installation instructions.
-5. Create a .env file in the root folder and add your API keys in the following format:
+6. Create a .env file in the root folder and add your API keys in the following format:
 ```sh
 NODE_ENV=statging
  
@@ -112,7 +98,7 @@ SERPER_API_KEY="YOUR_API_KEY"
 BROWERLESS_API_KEY="YOUR_API_KEY"
 
 ```
-5. Run the project:
+7. Run the project:
 ```sh
 npm run build
 ```
@@ -120,6 +106,21 @@ Or
 ```sh
 npm run dev 
 ```
+
+#### Front End: React.js + Vite
+1. Clone the repository:
+```sh
+git clone https://github.com/idaka123/studyIO
+```
+2. Install the dependencies:
+```sh
+npm install
+```
+3. Run the project:
+```sh
+npm run dev
+```
+4. Now when you navigate to http://localhost:3001 you will see web response.
 
 
 ## Contributing
