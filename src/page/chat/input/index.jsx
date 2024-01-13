@@ -38,9 +38,16 @@ const InputBox = () => {
 
     };
     const handleEnterKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            setInputValue('');
+        if (event.key === 'Enter' && !event.shiftKey) {
+            // Ngăn chặn sự kiện Enter mặc định (ngăn chặn việc gửi form)
+            event.preventDefault();
+            // Xử lý khi nhấn Enter
+            setInputValue((prevValue) => prevValue + '\n');
+            // break;
         }
+        // if (event.key === 'Enter') {
+        //     setInputValue('');
+        // }
     };
     // const [files, setFiles] = useState([
     //     { id: 1, type: 'file', name: 'Tên file 1' },
