@@ -9,9 +9,11 @@ import ConversationContext from '../../context/Conversation.Context';
 
 const ChatPage = () => {
     
-    const { conList, selectedCon, setCurrentMsgList } = useContext(ConversationContext);  
+    const { createNewConversation } = useContext(ConversationContext);  
     
-
+    const handleOpenNewChat = () => {
+        createNewConversation()
+    }
 
     return ( 
         <Container>
@@ -22,7 +24,7 @@ const ChatPage = () => {
                     initial={{ opacity: 0, x: -100 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5 }}>
-                    <motion.div className='Edit-icon'>
+                    <motion.div className='Edit-icon' onClick={handleOpenNewChat}>
                         <Edit />
                     </motion.div>
                     <motion.h1>StudyIO</motion.h1>
@@ -68,6 +70,7 @@ const Container = styled.div`
             width: 35px;
             height: 35px;
             margin-left: 15px;
+            cursor: pointer;
             margin-top: 10px;
         }
     }

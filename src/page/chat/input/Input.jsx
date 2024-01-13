@@ -15,8 +15,10 @@ const Input = (p) => {
     };
 
     const handleSendButtonClick = () => {
-        setInputValue('');
-        handleSend(inputValue)
+        if(inputValue !== '') {
+            setInputValue('');
+            handleSend(inputValue)
+        }
         // setFiles([]);
         // if (uploadedFiles.length > 0) {
         //     setShowContent(true);

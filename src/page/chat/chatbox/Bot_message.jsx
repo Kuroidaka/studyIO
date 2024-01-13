@@ -94,13 +94,13 @@ const Container = styled.div`
                 img {
                     width: 100%;
                     max-width: 350px;
-                    margin-top: 10px;
+                    margin: 10px 0;
                     /* cursor: pointer; */
                 }
                 p {
                     font-size: 15px;   /* Thay đổi kích thước của chữ StudyIO */
                     font-weight: 500;
-                    margin-top: 10px;
+                    margin: 10px 0;
                 }
     
                 ol {
@@ -109,7 +109,7 @@ const Container = styled.div`
                     li {
                         font-size: 15px;   /* Thay đổi kích thước của chữ StudyIO */
                         font-weight: 500;
-                        margin-top: 10px;
+                        margin: 10px 0;
                     }
     
                 }
