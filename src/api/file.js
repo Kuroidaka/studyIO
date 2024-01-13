@@ -17,17 +17,15 @@ const fileApi = {
 
         return axiosClient.post(url, dataBody)
     },
-    uploadFile: async (listFile) => {
-        const url = `/openai/upload-file`;
+    uploadFile: async (formData) => {
+        const url = `/studyio/file/upload`;
 
-        const dataBody = {
-            data: {
-                files: listFile
-            },
-            type: "StudyIO"
-        }
-
-        return axiosClient.post(url, dataBody)
+        return axiosClient.post(url, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
+        )
     },
    
 }

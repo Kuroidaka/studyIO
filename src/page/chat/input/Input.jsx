@@ -5,7 +5,7 @@ import {
 import { motion } from "framer-motion";
 
 const Input = (p) => {
-    const { filesImages, handleUploadFile, setFilesImages, handleSend } = p
+    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p
 
     const [inputValue, setInputValue] = useState('');
     // const [showContent, setShowContent] = useState(false);
@@ -85,7 +85,7 @@ const Input = (p) => {
                 id="img_file-Input"
                 accept=".jpg,.png,.jpeg,.webp,.heic"
                 style={{ display: 'none' }}
-                onChange={(e) => handleUploadFile(e, 'img')}
+                onChange={(e) => handleUploadFileImg(e)}
                 multiple
             />
             </label>

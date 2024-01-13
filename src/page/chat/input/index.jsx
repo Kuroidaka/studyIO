@@ -1,5 +1,5 @@
 import '../style/index.scss'
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import DocsUploaded from "./Docs";
 import Input from './Input';
 import conversationApi from '../../../api/conversation';
@@ -9,8 +9,8 @@ import FileContext from '../../../context/File.Context';
 const InputBox = () => {
 
     const { updatedCon, selectedCon } = useContext(ConversationContext);
-    const { filesDocs, setFilesDocs, delFile, isLoadingFile } = useContext(FileContext);
-
+    const { filesDocs, setFilesDocs, delFile, isLoadingFile, uploadFile } = useContext(FileContext);
+    const [loadingFileList, setLoadingFileList] = useState([]);
     // file image for upload at the input box
     const [filesImages, setFilesImages] = useState(
     [
@@ -19,28 +19,42 @@ const InputBox = () => {
     ]
     )
 
-    const handleUploadFile = (event, fileType) => {
+    const handleUploadFileImg = (event) => {
         
         const uploadedFiles = event.target.files;
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
-            const newFile = { id: Date.now() + i, type: 'file', name: file.name };
+            const newFile = { id: Date.now() + i, type: 'file', name: file.name };   
 
-            // const formData = new FormData();
-            // formData.append(file);
-            // const fileDocs = {
-            //     name: file.name,
-            //     size: file.size
-            // }
-            console.log(file)
-            fileType ==="docs" 
-                ? setFilesDocs(prevFiles => [...prevFiles, newFile])
-                : setFilesImages(prevFiles => [...prevFiles, newFile]);
+            setFilesImages(prevFiles => [...prevFiles, newFile]);
             // if (uploadedFiles.length > 0) {
             //     setShowContent(true);
             // }
         }
+
     };
+    const handleUploadFileDocs = (event) => {
+        const uploadedFiles = event.target.files;
+        const formData = new FormData();
+        const newListFile = []
+        for (let i = 0; i < uploadedFiles.length; i++) {
+            const file = uploadedFiles[i];
+            const newFile = { id: Date.now() + i,size: file.size, name: file.name };   
+            console.log("file---", newFile)
+            formData.append("files", file);
+            newListFile.push(newFile)
+            setFilesDocs(prevFiles => [...prevFiles, newFile])
+            setLoadingFileList(prevFiles => [...prevFiles, newFile.name])
+        }
+
+        uploadFile(formData)
+    };
+
+    useEffect(() => {
+        if(!isLoadingFile) {
+            setLoadingFileList([])
+        }
+    }, [isLoadingFile]);
 
     const sendChat = (data) => {
         return conversationApi.createChat(data)
@@ -58,7 +72,8 @@ const InputBox = () => {
         const data ={
             text: inputValue,
             sender: "user",
-            conversationId: selectedCon.id || ""
+            conversationId: selectedCon.id || "",
+            isAttachedFile: filesDocs.length > 0 ? true : false,
         }
         updatedCon({
             id:selectedCon.id,
@@ -91,8 +106,8 @@ const InputBox = () => {
 
     };
 
-    const docsProp = { filesDocs, handleUploadFile, setFilesDocs, delFile, isLoadingFile }
-    const inputProp = { filesImages, handleUploadFile, setFilesImages, handleSend }
+    const docsProp = { filesDocs, handleUploadFileDocs, setFilesDocs, delFile, isLoadingFile, loadingFileList }
+    const inputProp = { filesImages, handleUploadFileImg, setFilesImages, handleSend }
 
     return (
         <div className='Input'>            
