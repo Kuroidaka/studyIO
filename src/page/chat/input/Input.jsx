@@ -41,6 +41,16 @@ const Input = (p) => {
         setFilesImages(updatedFiles);
     };
 
+    useEffect(() => {
+        document.getElementById('myTextarea').addEventListener('input', autoResize);
+
+        function autoResize() {
+            console.log("resize")
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        }
+    }, []);
+
     return (
         <div className="Input_content">
             <div className="File_area">
@@ -69,7 +79,9 @@ const Input = (p) => {
                     />
                 </label>
 
-                <textarea
+                <textarea className="Input_text"
+                    rows="1"
+                    id="myTextarea"
                     placeholder="Input your prompt..."
                     value={inputValue}
                     onChange={handleInputChange}

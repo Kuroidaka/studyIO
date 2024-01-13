@@ -246,6 +246,7 @@
             // border: 1px solid white;
             border-radius: 20px;
             padding: 9px 10px;
+            height: auto;
 
             .attach-btn-wrapper {
                 display: flex;
@@ -279,8 +280,9 @@
                 color: white;
                 padding: 3px 0px;
                 border: none;
-                width: 95%;
-                max-height: 30px;
+                width: 100%;
+                resize: none;
+                max-height: 300px;
                 overflow-y: auto;
             }
 
