@@ -132,6 +132,11 @@ export const ConversationProvider = (p) => {
         }
     }
 
+    const createNewConversation = async () => {
+        setCurrentMsgList([])
+        setSelectedCon({id: "", dayRef: null})
+    }
+
 
     const contextValue = {
         conList: list,
@@ -144,7 +149,8 @@ export const ConversationProvider = (p) => {
         updatedCon,
         updateLastCon,
         currentMsgList,
-        setCurrentMsgList
+        setCurrentMsgList,
+        createNewConversation
     }
 
     return (

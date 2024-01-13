@@ -6,6 +6,11 @@ const conversationApi = {
         const url = `/conversation/get?from=StudyIO`;
         return axiosClient.get(url)
     },
+    createConversation: async () => {
+        const url = `/conversation/create/new`;
+        return axiosClient.post(url, { from: "StudyIO" })
+    },
+    
     createChat: async ({text, sender, conversationId, isAttachedFile}) => {
         const url = '/studyio/create';
 
