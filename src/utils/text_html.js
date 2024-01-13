@@ -1,6 +1,37 @@
 export default function convertStringToHtml(input) {
+
+    //devide input into code and text
+    function extractCodeBlock(input) {
+        const startMarker = '```';
+        const startIndex = input.indexOf(startMarker);
+    
+        if (startIndex !== -1) {
+            const endIndex = input.indexOf(startMarker, startIndex + startMarker.length);
+    
+            if (endIndex !== -1) {
+                const extractedString = input.substring(startIndex, endIndex + startMarker.length);
+                return {
+                    extractedString,
+                    remainingString: input.replace(extractedString, '')
+                };
+            }
+        }
+    
+        return {
+            extractedString: '',
+            remainingString: input
+        };
+    }
+
+    const { CodeText, Text } = extractCodeBlock(input);
+    // Handle Code Text
+    
+
+
+
+
     // Split the input string by line breaks
-    var lines = input.split('\n');
+    var lines = Text.split('\n');
 
     // Initialize an empty string to store the final HTML
     var html = '';
