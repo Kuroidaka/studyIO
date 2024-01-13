@@ -103,6 +103,7 @@
                     .delete_button {
                         display: flex;
                         cursor: pointer;
+
                         svg {
                             width: 14px;
                         }
@@ -111,11 +112,12 @@
                             color: white;
                         }
                     }
+
                     .load_button {
                         display: flex;
                         cursor: pointer;
                         width: 10px;
-                        
+
                         svg {
                             width: 14px;
                         }
@@ -257,9 +259,10 @@
                 transition: all 0.3s ease-in-out;
                 // background-color: var(--second-color);
 
-                & > span {
+                &>span {
                     display: flex;
                 }
+
                 svg {
                     width: 16px;
                 }
@@ -270,15 +273,18 @@
                 }
             }
 
-            input {
+            textarea {
+                // border: 2px solid red;
                 background-color: rgb(255, 255, 255, 0.0);
                 color: white;
+                padding: 3px 0px;
                 border: none;
                 width: 95%;
-                padding: 2px;
+                max-height: 30px;
+                overflow-y: auto;
             }
 
-            input:focus {
+            textarea:focus {
                 outline: none;
                 border: none;
             }
