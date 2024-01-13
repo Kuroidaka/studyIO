@@ -1,3 +1,19 @@
+
+
+const css = {
+    codeBoxCss : {
+        wrapper:`border: 2px solid #000;padding: 0px 14px;background-color: #2B2D31;color: #fff;width: 100%;height: auto;border-radius: 8px;`,
+        js: {
+            const: "color: #FF7B72;",
+            function: "color: #D2A8FF;",
+            string: "color: #A5D6FF;", 
+            cmt: "color: #6A9955;"
+        }
+    },
+    link: {
+        refLink: "text-decoration: underline;color: #9f9fff;font-size: 1rem;font-style: italic;"
+    }
+}
 // check is img link
 const checkIsImgLink = (input) => {
     const urlRegex = /(http[s]?:\/\/){0,1}(\w+:\w+@){0,1}([a-zA-Z0-9.-]+)(:[0-9]+){0,1}(\/[a-zA-Z0-9.-]+)*\/?/;
@@ -9,36 +25,19 @@ const checkIsImgLink = (input) => {
     return isImage;
 }
 
-
-const splitCodeBlock = (text) => {
-
-    const codeBlockRegex = /```(javascript|js|python)\n([\s\S]*?)\n```/gm;
-    // const text = "Here is a code block:\n\n```javascript\nconsole.log('Hello, world!');\n```\n\nAnd here is another one:\n\n```python\nprint('Hello, world!')\n```";
-
-    let listCode = []
-    const matches = [...text.matchAll(codeBlockRegex)];
-    matches.forEach((match, index) => {
-        const language = match[1];
-        const code = match[2];
-        console.log(`Code block ${index + 1}:`);
-        console.log("Language:", language);
-        console.log("Code:", code);
-        listCode.push(code)
-    });
-
-    return listCode
+const convertLink = (str) => {
+    const {link} = css
+    const regex = /\[([^\]]+)\]\((http[^)]+)\)/g;
+    
+    const newStr = str.replace(regex, `<a href="$2" target="_blank" style="${link.refLink}">$1</a>`);
+    
+    return newStr;
 }
+
     
 const formatCodeBlock = (text) => {
-    const codeBoxCss = {
-        wrapper:`border: 2px solid #000;padding: 0px 14px;background-color: #2B2D31;color: #fff;width: 100%;height: auto;border-radius: 8px;`,
-        js: {
-            const: "color: #FF7B72;",
-            function: "color: #D2A8FF;",
-            string: "color: #A5D6FF;", 
-        }
-    }
 
+    const { codeBoxCss } = css
     const codeBlockRegex = /```(javascript|js|python|py)\n([\s\S]*?)\n```/gm;
 
     let codeBlocks = [];
@@ -52,10 +51,27 @@ const formatCodeBlock = (text) => {
         }
         htmlCode += '</div>'
 
-        // change color for keyword
-        htmlCode= htmlCode.replace(/console.log/g, `<span style="${codeBoxCss.js.const}">console</span>.<span style="${codeBoxCss.js.function}">log</span>`); // Wrap console.log in a span
-        htmlCode= htmlCode.replace(/function/g, `<span style="${codeBoxCss.js.function}">function</span>`); // Wrap console.log in a span
-        htmlCode= htmlCode.replace(/\"(.*?)\"/g, `<span style="${codeBoxCss.js.string}">\"$1\"</span>`); // Wrap console.log in a span
+        if(language === "javascript" || language === "js") {
+            // // change color for string
+            // const regexString = /(["'`])(.*?)\1/g;
+            // htmlCode = htmlCode.replace(regexString, `<span style="${codeBoxCss.js.string}">$&</span>`);
+
+
+            // change color for keyword
+            const regexcmt = /(\/\/.*$|\/\*[\s\S]*?\*\/)/gm;
+            htmlCode = htmlCode.replace(regexcmt, `<span style="${codeBoxCss.js.cmt}">$&</span>`);
+            
+
+            // change color for keyword
+            const regex = /\b(const|let|var|while|for|this|document|try|catch|console|function)\b/g;
+            htmlCode = htmlCode.replace(regex, `<span style="${codeBoxCss.js.const}">$&</span>`);
+    
+            // change color for function
+            const regexFunc = /\b(split|find|some|every|push|replace|log|error|getElementById|querySelector|map|filter|reduce|forEach|sort|reverse|join|pop|shift|unshift|single|post|get)\b/g;
+            htmlCode = htmlCode.replace(regexFunc, `<span style="${codeBoxCss.js.function}">$&</span>`);
+
+        }
+    
         codeBlocks.push(`\n${htmlCode}\n`);
         return match; // This does not change the original text
     });
@@ -68,12 +84,17 @@ const formatCodeBlock = (text) => {
 }
 
 export default function convertStringToHtml(input) {
+    console.log(input)
 
     let html = ""
     if(checkIsImgLink(input)) 
-        return `<img src="${input}" alt=""/>`;
+        return `<img src="${input}" loading="lazy" alt=""/>`;
 
+
+        
     input = formatCodeBlock(input)
+
+    input = convertLink(input)
 
     var lines = input.split('\n');
 

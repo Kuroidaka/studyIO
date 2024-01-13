@@ -60,7 +60,7 @@ const InputBox = () => {
         return conversationApi.createChat(data)
     }
 
-    const handleSend = async (inputValue) => {
+    const handleSend = async (inputValue, enableSend) => {
   
         // setFiles([]);
         // if (uploadedFiles.length > 0) {
@@ -101,6 +101,7 @@ const InputBox = () => {
                     newCon: res.data.data.newConversation,
                     isNewConversation: res.data.data.isNewConversation
                 })
+                enableSend()
             }
         })
 

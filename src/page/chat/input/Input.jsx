@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Send, File1, Image, Delete, AttachFile
 } from "../../../assets/Icons/index";
 import { motion } from "framer-motion";
 
 const Input = (p) => {
-    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p
+    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p;
 
     const [inputValue, setInputValue] = useState('');
-    // const [showContent, setShowContent] = useState(false);
+    const [isWaiting, setIsWaiting] = useState(false);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -16,8 +16,13 @@ const Input = (p) => {
 
     const handleSendButtonClick = () => {
         if(inputValue !== '') {
-            setInputValue('');
-            handleSend(inputValue)
+            if (!isWaiting) {
+                setIsWaiting(true);
+                handleSend(inputValue, () => {
+                    setIsWaiting(false);
+                });
+                setInputValue('');
+            }
         }
         // setFiles([]);
         // if (uploadedFiles.length > 0) {
@@ -27,84 +32,81 @@ const Input = (p) => {
         //     setShowContent(false);
         // }
 
+
     };
 
-    const handleEnterKeyPress = (event) => {
-        if (event.key === 'Enter') {
-            handleSendButtonClick()
+    const handleEnterKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendButtonClick();
+        } else if (e.key === 'Enter' && e.shiftKey) {
+            setInputValue((prevValue) => prevValue);
         }
     };
 
     const handleDeleteImgFile = (id) => {
         const updatedFiles = filesImages.filter(file => file.id !== id);
         setFilesImages(updatedFiles);
-    }
+    };
+
+    useEffect(() => {
+        document.getElementById('myTextarea').addEventListener('input', autoResize);
+
+        function autoResize() {
+            console.log("resize")
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        }
+    }, []);
 
     return (
         <div className="Input_content">
-        <div className="File_area">
-            {filesImages.map((file) => (
-            <div className="file_container" key={file.id}>
-                <div className="file_info">
-                {file.type === 'file' ? <File1 /> : <Image />}
-                <p className="file_name">{file.name}</p>
-                </div>
-                <div id="Delete_icon" onClick={() => handleDeleteImgFile(file.id)}>
-                <Delete />
-                </div>
+            <div className="File_area">
+                {filesImages.map((file) => (
+                    <div className="file_container" key={file.id}>
+                        <div className="file_info">
+                            {file.type === 'file' ? <File1 /> : <Image />}
+                            <p className="file_name">{file.name}</p>
+                        </div>
+                        <div id="Delete_icon" onClick={() => handleDeleteImgFile(file.id)}>
+                            <Delete />
+                        </div>
+                    </div>
+                ))}
             </div>
-            ))}
-        </div>
-        {/* <div className='File_area'>
+            <div className="Input_area">
+                <label className="attach-btn-wrapper" htmlFor="img_file-Input">
+                    <motion.span whileHover={{ y: -3 }} ><AttachFile /></motion.span>
+                    <input
+                        type="file"
+                        id="img_file-Input"
+                        accept=".jpg,.png,.jpeg,.webp,.heic"
+                        style={{ display: 'none' }}
+                        onChange={(e) => handleUploadFileImg(e)}
+                        multiple
+                    />
+                </label>
 
-            <div className="file_container">
-                <div className="file_info">
-                    <File1 />
-                    <p className="file_name">Tên file</p>
-                </div>
-                <div id='Delete_icon'>
-                    <Delete />
-                </div>
+                <textarea className="Input_text"
+                    rows="1"
+                    id="myTextarea"
+                    placeholder="Input your prompt..."
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onKeyDown={handleEnterKeyPress}
+                />
+                {isWaiting ? (
+                    <></>
+                ) : (
+                    <span id="send_button" onClick={handleSendButtonClick}>
+                        <Send />
+                    </span>
+                )
+                }
+
             </div>
-            <div className="file_container">
-                <div className="file_info">
-                    <Image />
-                    <p className="file_name">Tên file</p>
-                </div>
-                <div id='Delete_icon'>
-                    <Delete />
-                </div>
-            </div>
-        </div> */}
-        <div className="Input_area">
-            <label className="attach-btn-wrapper" htmlFor="img_file-Input"
-              
-            >
-                <motion.span whileHover={{ y: -3 }} ><AttachFile /></motion.span>
-
-            <input
-                type="file"
-                id="img_file-Input"
-                accept=".jpg,.png,.jpeg,.webp,.heic"
-                style={{ display: 'none' }}
-                onChange={(e) => handleUploadFileImg(e)}
-                multiple
-            />
-            </label>
-
-            <input
-            type="text"
-            placeholder="Input your prompt..."
-            value={inputValue}
-            onChange={handleInputChange}
-            onKeyDown={handleEnterKeyPress}
-            />
-            <span id="send_button" onClick={handleSendButtonClick}>
-            <Send />
-            </span>
         </div>
-        </div>
-    )
+    );
 }
 
-export default Input
+export default Input;

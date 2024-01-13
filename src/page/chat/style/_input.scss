@@ -103,6 +103,7 @@
                     .delete_button {
                         display: flex;
                         cursor: pointer;
+
                         svg {
                             width: 14px;
                         }
@@ -111,11 +112,12 @@
                             color: white;
                         }
                     }
+
                     .load_button {
                         display: flex;
                         cursor: pointer;
                         width: 10px;
-                        
+
                         svg {
                             width: 14px;
                         }
@@ -244,6 +246,7 @@
             // border: 1px solid white;
             border-radius: 20px;
             padding: 9px 10px;
+            height: auto;
 
             .attach-btn-wrapper {
                 display: flex;
@@ -257,9 +260,10 @@
                 transition: all 0.3s ease-in-out;
                 // background-color: var(--second-color);
 
-                & > span {
+                &>span {
                     display: flex;
                 }
+
                 svg {
                     width: 16px;
                 }
@@ -270,15 +274,19 @@
                 }
             }
 
-            input {
+            textarea {
+                // border: 2px solid red;
                 background-color: rgb(255, 255, 255, 0.0);
                 color: white;
+                padding: 3px 0px;
                 border: none;
-                width: 95%;
-                padding: 2px;
+                width: 100%;
+                resize: none;
+                max-height: 300px;
+                overflow-y: auto;
             }
 
-            input:focus {
+            textarea:focus {
                 outline: none;
                 border: none;
             }
