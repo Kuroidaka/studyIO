@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect , useState } from "react";
 
 import './style/sidebar.scss'
 import styled from "styled-components";
@@ -24,37 +24,43 @@ const Sidebar = (p) => {
         <div className="container">
             <div className="cover">
                 <h2>History</h2>
-            { isLoading ?
+    { isLoading ?
             (
-                <>Loading</> 
+                <>
+                    <div className="body">
+                        <div className="spinner-wrapper">
+                            <div className="spinner"></div>
+                        </div>
+                    </div>
+                </> 
             ) : (
-            <div className="conversation-list" aria-hidden="true">
-            {(conList && conList.length > 0 ) ?
+                <div className="conversation-list" aria-hidden="true">
+                {(conList && conList.length > 0 ) ?
                 (
                     conList.map((item, index) => (
-                        <div className="day-ref-section" key={index}>
-                           {item.conversationList.length > 0 && <h4 className="title">{item.dayRef}</h4>}
-                            <ul className="day-ref-list">
-                                {item.conversationList && 
-                                item.conversationList.map((conversation, index) => {
-                                return (
-                                    <SidebarNav 
-                                        key={index} 
-                                        conversation={conversation}
-                                        selectedCon={selectedCon}
-                                        dayRef={item.dayRef}
-                                        hdlSelCon={hdlSelCon}
-                                    > </SidebarNav>
-                                )
-                                })}
-                            </ul>
-                        </div>
-                    ))
+                    <div className="day-ref-section" key={index}>
+                        {item.conversationList.length > 0 && <h4 className="title">{item.dayRef}</h4>}
+                        <ul className="day-ref-list">
+                            {item.conversationList && 
+                            item.conversationList.map((conversation, index) => {
+                              return (
+                                <SidebarNav 
+                                    key={index} 
+                                    conversation={conversation}
+                                    selectedCon={selectedCon}
+                                    dayRef={item.dayRef}
+                                    hdlSelCon={hdlSelCon}
+                                > </SidebarNav>
+                              )
+                            })}
+                        </ul>
+                    </div>
+                ))
                 ) : (
                     <div className="empty">
                         <p>No conversation</p>
-                    </div> 
-                )
+                </div>
+)
             }
             </div>
             )

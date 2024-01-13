@@ -5,8 +5,8 @@ const GlobalStyles = createGlobalStyle`
     :root {
         --primary-color: #1A1A22;
         --second-color: #596bc4;
-        --third-color: #5F6399;
-        --selected-color: #3E4165;
+        --selected-color: #5F6399;
+        --third-color: #3E4165;
 
         --white-text: #ffff;
         --black-text: #1e1e1e;

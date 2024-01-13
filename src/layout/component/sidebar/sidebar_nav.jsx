@@ -70,7 +70,11 @@ const SidebarNav = (p) => {
             placement= 'right'
         >
             <div className="setting">
-                <i className="fas fa-ellipsis-h" onClick={handleToggleDropdown}/>
+                <div className="gradient-overlay"></div>
+                
+                <div className='icon-wrapper' onClick={handleToggleDropdown}>
+                    <i className="fas fa-ellipsis-h"/>
+                </div>
             </div>
         </Tippy>
 

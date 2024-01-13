@@ -109,9 +109,10 @@ const DocsUploaded = (p) => {
                 </div> */}
             </div>
         ) : (
-            <div id="Icon_Upload">
-            <label htmlFor="fileInput">
-                <Upload />
+            <label id="Icon_Upload" htmlFor="fileInput">
+                <div >
+                    <Upload />
+                </div>
                 <input
                     type="file"
                     id="fileInput"
@@ -121,7 +122,7 @@ const DocsUploaded = (p) => {
                     multiple
                 />
             </label>
-            </div>
+
         )}
         </div>
     )

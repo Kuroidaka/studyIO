@@ -62,10 +62,9 @@ export const ConversationProvider = (p) => {
 
     }
 
-    const updatedCon = async ({id, dayRef, newMsg, newCon, isNewConversation}) => {
-
+    const updatedCon = async ({id, dayRef, newMsgList, newCon, isNewConversation}) => {
         // update current msg list screen 
-        setCurrentMsgList(prev => [...prev, newMsg])
+        setCurrentMsgList(prev => [...prev, ...newMsgList])
 
         // if is new conversation for Bot
         if(newCon && newCon.length > 0 && isNewConversation)  {
@@ -90,7 +89,7 @@ export const ConversationProvider = (p) => {
                 if (day) {
                     const conversation = day.conversationList.find(con => con.id === id);
                     if (conversation) {
-                        conversation.messages = [...conversation.messages, newMsg];
+                        conversation.messages = [...conversation.messages, ...newMsgList];
                         setList([...list]);
                         console.log('Conversation updated successfully.');
                     } else {

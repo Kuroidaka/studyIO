@@ -78,7 +78,7 @@ const InputBox = () => {
         updatedCon({
             id:selectedCon.id,
             dayRef: selectedCon.dayRef,
-            newMsg: {
+            newMsgList: [{
                 "id": "temp-id",
                 "createdAt": new Date().toISOString(),
                 "updatedAt": new Date().toISOString(),
@@ -86,7 +86,7 @@ const InputBox = () => {
                 "sender": "user",
                 "senderID": "-1",
                 "conversationId": selectedCon.id
-            },
+            }],
         })
 
         // console.log(data)
@@ -97,7 +97,7 @@ const InputBox = () => {
                 updatedCon({
                     id: selectedCon.id,
                     dayRef: selectedCon.dayRef,
-                    newMsg: res.data.data.bot,
+                    newMsgList: res.data.data.bot,
                     newCon: res.data.data.newConversation,
                     isNewConversation: res.data.data.isNewConversation
                 })

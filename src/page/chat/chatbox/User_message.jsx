@@ -23,8 +23,10 @@ const UserMsg = (p) => {
         </div>
         <div className="chat-content">
             <p className='chat-person'>{"You"}</p>
-            <div className='human-text'>
-                <p>{text}</p>
+            <div className="human-text-wrapper">
+                <div className='human-text'>
+                    <p>{text}</p>
+                </div>
             </div>
         </div>
     </Container>
@@ -36,7 +38,7 @@ export default UserMsg;
 const Container = styled.div`
     width: 100%;
     display: flex;
-
+    direction: rtl;
     .icon {
         display: flex;
         align-items: center;
@@ -56,17 +58,30 @@ const Container = styled.div`
         }
     }
     .chat-content{
-        margin-left: 18px;
+        margin-right: 18px;
+        max-width: 80%;
         p.chat-person {
-            font-size: 20px;
+            font-size: 16px;
+            margin-bottom: 7px;
             font-weight: bold;
         }
-        .human-text {
-
-            p {
-                font-size: 15px;
-                font-weight: 500;
-                margin-top: 10px;
+        .human-text-wrapper{
+            padding-bottom: 10px;
+            padding-right: 10px;
+            padding-left: 10px;
+            border-radius: 10px;
+            background: #5a565d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            .human-text {
+                direction: ltr;
+                p {
+                    font-size: 15px;
+                    font-weight: 500;
+                    margin-top: 10px;
+                }
             }
         }
     }
