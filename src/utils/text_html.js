@@ -25,8 +25,13 @@ export default function convertStringToHtml(input) {
 
     const { CodeText, Text } = extractCodeBlock(input);
     // Handle Code Text
-    
-
+    var html = '<div style = "border: 2px solid #000; padding: 20px; background-color: #000; color: #fff; width: 150px; height:300px;">'
+    lists = CodeText.split('\n');
+    for (var i = 0; i < lists.length; i++) 
+    {
+        html += '<p>' + lists[i] + '</p>';
+    }
+    html += '</div>'
 
 
 
@@ -34,7 +39,6 @@ export default function convertStringToHtml(input) {
     var lines = Text.split('\n');
 
     // Initialize an empty string to store the final HTML
-    var html = '';
 
     // Loop through each line
     for (var i = 0; i < lines.length; i++) {
