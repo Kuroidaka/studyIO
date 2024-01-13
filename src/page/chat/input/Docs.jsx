@@ -6,7 +6,7 @@ import {
 import Load from "../../../component/Load";
 
 const DocsUploaded = (p) => {
-    const { filesDocs, setFilesDocs, handleUploadFile, delFile, isLoadingFile } = p
+    const { filesDocs, setFilesDocs, handleUploadFileDocs, delFile, isLoadingFile, loadingFileList } = p
 
     const [hoveredFile, setHoveredFile] = useState(null);
     const [selectFile, setSelectFile] = useState(null);
@@ -51,7 +51,7 @@ const DocsUploaded = (p) => {
                     id="fileInput"
                     accept=".pdf,.docx,.pptx"
                     style={{ display: 'none' }}
-                    onChange={(e) => handleUploadFile(e, 'docs')}
+                    onChange={(e) => handleUploadFileDocs(e)}
                     multiple
                 />
                 </div>
@@ -66,7 +66,7 @@ const DocsUploaded = (p) => {
                     onMouseLeave={handleMouseLeave}
                 >
                     {
-                    (isLoadingFile && selectFile === file.name) ? 
+                    (isLoadingFile && selectFile === file.name) || loadingFileList.indexOf(file.name) !== -1? 
                     (
                         <span className="load_button">
                             <Load type="small"/>
@@ -112,16 +112,15 @@ const DocsUploaded = (p) => {
             <div id="Icon_Upload">
             <label htmlFor="fileInput">
                 <Upload />
-                
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".pdf,.docx,.pptx"
+                    style={{ display: 'none' }}
+                    onChange={(e) => handleUploadFileDocs(e)}
+                    multiple
+                />
             </label>
-            <input
-                type="file"
-                id="fileInput"
-                accept=".pdf,.docx,.pptx"
-                style={{ display: 'none' }}
-                onChange={(e) => handleUploadFile(e, 'docs')}
-                multiple
-            />
             </div>
         )}
         </div>
