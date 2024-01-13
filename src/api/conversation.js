@@ -6,7 +6,7 @@ const conversationApi = {
         const url = `/conversation/get?from=StudyIO`;
         return axiosClient.get(url)
     },
-    createChat: async ({text, sender, conversationId}) => {
+    createChat: async ({text, sender, conversationId, isAttachedFile}) => {
         const url = '/studyio/create';
 
         const dataBody = {
@@ -18,7 +18,8 @@ const conversationApi = {
                     sender: sender,
                     senderID: "-1"
                 },
-                maxToken: 2000
+                maxToken: 2000,
+                isAttachedFile: isAttachedFile
             }
 
         }
