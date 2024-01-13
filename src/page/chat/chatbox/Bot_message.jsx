@@ -84,7 +84,7 @@ const Container = styled.div`
             padding-right: 10px;
             padding-left: 10px;
             border-radius: 10px;
-            background: rebeccapurple;
+            background: #151515;
             display: flex;
             align-items: center;
             justify-content: center;
