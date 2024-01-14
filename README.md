@@ -1,27 +1,36 @@
-# Web Application Using OpenAI's Large Language Models GPT3.5
+# Web Application Using OpenAI's Large Language Models GPT
 
 A web application that allows users to interact with OpenAI's modles through a simple and user-friendly interface.
 This Application to Support Student Learning that enhances the learning process, making it more engaging and effective.
 
 
 ## Features
-- User-friendly interface for making requests to the OpenAI API
-- Responses are displayed in a chat-like format
-- Select Models (DALL·E, GPT35TURBO, GPT35TURBO16K, ADA) based on your needs
-- Create AI Images (DALL·E)
-- Highlight code syntax
+- User-friendly interface for making requests to the OpenAI API. Responses are displayed in a chat-like format
+- Researching agent
+- File reading agent
+- Create Images (DALL·E)
+- Setup reminder
+- Ask weather condition
+
+## Usaged Model
+Models (DALL·E, GPT35TURBO, GPT35TURBO16K, ADA)
 
 ## Technologies Used
-- For Front End, We have used Reactjs and Vite.
-- For Back End, We used Nodejs and Redis with MySQL as the Database Management System.
+- For Front End, We have used Reactjs.
+- For Back End, We used Nodejs, Azure OpenAI, OpenAI, Langchain,​ Redis, Mysql, Discord.js,​ puppeteer, borserless, Serper, Prisma, Docker​,...
 
 ## Setup
 ### Prerequisites
-- Node.js
-- Redis, MySQL
 - OpenAI API Key
+- Serper API key
+- Browerless API key
+
+If with discord bot:
+- Discord bot token
+
+
 ### Installation
-#### Back End: Note.js, Redis, MySQL
+#### Back End: Note.js, Redis, MySQL, 
 1. Install the Node.js and npm:
 Ensure that Node.js and npm (Node Package Manager) are installed on your machine. You can download and install them from the official website: <a href="https://nodejs.org/en" target="_blank">Node.js</a>.
 2. Clone the repository:
@@ -49,7 +58,7 @@ brew services start mysql
 ##### On Windows:
 - Download MySQL Installer from the <a href="https://www.mysql.com/downloads/" target="_blank">official MySQL download page</a>.
 - Run the installer and follow the installation instructions.
-6. Create a .env file in the root folder and add your API keys in the following format:
+6. Create a .env.developement for dev or .env.production for docker in the root folder and add your API keys in the following format:
 ```sh
 NODE_ENV=statging
  
@@ -98,13 +107,19 @@ SERPER_API_KEY="YOUR_API_KEY"
 BROWERLESS_API_KEY="YOUR_API_KEY"
 
 ```
-7. Run the project:
+
+7. Push prisma into DB:
+```sh
+npx prisma db push
+```
+
+8. Run the project:
 ```sh
 npm run build:dev
 ```
 Or
 ```sh
-npm run dev:production
+npm run dev:prod
 ```
 
 #### Front End: React.js + Vite
@@ -120,7 +135,7 @@ npm install
 ```sh
 npm run dev
 ```
-4. Now when you navigate to http://localhost:3001 you will see web response.
+4. Now when you navigate to http://localhost:5173 you will see web.
 
 
 ## Contributing
