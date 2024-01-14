@@ -16,13 +16,15 @@ const css = {
 }
 // check is img link
 const checkIsImgLink = (input) => {
+    if(input === "" || input === undefined || input === null) return false;
     const urlRegex = /(http[s]?:\/\/){0,1}(\w+:\w+@){0,1}([a-zA-Z0-9.-]+)(:[0-9]+){0,1}(\/[a-zA-Z0-9.-]+)*\/?/;
     const url = input.match(urlRegex);
 
     const imageRegex = /\.(jpeg|jpg|gif|png)$/;
-    const isImage = imageRegex.test(url[0]);
-    console.log(isImage); // Outputs: true
-    return isImage;
+    if(url.length > 0 ) {
+        const isImage = imageRegex.test(url[0]);
+        return isImage;
+    }
 }
 
 const convertLink = (str) => {
@@ -33,58 +35,65 @@ const convertLink = (str) => {
     
     return newStr;
 }
+const escapeHtml = (html) => {
+    return html
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
+      .replace(/ /g, '&nbsp;') // for space
+      .replace(/&lt;(\w+).*?&gt;/g, '&lt;<span style="color: green;">$1</span>&gt;')
+      .replace(/&lt;\/(\w+).*?&gt;/g, '&lt;/<span style="color: green;">$1</span>&gt;');
+}
 
     
 const formatCodeBlock = (text) => {
 
     const { codeBoxCss } = css
-    const codeBlockRegex = /```(javascript|js|python|py)\n([\s\S]*?)\n```/gm;
+    const codeBlockRegex = /```(javascript|js|python|py|jsx)\n([\s\S]*?)\n```/gm;
 
     let codeBlocks = [];
     text.replace(codeBlockRegex, function(match, language, code) {
-        // Adjust the code block here
+        code = escapeHtml(code);
 
         let htmlCode = `<div style = '${codeBoxCss.wrapper}'>`
-        const lists = code.split('\n');
-        for (let i = 0; i < lists.length; i++) {
-            htmlCode += '<p>' + lists[i] + '</p>';
+        const lines = code.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          htmlCode += '<p>' + lines[i]+ '</p>';
         }
         htmlCode += '</div>'
 
-        if(language === "javascript" || language === "js") {
-            // // change color for string
-            // const regexString = /(["'`])(.*?)\1/g;
-            // htmlCode = htmlCode.replace(regexString, `<span style="${codeBoxCss.js.string}">$&</span>`);
-
+        if(language === "javascript" || language === "js" || language === "jsx") {
 
             // change color for keyword
-            const regexcmt = /(\/\/.*$|\/\*[\s\S]*?\*\/)/gm;
+            const regexcmt = /(\/\/.*$|\/\*[\s\S]*?\*\/|(?<=\/\/.*)\n)/gm;
             htmlCode = htmlCode.replace(regexcmt, `<span style="${codeBoxCss.js.cmt}">$&</span>`);
-            
-
             // change color for keyword
-            const regex = /\b(const|let|var|while|for|this|document|try|catch|console|function)\b/g;
+            const regex = /\b(const|let|var|while|for|this|document|try|catch|console|function|import|from|return)\b/g;
             htmlCode = htmlCode.replace(regex, `<span style="${codeBoxCss.js.const}">$&</span>`);
     
             // change color for function
-            const regexFunc = /\b(split|find|some|every|push|replace|log|error|getElementById|querySelector|map|filter|reduce|forEach|sort|reverse|join|pop|shift|unshift|single|post|get)\b/g;
+            const regexFunc = /\b(split|find|some|every|push|replace|log|error|getElementById|querySelector|map|filter|reduce|forEach|sort|reverse|join|pop|shift|unshift|single|post|get|React|useState|useEffect|useContext|useReducer|useCallback|useMemo|useRef|useImperativeHandle|useLayoutEffect|useDebugValue)\b/g;
             htmlCode = htmlCode.replace(regexFunc, `<span style="${codeBoxCss.js.function}">$&</span>`);
 
+            
         }
     
         codeBlocks.push(`\n${htmlCode}\n`);
         return match; // This does not change the original text
     });
+    
+
+
 
     codeBlocks.forEach(codeBlock => {
         text = text.replace(codeBlockRegex, codeBlock);
     });
-
     return text
 }
 
 export default function convertStringToHtml(input) {
-    console.log(input)
 
     let html = ""
     if(checkIsImgLink(input)) 

@@ -60,18 +60,26 @@ const Container = styled.div`
         margin-left: 40px;
         height: 8vh;
         h1 {
-            margin-left: 5px; /* Thay đổi khoảng cách giữa Edit và chữ StudyIO */
+            margin-left: 15px; /* Thay đổi khoảng cách giữa Edit và chữ StudyIO */
             font-size: 20px;   /* Thay đổi kích thước của chữ StudyIO */
             font-style: 'Montserrat';
-            margin-top: 2px;
         }
     
         .Edit-icon {
-            width: 35px;
-            height: 35px;
-            margin-left: 15px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
-            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            padding: 7px;
+            border-radius: 5px;
+            align-items: center;
+            border: 1px solid;
+
+            &:hover {
+                background-color: #ffffff;
+                color: #292A38;
+            }
         }
     }
     

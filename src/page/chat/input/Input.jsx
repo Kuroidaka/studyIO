@@ -5,10 +5,9 @@ import {
 import { motion } from "framer-motion";
 
 const Input = (p) => {
-    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p;
+    const { filesImages, handleUploadFileImg, setFilesImages, handleSend, isWaiting, setIsWaiting } = p;
 
     const [inputValue, setInputValue] = useState('');
-    const [isWaiting, setIsWaiting] = useState(false);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);

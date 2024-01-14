@@ -6,7 +6,7 @@ import utils from '../../../utils';
 import { useEffect, useRef } from "react";
 
 const BotMsg = (p) => {
-    const { text } = p
+    const { text, className, isWaiting } = p
 
     const { convertStringToHtml } = utils
     const sanitizedHTML = DOMPurify.sanitize(convertStringToHtml(text));
@@ -20,7 +20,7 @@ const BotMsg = (p) => {
     useEffect(scrollToBottom, [text]);
 
     return ( 
-    <Container className='chat-msg bot-chat' ref={messagesEndRef}>
+    <Container className={`chat-msg bot-chat ${className}`} ref={messagesEndRef}>
         <div className='icon'>
             <div className='bot-icon-wrapper'>
                 <Tv className='bot-icon'/>
@@ -29,16 +29,17 @@ const BotMsg = (p) => {
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
             <div className="bot-text-wrapper">
-                
-                <div className='bot-text' dangerouslySetInnerHTML={{ __html: sanitizedHTML }} >
-                    {/* <p>{'"Cộng" là một từ tiếng Việt có nhiều nghĩa khác nhau tùy vào ngữ cảnh sử dụng. Dưới đây là một số ý nghĩa phổ biến của từ "cộng":'}</p>
-                    <ol>
-                        <li>{'Toán học: Trong lĩnh vực toán học, "cộng" là một phép toán để tính tổng của hai hoặc nhiều số. Ví dụ: 2 + 3 = 5, trong đó "+" là ký hiệu của phép cộng.'}</li>
-                        <li>{'Chính trị: Trong ngữ cảnh chính trị, "cộng" có thể liên quan đến chủ nghĩa cộng sản, một hệ thống chính trị và kinh tế phổ biến trong nhiều quốc gia.'}</li>
-                        <li>{'Ngôn ngữ hàng ngày: Trong ngôn ngữ hàng ngày, "cộng" có thể được sử dụng để diễn đạt ý nghĩa của việc thêm vào, gộp lại, hoặc tăng thêm cái gì đó.'}</li>
-                    </ol>
-                    <p>{'Nếu bạn có ngữ cảnh cụ thể hoặc văn bản mà bạn đang thảo luận, tôi có thể cung cấp một giải thích chi tiết hơn.'}</p> */}
-                </div>
+            {isWaiting ? (
+                    <div className='bot-text'>
+                        <div className="chat-dot"></div>
+                        <div className="chat-dot"></div>
+                        <div className="chat-dot"></div>
+                    </div>
+                ) : (
+                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: sanitizedHTML }} >
+                    </div>
+                )
+            }
             </div>
         </div>
     </Container>   
@@ -112,6 +113,45 @@ const Container = styled.div`
                         margin: 10px 0;
                     }
     
+                }
+            }
+        }
+    }
+
+    &.waiting {
+        @keyframes jump {
+            0% { transform: translateY(5px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(5px); }
+        }
+
+        .bot-text-wrapper {
+            padding: 6px;
+            .bot-text {
+                gap: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 25px;
+                .chat-dot {
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    background-color: #848484;
+                    border-radius: 50%;
+                    animation: jump .8s linear infinite;
+
+
+                    &:nth-child(1) {
+                        animation-delay: 0s;
+                    }
+                    &:nth-child(2) {
+                        animation-delay: 0.15s;
+                    }
+                    &:nth-child(3) {
+                        animation-delay: 0.3s;
+                    }
+
                 }
             }
         }
