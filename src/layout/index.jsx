@@ -80,7 +80,7 @@ const Container = styled.div`
             .icon-wrapper {
                 
                 position: absolute;
-                width: 40px;
+                width: 31px;
                 height: 40px;
                 top: 50%;
                 z-index: 999;

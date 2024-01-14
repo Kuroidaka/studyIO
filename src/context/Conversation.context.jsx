@@ -11,6 +11,7 @@ export const ConversationProvider = (p) => {
     const [selectedCon, setSelectedCon] = useState({id: "", dayRef: null})
     const [isLoading, setIsLoading] = useState(true);
     const [currentMsgList, setCurrentMsgList] = useState([]);
+    const [isWaiting, setIsWaiting] = useState(false);
     
 
     useEffect(() => {
@@ -150,7 +151,9 @@ export const ConversationProvider = (p) => {
         updateLastCon,
         currentMsgList,
         setCurrentMsgList,
-        createNewConversation
+        createNewConversation,
+        isWaiting,
+        setIsWaiting
     }
 
     return (
