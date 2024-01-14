@@ -100,11 +100,11 @@ BROWERLESS_API_KEY="YOUR_API_KEY"
 ```
 7. Run the project:
 ```sh
-npm run build
+npm run build:dev
 ```
 Or
 ```sh
-npm run dev 
+npm run dev :production
 ```
 
 #### Front End: React.js + Vite
