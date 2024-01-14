@@ -104,7 +104,7 @@ npm run build:dev
 ```
 Or
 ```sh
-npm run dev :production
+npm run dev:production
 ```
 
 #### Front End: React.js + Vite
