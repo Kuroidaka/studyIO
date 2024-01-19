@@ -3,8 +3,7 @@ import { Tv } from 'react-feather';
 import DOMPurify from "dompurify";
 
 import utils from '../../../utils';
-import { useContext, useEffect, useRef } from "react";
-import ConversationContext from "../../../context/Conversation.Context";
+import { useEffect, useRef } from "react";
 
 const BotMsg = (p) => {
     const { text, className, isWaiting=false } = p
@@ -26,6 +25,7 @@ const BotMsg = (p) => {
         <div className='icon'>
             <div className='bot-icon-wrapper'>
                 <Tv className='bot-icon'/>
+                
             </div>
         </div>
         <div className="chat-content">
@@ -38,8 +38,7 @@ const BotMsg = (p) => {
                         <div className="chat-dot"></div>
                     </div>
                 ) : (
-                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: sanitizedHTML }} >
-                    </div>
+                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: sanitizedHTML }} ></div>
                 )
             }
             </div>

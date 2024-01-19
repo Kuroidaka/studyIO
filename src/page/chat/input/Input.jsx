@@ -101,7 +101,7 @@ const Input = (p) => {
                     onChange={handleInputChange}
                     onKeyDown={handleEnterKeyPress}
                 />
-                {isWaiting ? (
+                {(isWaiting.isWait && selectedCon.id === isWaiting.conId)  ? (
                     <></>
                 ) : (
                     <span id="send_button" onClick={handleSendButtonClick}>
