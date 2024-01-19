@@ -1,7 +1,13 @@
 import { Navigate } from "react-router"
+import React, { lazy } from 'react';
 
 import DefaultLayout from "../layout/index.jsx"
-import ChatPage from "../page/chat/chat.jsx"
+
+const ChatPage = lazy(() => import("../page/chat/chat.jsx"));
+const CamChat = lazy(() => import("../page/camChat/index.jsx"));
+
+// import ChatPage from "../page/chat/chat.jsx"
+// import CamChat from "../page/camChat/index.jsx"
 import paths from "./path"
 
 export const routes = [
@@ -16,7 +22,12 @@ export const routes = [
         page: <DefaultLayout><ChatPage /></DefaultLayout>,
         path: paths.chat, 
         exact: true,
-
+    },
+    {
+        name: "cam-chat",
+        page: <DefaultLayout><CamChat /></DefaultLayout>,
+        path: paths.camChat, 
+        exact: true,
     }
 
     // {

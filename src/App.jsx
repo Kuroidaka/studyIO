@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
+import { Suspense } from 'react';
 
 function App() {
 
@@ -8,17 +9,19 @@ function App() {
     <>
 
       <GlobalStyles />
-      <Routes>
-        {routes.map((route, idx) => {
-          return (<Route
-            key={idx}
-            exact={route.exact}
-            path={route.path}
-            element={route.page}
-          ></Route>
-          )
-        })}
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          {routes.map((route, idx) => {
+            return (<Route
+              key={idx}
+              exact={route.exact}
+              path={route.path}
+              element={route.page}
+            ></Route>
+            )
+          })}
+        </Routes>
+      </Suspense>
     </>
   )
 }

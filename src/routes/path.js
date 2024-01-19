@@ -1,6 +1,6 @@
 const paths = {
     chat: "/chat",
-    index: "/index"
+    camChat: "/cam-chat",
 }
 
 export default paths;
