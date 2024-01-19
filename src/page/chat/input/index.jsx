@@ -8,7 +8,7 @@ import FileContext from '../../../context/File.Context';
 
 const InputBox = () => {
 
-    const { updatedCon, selectedCon, isWaiting, setIsWaiting } = useContext(ConversationContext);
+    const { updatedCon, selectedCon } = useContext(ConversationContext);
     const { filesDocs, setFilesDocs, delFile, isLoadingFile, uploadFile } = useContext(FileContext);
     const [loadingFileList, setLoadingFileList] = useState([]);
     // file image for upload at the input box
@@ -108,7 +108,7 @@ const InputBox = () => {
     };
 
     const docsProp = { filesDocs, handleUploadFileDocs, setFilesDocs, delFile, isLoadingFile, loadingFileList }
-    const inputProp = { filesImages, handleUploadFileImg, setFilesImages, handleSend, isWaiting, setIsWaiting }
+    const inputProp = { filesImages, handleUploadFileImg, setFilesImages, handleSend }
 
     return (
         <div className='Input'>            

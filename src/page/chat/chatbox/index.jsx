@@ -9,7 +9,7 @@ import ConversationContext from '../../../context/Conversation.Context';
 const ChatBox = () => {
 
 
-    const { currentMsgList, isWaiting } = useContext(ConversationContext);  
+    const { currentMsgList, isWaiting, selectedCon } = useContext(ConversationContext);  
 
     return (
         <Conversation>
@@ -26,7 +26,7 @@ const ChatBox = () => {
                 <EmptyBox />
             )
         }
-        { isWaiting && <BotMsg text={"..."} className="waiting" isWaiting={isWaiting}/> }
+        { (isWaiting.isWait && isWaiting.conId === selectedCon.id) && <BotMsg text="..." className="waiting" isWaiting={isWaiting}/> }
         </Conversation>
      );
 }

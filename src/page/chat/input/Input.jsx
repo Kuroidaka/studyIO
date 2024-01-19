@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
     Send, File1, Image, Delete, AttachFile
 } from "../../../assets/Icons/index";
 import { motion } from "framer-motion";
+import ConversationContext from "../../../context/Conversation.Context";
 
 const Input = (p) => {
-    const { filesImages, handleUploadFileImg, setFilesImages, handleSend, isWaiting, setIsWaiting } = p;
-
+    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p;
+    const { isWaiting, setIsWaiting, selectedCon } = useContext(ConversationContext);
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (event) => {
@@ -15,10 +16,16 @@ const Input = (p) => {
 
     const handleSendButtonClick = () => {
         if(inputValue !== '') {
-            if (!isWaiting) {
-                setIsWaiting(true);
+            if (!isWaiting.isWait) {
+                setIsWaiting({
+                    isWait:true, 
+                    conId: selectedCon.id
+                });
                 handleSend(inputValue, () => {
-                    setIsWaiting(false);
+                    setIsWaiting({
+                        isWait:false,
+                        conId: ""
+                    });
                 });
                 setInputValue('');
             }

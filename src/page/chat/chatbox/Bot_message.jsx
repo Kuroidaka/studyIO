@@ -3,10 +3,12 @@ import { Tv } from 'react-feather';
 import DOMPurify from "dompurify";
 
 import utils from '../../../utils';
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import ConversationContext from "../../../context/Conversation.Context";
 
 const BotMsg = (p) => {
-    const { text, className, isWaiting } = p
+    const { text, className, isWaiting=false } = p
+    // const { isWaiting, selectedCon } = useContext(ConversationContext);
 
     const { convertStringToHtml } = utils
     const sanitizedHTML = DOMPurify.sanitize(convertStringToHtml(text));
@@ -29,7 +31,7 @@ const BotMsg = (p) => {
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
             <div className="bot-text-wrapper">
-            {isWaiting ? (
+            { isWaiting.isWait ? (
                     <div className='bot-text'>
                         <div className="chat-dot"></div>
                         <div className="chat-dot"></div>
