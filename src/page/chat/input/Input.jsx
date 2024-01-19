@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import ConversationContext from "../../../context/Conversation.Context";
 
 const Input = (p) => {
-    const { filesImages, handleUploadFileImg, setFilesImages, handleSend } = p;
+    const { filesImages, uploadFileImg, setFilesImages, handleSend } = p;
     const { isWaiting, setIsWaiting, selectedCon } = useContext(ConversationContext);
     const [inputValue, setInputValue] = useState('');
 
@@ -88,7 +88,7 @@ const Input = (p) => {
                         id="img_file-Input"
                         accept=".jpg,.png,.jpeg,.webp,.heic"
                         style={{ display: 'none' }}
-                        onChange={(e) => handleUploadFileImg(e)}
+                        onChange={(e) => uploadFileImg(e)}
                         multiple
                     />
                 </label>

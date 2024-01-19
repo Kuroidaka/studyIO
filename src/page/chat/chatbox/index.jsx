@@ -16,7 +16,7 @@ const ChatBox = () => {
         {currentMsgList && currentMsgList.length > 0  ? (
                 currentMsgList.map((msg, index) => (
                     msg.sender === "user" ? (
-                        <UserMsg key={index} text={msg.text}  />
+                        <UserMsg key={index} text={msg.text} imgList={msg.imgList} />
                     ) : (
                         <BotMsg key={index} text={msg.text}/>
                     )

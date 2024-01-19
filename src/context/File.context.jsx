@@ -48,7 +48,7 @@ export const FileProvider = (p) => {
         deleteDB()
     }
 
-    const uploadFile = async (formData, ) => {
+    const uploadFile = async (formData) => {
     
             const uploadDB = async (formData) => {
                 setIsLoading(true); 

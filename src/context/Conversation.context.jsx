@@ -15,7 +15,6 @@ export const ConversationProvider = (p) => {
         isWait: false,
         conId: ""
     });
-    
 
     useEffect(() => {
         getCon()

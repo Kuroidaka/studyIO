@@ -5,6 +5,7 @@ import Input from './Input';
 import conversationApi from '../../../api/conversation';
 import ConversationContext from '../../../context/Conversation.Context';
 import FileContext from '../../../context/File.Context';
+import fileApi from '../../../api/file';
 
 const InputBox = () => {
 
@@ -19,20 +20,60 @@ const InputBox = () => {
     ]
     )
 
-    const handleUploadFileImg = (event) => {
-        
-        const uploadedFiles = event.target.files;
-        for (let i = 0; i < uploadedFiles.length; i++) {
-            const file = uploadedFiles[i];
-            const newFile = { id: Date.now() + i, type: 'file', name: file.name };   
+    const imageFile = {
+        setFileImg: (e) => {
+            const uploadedFiles = e.target.files;
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                setFilesImages(prevFiles => [...prevFiles, file]);
+            }
+        },
+        handleProcess: async () => {
+            const formData = new FormData();
+            for (let i = 0; i < filesImages.length; i++) {
+                const file = filesImages[i];
+                formData.append("files", file);
+            }
+        // // Log the formData entries for debugging
+        //     for (let entry of formData.entries()) {
+        //         console.log(entry);
+        //     }
+            const { imgList } = await imageFile.sendToBE(formData)
 
-            setFilesImages(prevFiles => [...prevFiles, newFile]);
-            // if (uploadedFiles.length > 0) {
-            //     setShowContent(true);
-            // }
+            return imgList
+        },
+        sendToBE: async (formData) => {
+            return fileApi.uploadFileImg(formData)
+            .then((data) => {
+                console.log("img list: ",data.data);
+                setFilesImages([])
+                return {
+                    imgList: data.data.data
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                throw error
+            });
         }
+    }
 
-    };
+    // const handleUploadFileImg = async (event) => {
+        
+    //     const uploadedFiles = event.target.files;
+    //     const formData = new FormData();
+    //     for (let i = 0; i < uploadedFiles.length; i++) {
+    //         const file = uploadedFiles[i];
+    //         const newFile = { id: Date.now() + i, type: 'file', name: file.name };   
+    //         formData.append("images", file);
+    //         setFilesImages(prevFiles => [...prevFiles, newFile]);
+    //     }
+    //     const result = await uploadFileImg(formData)
+
+    //     return result
+
+    // };
+
     const handleUploadFileDocs = (event) => {
         const uploadedFiles = event.target.files;
         const formData = new FormData();
@@ -40,7 +81,7 @@ const InputBox = () => {
         for (let i = 0; i < uploadedFiles.length; i++) {
             const file = uploadedFiles[i];
             const newFile = { id: Date.now() + i,size: file.size, name: file.name };   
-            console.log("file---", newFile)
+
             formData.append("files", file);
             newListFile.push(newFile)
             setFilesDocs(prevFiles => [...prevFiles, newFile])
@@ -62,20 +103,19 @@ const InputBox = () => {
 
     const handleSend = async (inputValue, enableSend) => {
   
-        // setFiles([]);
-        // if (uploadedFiles.length > 0) {
-        //     setShowContent(true);
-        // }
-        // if (updatedFiles.length === 0) {
-        //     setShowContent(false);
-        // }
-        const data ={
-            text: inputValue,
-            sender: "user",
-            conversationId: selectedCon.id || "",
-            isAttachedFile: filesDocs.length > 0 ? true : false,
+        // API FILE IMG
+        let imgList = []
+        if(filesImages.length > 0) {
+            imgList = await imageFile.handleProcess()
         }
-        updatedCon({
+        // create new array to store image object, each object has id, url
+        let newImgList = []
+        for (let i = 0; i < imgList.length; i++) {
+            const newFile = { url: imgList[i] };   
+            newImgList.push(newFile)
+        }
+        // update current user msg 
+        await updatedCon({
             id:selectedCon.id,
             dayRef: selectedCon.dayRef,
             newMsgList: [{
@@ -85,15 +125,24 @@ const InputBox = () => {
                 "text": inputValue,
                 "sender": "user",
                 "senderID": "-1",
-                "conversationId": selectedCon.id
+                "conversationId": selectedCon.id,
+                "imgList": newImgList.length > 0 ? newImgList : [],
             }],
         })
 
-        // console.log(data)
+        // API CHAT
+        const data ={
+            text: inputValue,
+            sender: "user",
+            conversationId: selectedCon.id || "",
+            isAttachedFile: filesDocs.length > 0 ? true : false,
+            imgFiles: imgList.length > 0 ? imgList : [],
+        }
         await sendChat(data)
         .then(res => {
             if(res.statusText === "OK"){
                 console.log(res.data.data)
+                // update Bot msg
                 updatedCon({
                     id: selectedCon.id,
                     dayRef: selectedCon.dayRef,
@@ -108,7 +157,12 @@ const InputBox = () => {
     };
 
     const docsProp = { filesDocs, handleUploadFileDocs, setFilesDocs, delFile, isLoadingFile, loadingFileList }
-    const inputProp = { filesImages, handleUploadFileImg, setFilesImages, handleSend }
+    const inputProp = { 
+        filesImages,
+        uploadFileImg: imageFile.setFileImg,
+        setFilesImages,
+        handleSend
+    }
 
     return (
         <div className='Input'>            

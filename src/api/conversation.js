@@ -11,7 +11,7 @@ const conversationApi = {
         return axiosClient.post(url, { from: "StudyIO" })
     },
     
-    createChat: async ({text, sender, conversationId, isAttachedFile}) => {
+    createChat: async ({text, sender, conversationId, isAttachedFile, imgFiles}) => {
         const url = '/studyio/create';
 
         const dataBody = {
@@ -24,7 +24,8 @@ const conversationApi = {
                     senderID: "-1"
                 },
                 maxToken: 2000,
-                isAttachedFile: isAttachedFile
+                isAttachedFile: isAttachedFile,
+                imgFiles: imgFiles
             }
 
         }

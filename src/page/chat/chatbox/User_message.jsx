@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 const UserMsg = (p) => {
 
-    const { text } = p;
+    const { text, imgList=[] } = p;
 
     const messagesEndRef = useRef(null);
 
@@ -25,6 +25,11 @@ const UserMsg = (p) => {
             <p className='chat-person'>{"You"}</p>
             <div className="human-text-wrapper">
                 <div className='human-text'>
+                    <div className="img_list-wrapper">
+                        {imgList.length > 0 && imgList.map((img, index) => (
+                            <img key={index} src={img.url} alt="img" />
+                        ))}
+                    </div>
                     <p>{text}</p>
                 </div>
             </div>
@@ -77,6 +82,18 @@ const Container = styled.div`
             
             .human-text {
                 direction: ltr;
+                .img_list-wrapper {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    img {
+                        width: 100%;
+                        max-width: 350px;
+                        margin: 10px 0;
+                    }
+                
+                }
                 p {
                     font-size: 15px;
                     font-weight: 500;

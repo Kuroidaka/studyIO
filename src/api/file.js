@@ -27,6 +27,16 @@ const fileApi = {
           }
         )
     },
+    uploadFileImg: async (formData) => {
+        const url = `/studyio/file/img/upload`;
+
+        return axiosClient.post(url, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
+        )
+    },
    
 }
 
