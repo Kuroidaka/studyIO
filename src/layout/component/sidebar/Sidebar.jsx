@@ -1,7 +1,7 @@
-import {useEffect , useState } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import './style/sidebar.scss'
-import styled from "styled-components";
 import SidebarNav from "./sidebar_nav";
 
 
@@ -12,10 +12,12 @@ const Sidebar = (p) => {
         selectedCon,
         selectCon
     } = p
+    const navigate = useNavigate()
 
     const hdlSelCon = ({id, dayRef}) => {
         console.log("select side bar")
         selectCon({id, dayRef})
+        navigate('/chat')
     }
 
     console.log("reload sidebar")

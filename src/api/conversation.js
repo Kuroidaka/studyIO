@@ -42,7 +42,22 @@ const conversationApi = {
 
         }
         return axiosClient.post(url, dataBody)
-    }
+    },
+    speechToText: async ({formData}) => {
+
+        const response = await axiosClient.post(
+            'https://api.openai.com/v1/audio/transcriptions', formData,
+            {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+            }
+            }
+        );
+        
+        return {text: response.data.text};
+
+    },
 }
 
 export default conversationApi
