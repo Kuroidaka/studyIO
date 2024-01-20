@@ -150,7 +150,9 @@ const InputBox = () => {
                     newCon: res.data.data.newConversation,
                     isNewConversation: res.data.data.isNewConversation
                 })
-                enableSend()
+                if(typeof enableSend === 'function') {
+                     enableSend()
+                }
             }
         })
 

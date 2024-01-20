@@ -1,11 +1,14 @@
-import { useChat } from "ai/react";
+import fs from "fs";
 import mergeImages from "merge-images";
 import styled, { css } from "styled-components";
 import useMediaRecorder from "@wmik/use-media-recorder";
-import { useId, useEffect, useRef, useState } from "react";
+import { useId, useEffect, useRef, useState, useContext } from "react";
 import useSilenceAwareRecorder from "silence-aware-recorder/react";
 
+import func from "./function"
+import conversationApi from "../../api/conversation"
 import common from "./common";
+import ConversationContext from "../../context/Conversation.Context";
 
 const INTERVAL = 250;
 const IMAGE_WIDTH = 512;
@@ -18,6 +21,13 @@ const SILENT_THRESHOLD = -30;
 const transparentPixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/2lXzAAAACV0RVh0ZGF0ZTpjcmVhdGU9MjAyMy0xMC0xOFQxNTo0MDozMCswMDowMEfahTAAAAAldEVYdGRhdGU6bW9kaWZ5PTIwMjMtMTAtMThUMTU6NDA6MzArMDA6MDBa8cKfAAAAAElFTkSuQmCC";
 
+function playAudio(url) {
+return new Promise((resolve) => {
+    const audio = new Audio(url);
+    audio.onended = resolve;
+    audio.play();
+});
+}
 
 const imagesGrid = async ({
     base64Images,
@@ -57,6 +67,7 @@ const imagesGrid = async ({
   
 
 const CamChat = () => {
+    // console.log("api:", process?.env?.REACT_APP_OPENAI_API_KEY)
     const id = useId();
     const maxVolumeRef = useRef(0);
     const minVolumeRef = useRef(-100);
@@ -65,13 +76,17 @@ const CamChat = () => {
     const videoRef = useRef();
     const canvasRef = useRef();
 
-    const [displayDebug, setDisplayDebug] = useState(false);
+    const { updatedCon, selectedCon } = useContext(ConversationContext);
+
+    const [displaydebug, setDisplayDebug] = useState(false);
     const [isStarted, setIsStarted] = useState(false);
     const [phase, setPhase] = useState("not inited");
     const [transcription, setTranscription] = useState("");
     const [imagesGridUrl, setImagesGridUrl] = useState(null);
     const [currentVolume, setCurrentVolume] = useState(-50);
     const [volumePercentage, setVolumePercentage] = useState(0);
+    const [lang, setLang] = useState("en") 
+    // const [lang, setLang] = useLocalStorage("lang", "");
 
     // Define recorder for video
     let { liveStream, ...video } = useMediaRecorder({
@@ -87,7 +102,7 @@ const CamChat = () => {
         silentThreshold: SILENT_THRESHOLD,
         minDecibels: -100,
     });
-
+    
     async function onSpeech(data) { //on speeching
         if (isBusy.current) return;
     
@@ -95,15 +110,29 @@ const CamChat = () => {
         audio.stopRecording();
         
         // send audio to whisper
-
-        // gen img grid
         setPhase("user: processing speech to text");
 
+        const speechtotextFormData = new FormData();
+        speechtotextFormData.append("file", data, "audio.webm");
+        speechtotextFormData.append("model", "whisper-1");
+        speechtotextFormData.append("language", lang);
+    
+    
+        const result = await conversationApi.speechToText({
+            formData: speechtotextFormData
+        });
+
+    
+        setTranscription(result.text);
+    
+        setPhase("user: uploading video captures");
+      
+        // gen img grid
          // Keep only the last XXX screenshots
         screenshotsRef.current = screenshotsRef.current.slice(-MAX_SCREENSHOTS);
 
         const imageUrl = await imagesGrid({
-        base64Images: screenshotsRef.current,
+            base64Images: screenshotsRef.current,
         });
 
         screenshotsRef.current = [];
@@ -113,7 +142,54 @@ const CamChat = () => {
         setImagesGridUrl(imageUrl);
 
         setPhase("user: processing completion");
-      }
+
+        // send chat
+        const AIresult = await handleSendChat({ uploadUrl, text: result.text })
+        // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
+
+        if(AIresult?.data) {
+            setPhase("assistant: processing text to speech");
+
+            const ttsFormData = new FormData();
+            ttsFormData.append("input", AIresult?.data);
+            
+            const { blobURL } = await func.textToSpeech({ formData: ttsFormData })
+
+            setPhase("assistant: playing audio");
+
+            await playAudio(blobURL);
+      
+            audio.startRecording();
+            isBusy.current = false;
+      
+            setPhase("user: waiting for speech");
+        }
+        
+    }
+
+    const handleSendChat = async ({ text, uploadUrl }) => {
+
+        const message = {
+            content: [
+              text,
+              {
+                type: "image_url",
+                image_url: {
+                  url: uploadUrl,
+                },
+              },
+            ],
+            role: "user",
+        }
+        const result = await func.sendChat({
+            messages: message,
+            lang: lang
+        })
+
+        console.log("result", result)
+
+        return result
+    }
 
 
     const recorder = {//recorder object
@@ -229,7 +305,7 @@ const CamChat = () => {
           <DebugBtn onClick={() => setDisplayDebug(prev => !prev)}>Debug</DebugBtn>
         </BtnSection>
 
-        <DebugContainer displayDebug={displayDebug}>
+        <DebugContainer displaydebug={displaydebug}>
            <CloseButton onClick={() => setDisplayDebug(false)}>
              ⛌
            </CloseButton>
@@ -340,7 +416,7 @@ const DebugContainer = styled.div`
     @media (min-width: 640px) {
         width: 33vw;
     }
-    ${props => props.displayDebug ? css`
+    ${props => props.displaydebug ? css`
       transform: translateX(0);
     ` : css`
       transform: translateX(-100%);
