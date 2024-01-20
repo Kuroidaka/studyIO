@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { User } from 'react-feather';
 import { useEffect, useRef } from "react";
+
 import Img from '../../../assets/img'
+import Image from "../../../component/Image";
 
 const UserMsg = (p) => {
 
@@ -31,20 +33,16 @@ const UserMsg = (p) => {
             <p className='chat-person'>{"You"}</p>
             <div className="human-text-wrapper">
                 <div className='human-text'>
-                    <div className="img_list-wrapper">
-                        {imgList.length > 0 && imgList.map((img, index) => (
-                            <img 
+                   {imgList.length > 0 && <div className="img_list-wrapper">
+                        {imgList.map((img, index) => (
+                            <Image 
                                 key={index}
                                 src={img.url}
-                                alt="img" 
-                                onError={(e) => { 
-                                    console.log("error")
-                                    e.target.onerror = null; 
-                                    e.target.src = imgPlaceHolder
-                                  }} 
+                                imgPlaceHolder={imgPlaceHolder}
                                 />
                         ))}
-                    </div>
+
+                    </div>}
                     <p dangerouslySetInnerHTML={{ __html: convertStringToHtml(text) }} />
                 </div>
             </div>
@@ -86,9 +84,7 @@ const Container = styled.div`
             font-weight: bold;
         }
         .human-text-wrapper{
-            padding-bottom: 10px;
-            padding-right: 10px;
-            padding-left: 10px;
+            padding: 10px;
             border-radius: 10px;
             background: #484856;
             display: flex;
@@ -102,19 +98,22 @@ const Container = styled.div`
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
+                    gap: 10px;
+                    margin: 10px 0;
                     img {
+                        border-radius: 10px;
+                        cursor: pointer;
                         width: 100%;
-                        max-width: 350px;
-                        margin: 10px 0;
+                        max-width: 200px;
                     }
                 
                 }
                 p {
                     font-size: 15px;
                     font-weight: 500;
-                    margin-top: 10px;
                 }
             }
         }
     }
 `
+

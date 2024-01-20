@@ -15,18 +15,6 @@ const css = {
         refLink: "text-decoration: underline;color: #9f9fff;font-size: 1rem;font-style: italic;"
     }
 }
-// check is img link
-const checkIsImgLink = (input) => {
-    if(input === "" || input === undefined || input === null) return false;
-    const urlRegex = /(http[s]?:\/\/){0,1}(\w+:\w+@){0,1}([a-zA-Z0-9.-]+)(:[0-9]+){0,1}(\/[a-zA-Z0-9.-]+)*\/?/;
-    const url = input.match(urlRegex);
-
-    const imageRegex = /\.(jpeg|jpg|gif|png)$/;
-    if(url.length > 0 ) {
-        const isImage = imageRegex.test(url[0]);
-        return isImage;
-    }
-}
 
 const convertLink = (str) => {
     const {link} = css
@@ -97,10 +85,6 @@ const formatCodeBlock = (text) => {
 export default function convertStringToHtml(input) {
 
     let html = ""
-    if(checkIsImgLink(input)) 
-        return `<img src="${input}" loading="lazy" alt="" onerror="this.onerror=null;this.src=${imgPlaceHolder};"/>`;
-
-
         
     input = formatCodeBlock(input)
 
