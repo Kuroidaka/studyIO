@@ -1,14 +1,19 @@
 import fs from "fs";
+import { nanoid } from 'nanoid'
 import mergeImages from "merge-images";
+import { motion } from "framer-motion";
+import { ArrowLeft } from 'react-feather';
+import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import useMediaRecorder from "@wmik/use-media-recorder";
-import { useId, useEffect, useRef, useState, useContext } from "react";
 import useSilenceAwareRecorder from "silence-aware-recorder/react";
+import { useId, useEffect, useRef, useState, useContext } from "react";
 
 import func from "./function"
-import conversationApi from "../../api/conversation"
 import common from "./common";
+import conversationApi from "../../api/conversation"
 import ConversationContext from "../../context/Conversation.Context";
+import utils from "../../utils/index";
 
 const INTERVAL = 250;
 const IMAGE_WIDTH = 512;
@@ -75,6 +80,9 @@ const CamChat = () => {
     const screenshotsRef = useRef([]);
     const videoRef = useRef();
     const canvasRef = useRef();
+    const navigate = useNavigate();
+
+    const { hostImages } = utils
 
     const { updatedCon, selectedCon } = useContext(ConversationContext);
 
@@ -86,6 +94,11 @@ const CamChat = () => {
     const [currentVolume, setCurrentVolume] = useState(-50);
     const [volumePercentage, setVolumePercentage] = useState(0);
     const [lang, setLang] = useState("en") 
+    const [isWaiting, setIsWaiting] = useState(false)
+    const [tmpConversation, setTmpConversation] = useState({
+        user: {},
+        bot: {}
+    })
     // const [lang, setLang] = useLocalStorage("lang", "");
 
     // Define recorder for video
@@ -111,18 +124,19 @@ const CamChat = () => {
         
         // send audio to whisper
         setPhase("user: processing speech to text");
+        setIsWaiting(true)
 
         const speechtotextFormData = new FormData();
         speechtotextFormData.append("file", data, "audio.webm");
         speechtotextFormData.append("model", "whisper-1");
         speechtotextFormData.append("language", lang);
     
-    
+        
         const result = await conversationApi.speechToText({
             formData: speechtotextFormData
         });
 
-    
+        setIsWaiting(false)
         setTranscription(result.text);
     
         setPhase("user: uploading video captures");
@@ -137,21 +151,33 @@ const CamChat = () => {
 
         screenshotsRef.current = [];
 
-        const uploadUrl = await common.uploadImageToFreeImageHost(imageUrl);
+        const uploadUrls = await hostImages([imageUrl]);
 
         setImagesGridUrl(imageUrl);
+
+        setTmpConversation({// store user tmp msg
+            user: {
+                text: result.text,
+                image: uploadUrls[0]
+            },
+        })
 
         setPhase("user: processing completion");
 
         // send chat
-        const AIresult = await handleSendChat({ uploadUrl, text: result.text })
+        const { content } = await handleSendChat({ uploadUrl: uploadUrls[0], text: result.text })
         // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
 
-        if(AIresult?.data) {
+        if(content) {
             setPhase("assistant: processing text to speech");
+            setTmpConversation({//store AI tmp msg
+                bot: {
+                    text: content,
+                },
+            })
 
             const ttsFormData = new FormData();
-            ttsFormData.append("input", AIresult?.data);
+            ttsFormData.append("input", content);
             
             const { blobURL } = await func.textToSpeech({ formData: ttsFormData })
 
@@ -167,30 +193,67 @@ const CamChat = () => {
         
     }
 
-    const handleSendChat = async ({ text, uploadUrl }) => {
+    const handleSendChat = async ({ text, uploadUrl, enableSend=null }) => {
+  
+        // create new array to store image object, each object has id, url
+        let newImgList = [{
+            url: uploadUrl,
+            id: nanoid(),
+        }]
 
-        const message = {
-            content: [
-              text,
-              {
-                type: "image_url",
-                image_url: {
-                  url: uploadUrl,
-                },
-              },
-            ],
-            role: "user",
-        }
-        const result = await func.sendChat({
-            messages: message,
-            lang: lang
+        // update current user msg 
+        await updatedCon({
+            id: selectedCon.id,
+            dayRef: selectedCon.dayRef,
+            newMsgList: [{
+                "id": "temp-id",
+                "createdAt": new Date().toISOString(),
+                "updatedAt": new Date().toISOString(),
+                "text": text,
+                "sender": "user",
+                "senderID": "-1",
+                "conversationId": selectedCon.id,
+                "imgList": newImgList.length > 0 ? newImgList : [],
+            }],
         })
 
-        console.log("result", result)
+        // API CHAT
+        const data ={
+            text: text,
+            sender: "user",
+            conversationId: selectedCon.id || "",
+            isAttachedFile: false,
+            imgFiles: newImgList.length > 0 ? newImgList : [],
+        }
+        const result = await conversationApi.createChat(data)
+        .then(res => {
+            if(res.statusText === "OK"){
+                console.log(res.data.data)
+                // update Bot msg
+                updatedCon({
+                    id: selectedCon.id,
+                    dayRef: selectedCon.dayRef,
+                    newMsgList: res.data.data.bot,
+                    newCon: res.data.data.newConversation,
+                    isNewConversation: res.data.data.isNewConversation
+                })
+                if(typeof enableSend === 'function') {
+                     enableSend()
+                }
+                console.log(res.data.data.bot[0])
+                return res.data.data.bot[0]
+            }
+        })
 
-        return result
+        return {
+          content: result.text
+        }
+
+    };
+
+    const handleClickBack = () => {
+      navigate("/chat")
     }
-
 
     const recorder = {//recorder object
         start: () => {
@@ -279,12 +342,20 @@ const CamChat = () => {
 
     return ( 
         <Container>
+           <motion.div 
+                    className='title'
+                    initial={{ opacity: 0, x: -100 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5 }}>
+              <motion.div className='back-icon' onClick={handleClickBack} >
+                <ArrowLeft />
+              </motion.div>
+            </motion.div>
             <canvas ref={canvasRef} style={{ display: "none" }} />
             <div className="content">
                 <VideoContainer>
                     <video
                     ref={videoRef}
-                    className=""
                     autoPlay
                     />
                     <RecordDot isRecording={audio.isRecording} volumePercentage={volumePercentage}>
@@ -304,6 +375,17 @@ const CamChat = () => {
           )}
           <DebugBtn onClick={() => setDisplayDebug(prev => !prev)}>Debug</DebugBtn>
         </BtnSection>
+
+        <AiResponseContainer>
+                <div className="ai-text">
+                {!isWaiting ? (
+                    <p>{transcription}</p>
+                ) : (
+                    <>...loading</>
+                )
+                }
+                </div>
+        </AiResponseContainer>
 
         <DebugContainer displaydebug={displaydebug}>
            <CloseButton onClick={() => setDisplayDebug(false)}>
@@ -333,14 +415,41 @@ export default CamChat;
 const Container = styled.div`
     height: 100%;
     width: 100%;
-    background-color: #000000;
     position: relative;
+
+    .title {
+        display: flex;
+        align-items: center;
+        margin-left: 40px;
+        height: 8vh;
+        color: #ffffff;
+    
+        .back-icon {
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            padding: 7px;
+            border-radius: 5px;
+            align-items: center;
+            border: 1px solid;
+
+            &:hover {
+                background-color: #ffffff;
+                color: #292A38;
+            }
+        }
+
+    }
+
+
 
     .content {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 80%;
+        height: 60%;
         width: 100%;
     
     }
@@ -351,13 +460,20 @@ const BtnSection = styled.div `
 `
 
 const VideoContainer = styled.div`
-    width: 500px;
-    height: auto;
+    width: 100%;
+    background-color: #A0A0A0;
+    height: 80%;
     position: relative;
+    margin: 30px;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     video {
         width: 100%;
         height: 100%;
+        border-radius: 0.5rem;
         
     }
 
@@ -444,3 +560,7 @@ const DebugContainer = styled.div`
     }
 
 `;
+
+const AiResponseContainer = styled.div `
+
+`

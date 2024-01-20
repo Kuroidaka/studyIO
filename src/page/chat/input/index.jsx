@@ -1,11 +1,14 @@
-import '../style/index.scss'
 import { useContext, useEffect, useState } from 'react';
+import { nanoid } from 'nanoid'
+
+import '../style/index.scss'
 import DocsUploaded from "./Docs";
 import Input from './Input';
 import conversationApi from '../../../api/conversation';
 import ConversationContext from '../../../context/Conversation.Context';
 import FileContext from '../../../context/File.Context';
 import fileApi from '../../../api/file';
+import filesToBase64 from '../../../utils/fileToBase64';
 
 const InputBox = () => {
 
@@ -29,16 +32,17 @@ const InputBox = () => {
             }
         },
         handleProcess: async () => {
-            const formData = new FormData();
-            for (let i = 0; i < filesImages.length; i++) {
-                const file = filesImages[i];
-                formData.append("files", file);
-            }
+            // const formData = new FormData();
+            // for (let i = 0; i < filesImages.length; i++) {
+            //     const file = filesImages[i];
+            //     formData.append("files", file);
+            // }
         // // Log the formData entries for debugging
         //     for (let entry of formData.entries()) {
         //         console.log(entry);
         //     }
-            const { imgList } = await imageFile.sendToBE(formData)
+            // const { imgList } = await imageFile.sendToBE(formData)
+            await filesToBase64(filesImages)
 
             return imgList
         },
@@ -111,12 +115,12 @@ const InputBox = () => {
         // create new array to store image object, each object has id, url
         let newImgList = []
         for (let i = 0; i < imgList.length; i++) {
-            const newFile = { url: imgList[i] };   
+            const newFile = { url: imgList[i], id: nanoid() };   
             newImgList.push(newFile)
         }
         // update current user msg 
         await updatedCon({
-            id:selectedCon.id,
+            id: selectedCon.id,
             dayRef: selectedCon.dayRef,
             newMsgList: [{
                 "id": "temp-id",
@@ -136,7 +140,7 @@ const InputBox = () => {
             sender: "user",
             conversationId: selectedCon.id || "",
             isAttachedFile: filesDocs.length > 0 ? true : false,
-            imgFiles: imgList.length > 0 ? imgList : [],
+            imgFiles: newImgList.length > 0 ? newImgList : [],
         }
         await sendChat(data)
         .then(res => {

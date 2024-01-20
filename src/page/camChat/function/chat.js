@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-
+import AiClient from "../../../config/openAI"
 
 const systemMessage = (
   lang
@@ -19,16 +19,19 @@ ${lang ? `10. Assistant must speak in this language : "${lang}".` : ""}`;
 
 export const sendChat = async ({ messages, lang }) => {
 
-  if (!import.meta.env.VITE_OPENAI_API_KEY) {
+  let openai
+  if (import.meta.env.VITE_AZURE_OPENAI_API_KEY) {
+    openai = AiClient.azureOpenAi
+  }
+  else if (import.meta.env.VITE_OPENAI_API_KEY) {
+    openai = AiClient.openai
+  }
+  else {
     return {
       error: "No API key provided.",
     };
   }
 
-  const openai = new OpenAI({
-    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-    dangerouslyAllowBrowser: true 
-  });
 
   const response = await openai.chat.completions.create({
     model: "gpt-4-vision-preview",

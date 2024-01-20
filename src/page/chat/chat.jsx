@@ -1,6 +1,7 @@
-import { Edit } from 'react-feather';
+import { Edit, Video } from 'react-feather';
 import styled from 'styled-components';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import ChatBox from './chatbox';
@@ -10,9 +11,13 @@ import ConversationContext from '../../context/Conversation.Context';
 const ChatPage = () => {
     
     const { createNewConversation } = useContext(ConversationContext);  
-    
+    const navigate = useNavigate();
+
     const handleOpenNewChat = () => {
         createNewConversation()
+    }
+    const handleSwitchVideoChat = () => {
+        navigate("/cam-chat")
     }
 
     return ( 
@@ -26,6 +31,9 @@ const ChatPage = () => {
                     transition={{ duration: 0.5 }}>
                     <motion.div className='Edit-icon' onClick={handleOpenNewChat}>
                         <Edit />
+                    </motion.div>
+                    <motion.div className='Camera-icon' onClick={handleSwitchVideoChat}>
+                        <Video />
                     </motion.div>
                     <motion.h1>StudyIO</motion.h1>
                 </motion.div>
@@ -59,13 +67,13 @@ const Container = styled.div`
         align-items: center;
         margin-left: 40px;
         height: 8vh;
+        gap: 15px;
         h1 {
-            margin-left: 15px; /* Thay đổi khoảng cách giữa Edit và chữ StudyIO */
             font-size: 20px;   /* Thay đổi kích thước của chữ StudyIO */
             font-style: 'Montserrat';
         }
     
-        .Edit-icon {
+        .Edit-icon, .Camera-icon {
             width: 45px;
             height: 45px;
             cursor: pointer;
@@ -81,6 +89,7 @@ const Container = styled.div`
                 color: #292A38;
             }
         }
+
     }
     
 
