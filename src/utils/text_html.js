@@ -1,5 +1,6 @@
+import Img from "../assets/img"
 
-
+const { imgPlaceHolder } = Img
 const css = {
     codeBoxCss : {
         wrapper:`border: 2px solid #000;padding: 0px 14px;background-color: #2B2D31;color: #fff;width: 100%;height: auto;border-radius: 8px;`,
@@ -97,7 +98,7 @@ export default function convertStringToHtml(input) {
 
     let html = ""
     if(checkIsImgLink(input)) 
-        return `<img src="${input}" loading="lazy" alt=""/>`;
+        return `<img src="${input}" loading="lazy" alt="" onerror="this.onerror=null;this.src=${imgPlaceHolder};"/>`;
 
 
         

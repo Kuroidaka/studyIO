@@ -13,6 +13,7 @@ const ChatPage = () => {
     const { createNewConversation } = useContext(ConversationContext);  
     const navigate = useNavigate();
 
+
     const handleOpenNewChat = () => {
         createNewConversation()
     }

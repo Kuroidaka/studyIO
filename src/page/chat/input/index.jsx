@@ -8,7 +8,7 @@ import conversationApi from '../../../api/conversation';
 import ConversationContext from '../../../context/Conversation.Context';
 import FileContext from '../../../context/File.Context';
 import fileApi from '../../../api/file';
-import filesToBase64 from '../../../utils/fileToBase64';
+import utils from "../../../utils"
 
 const InputBox = () => {
 
@@ -22,6 +22,9 @@ const InputBox = () => {
         // { id: 3, type: 'file', name: 'chinh_sach_moi.pdf' }
     ]
     )
+
+        
+    const { filesToBase64, hostImages, filesToBlobURLs } = utils
 
     const imageFile = {
         setFileImg: (e) => {
@@ -42,7 +45,10 @@ const InputBox = () => {
         //         console.log(entry);
         //     }
             // const { imgList } = await imageFile.sendToBE(formData)
-            await filesToBase64(filesImages)
+            setFilesImages([])
+            const listBase64 = await filesToBase64(filesImages)
+            
+            const imgList = await hostImages(listBase64)
 
             return imgList
         },
@@ -107,17 +113,10 @@ const InputBox = () => {
 
     const handleSend = async (inputValue, enableSend) => {
   
-        // API FILE IMG
-        let imgList = []
-        if(filesImages.length > 0) {
-            imgList = await imageFile.handleProcess()
-        }
-        // create new array to store image object, each object has id, url
-        let newImgList = []
-        for (let i = 0; i < imgList.length; i++) {
-            const newFile = { url: imgList[i], id: nanoid() };   
-            newImgList.push(newFile)
-        }
+
+        let blobImages = await filesToBlobURLs(filesImages)
+
+        blobImages = blobImages.map(img => ({url: img, id: nanoid()}))
         // update current user msg 
         await updatedCon({
             id: selectedCon.id,
@@ -130,9 +129,24 @@ const InputBox = () => {
                 "sender": "user",
                 "senderID": "-1",
                 "conversationId": selectedCon.id,
-                "imgList": newImgList.length > 0 ? newImgList : [],
+                "imgList": blobImages.length > 0 ? blobImages : [],
             }],
         })
+
+        // API FILE IMG
+        let imgUrlList = []
+        let newImgList = []
+        if(filesImages.length > 0) {
+            imgUrlList = await imageFile.handleProcess()
+
+            if(imgUrlList) {
+                // create new array to store image object, each object has id, url
+                newImgList = imgUrlList.map((img) => {
+                    const newFile = { url: img, id: nanoid() };   
+                    return newFile
+                })
+            }
+        }
 
         // API CHAT
         const data ={

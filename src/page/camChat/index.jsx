@@ -461,7 +461,7 @@ const BtnSection = styled.div `
 
 const VideoContainer = styled.div`
     width: 100%;
-    background-color: #A0A0A0;
+    background-color: black;
     height: 80%;
     position: relative;
     margin: 30px;

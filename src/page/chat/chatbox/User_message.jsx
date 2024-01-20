@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { User } from 'react-feather';
 import { useEffect, useRef } from "react";
+import Img from '../../../assets/img'
 
 const UserMsg = (p) => {
 
     const { text, imgList=[] } = p;
+    const { imgPlaceHolder } = Img
 
     const messagesEndRef = useRef(null);
 
@@ -13,6 +15,10 @@ const UserMsg = (p) => {
     };
 
     useEffect(scrollToBottom, [text]);
+
+    const convertStringToHtml = (str) => {
+        return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    }
 
     return ( 
     <Container className='chat-msg human-chat' ref={messagesEndRef}>
@@ -27,10 +33,19 @@ const UserMsg = (p) => {
                 <div className='human-text'>
                     <div className="img_list-wrapper">
                         {imgList.length > 0 && imgList.map((img, index) => (
-                            <img key={index} src={img.url} alt="img" />
+                            <img 
+                                key={index}
+                                src={img.url}
+                                alt="img" 
+                                onError={(e) => { 
+                                    console.log("error")
+                                    e.target.onerror = null; 
+                                    e.target.src = imgPlaceHolder
+                                  }} 
+                                />
                         ))}
                     </div>
-                    <p>{text}</p>
+                    <p dangerouslySetInnerHTML={{ __html: convertStringToHtml(text) }} />
                 </div>
             </div>
         </div>

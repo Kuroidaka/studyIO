@@ -44,9 +44,10 @@ const Input = (p) => {
     const handleEnterKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
+            document.getElementById('myTextarea').style.height = 'auto';
             handleSendButtonClick();
         } else if (e.key === 'Enter' && e.shiftKey) {
-            setInputValue((prevValue) => prevValue);
+            setInputValue((prevValue) => prevValue); 
         }
     };
 
