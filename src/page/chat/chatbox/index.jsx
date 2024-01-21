@@ -3,20 +3,30 @@ import styled from 'styled-components';
 import UserMsg from './User_message';
 import BotMsg from './Bot_message';
 import EmptyBox from './EmptyBox';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import ConversationContext from '../../../context/Conversation.Context';
 
 const ChatBox = () => {
 
 
     const { currentMsgList, isWaiting, selectedCon } = useContext(ConversationContext);  
+    const pageRef = useRef(null); 
+
+    const scrollToBottom = () => {
+        console.log("scroll")
+        // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+        const div = document.querySelector('.list-chat');
+        div.scrollTop = div.scrollHeight - div.clientHeight;
+    };
+
+    useEffect(scrollToBottom, [currentMsgList]);
 
     return (
-        <Conversation>
+        <Conversation ref={pageRef} className='list-chat'>
         {currentMsgList && currentMsgList.length > 0  ? (
                 currentMsgList.map((msg, index) => (
                     msg.sender === "user" ? (
-                        <UserMsg key={index} text={msg.text} imgList={msg.imgList} />
+                        <UserMsg pageRef={pageRef} key={index} text={msg.text} imgList={msg.imgList} />
                     ) : (
                         <BotMsg key={index} text={msg.text}/>
                     )

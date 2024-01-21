@@ -10,20 +10,12 @@ const UserMsg = (p) => {
     const { text, imgList=[] } = p;
     const { imgPlaceHolder } = Img
 
-    const messagesEndRef = useRef(null);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth"});
-    };
-
-    useEffect(scrollToBottom, [text]);
-
     const convertStringToHtml = (str) => {
         return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
     }
 
     return ( 
-    <Container className='chat-msg human-chat' ref={messagesEndRef}>
+    <Container className='chat-msg human-chat' >
         <div className='icon'>
             <div className='human-icon-wrapper'>
                 <User className='human-icon'/>
