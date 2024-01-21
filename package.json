@@ -18,6 +18,7 @@
     "@wmik/use-media-recorder": "^1.6.5-beta.0",
     "ai": "^2.2.31",
     "axios": "^1.6.5",
+    "best-effort-json-parser": "^1.0.1",
     "dompurify": "^3.0.8",
     "framer-motion": "^10.18.0",
     "html-react-parser": "^5.1.0",

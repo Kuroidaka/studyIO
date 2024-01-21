@@ -4,6 +4,7 @@ import base64ToBlob from './base64ToBlob';
 import hostImages from './hostImages';
 import filesToBlobURLs from './filesToBlobs';
 import checkIsImgLink from './isImgLink';
+import isObject from './isObject';
 
 const utils = {
     convertStringToHtml,
@@ -11,6 +12,7 @@ const utils = {
     base64ToBlob,
     hostImages,
     filesToBlobURLs,
-    checkIsImgLink
+    checkIsImgLink,
+    isObject
 }
 export default utils 

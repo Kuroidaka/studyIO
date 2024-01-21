@@ -72,7 +72,6 @@ const imagesGrid = async ({
   
 
 const CamChat = () => {
-    // console.log("api:", process?.env?.REACT_APP_OPENAI_API_KEY)
     const id = useId();
     const maxVolumeRef = useRef(0);
     const minVolumeRef = useRef(-100);
