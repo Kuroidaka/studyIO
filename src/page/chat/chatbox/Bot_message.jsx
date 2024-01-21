@@ -50,22 +50,15 @@ const BotMsg = (p) => {
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
             <div className="bot-text-wrapper">
-            { isWaiting.isWait ? (
+            { 
+                (newText.status && newText.isImg) ? (
                     <div className='bot-text'>
-                        <div className="chat-dot"></div>
-                        <div className="chat-dot"></div>
-                        <div className="chat-dot"></div>
+                        <Image 
+                            src={newText.text}
+                            imgPlaceHolder={imgPlaceHolder} />
                     </div>
                 ) : (
-                    (newText.status && newText.isImg) ? (
-                        <div className='bot-text'>
-                            <Image 
-                                src={newText.text}
-                                imgPlaceHolder={imgPlaceHolder} />
-                        </div>
-                    ) : (
-                        <div className='bot-text' dangerouslySetInnerHTML={{ __html: newText.text }} ></div>
-                    )
+                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: newText.text }} ></div>
                 )
             }
             </div>

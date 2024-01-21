@@ -178,6 +178,7 @@
         height: 100%;
         border: 1px solid white;
         border-radius: 20px;
+        position: relative;
 
         .File_area {
             // border: 1px solid red;
@@ -300,6 +301,45 @@
 
                 &:hover {
                     color: var(--second-color);
+                }
+            }
+        }
+
+        .chatting-dot {
+            position: absolute;
+            top: -51px;
+            left: 0;
+            width: 50px;
+            height: auto;
+            /* border-radius: 50%; */
+            /* background-color: #FF5C5C; */
+            padding: 6px;
+
+            .bot-text {
+                gap: 5px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 25px;
+                .chat-dot {
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    background-color: #848484;
+                    border-radius: 50%;
+                    animation: jump .8s linear infinite;
+
+
+                    &:nth-child(1) {
+                        animation-delay: 0s;
+                    }
+                    &:nth-child(2) {
+                        animation-delay: 0.15s;
+                    }
+                    &:nth-child(3) {
+                        animation-delay: 0.3s;
+                    }
+
                 }
             }
         }

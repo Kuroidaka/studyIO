@@ -112,6 +112,16 @@ const Input = (p) => {
                 }
 
             </div>
+            {(isWaiting.isWait && isWaiting.conId === selectedCon.id) 
+            && 
+            <div className="chatting-dot">
+                <div className='bot-text'>
+                    <div className="chat-dot"></div>
+                    <div className="chat-dot"></div>
+                    <div className="chat-dot"></div>
+                </div>
+            </div>
+            }
         </div>
     );
 }

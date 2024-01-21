@@ -36,7 +36,7 @@ const ChatBox = () => {
                 <EmptyBox />
             )
         }
-        { (isWaiting.isWait && isWaiting.conId === selectedCon.id) && <BotMsg text="..." className="waiting" isWaiting={isWaiting}/> }
+
         </Conversation>
      );
 }
