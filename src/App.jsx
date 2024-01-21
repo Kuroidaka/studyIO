@@ -2,14 +2,16 @@ import { Routes, Route } from "react-router-dom";
 import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
 import { Suspense } from 'react';
+import Load from "./component/Load";
+import styled from "styled-components";
 
 function App() {
-
+  
   return (
     <>
 
       <GlobalStyles />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingContainer><Load /></LoadingContainer>}>
         <Routes>
           {routes.map((route, idx) => {
             return (<Route
@@ -27,3 +29,12 @@ function App() {
 }
 
 export default App
+
+
+const LoadingContainer = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`
