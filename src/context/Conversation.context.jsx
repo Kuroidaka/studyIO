@@ -74,7 +74,7 @@ export const ConversationProvider = (p) => {
 
     }
 
-    const updatedCon = async ({id, dayRef, newMsgList, newCon, isNewConversation}) => {
+    const updatedCon = async ({id, dayRef, newMsgList, newCon, isNewConversation, userMsg}) => {
               
         // If it's a new conversation for Bot
         if(newCon && newCon.length > 0 && isNewConversation)  {
@@ -83,20 +83,44 @@ export const ConversationProvider = (p) => {
                 : item)
             );
             setSelectedCon({id: newCon[0].id, dayRef: "Today"});
-        } else {
 
+            setCurrentMsgList(prev => {
+                // newMsgList[0].id
+                let newList = prev.filter(item => item.id !== "temp-id" && item.id !== "temp-id-2")
+                return [...newList, ...newCon[0].messages]
+            });
+        } else {// if not new conversation for Bot
             // Update current message list screen 
-            setCurrentMsgList(prev => [...prev, ...newMsgList]);
-            
-          // Find the day from the list and update the conversation if found
-          const day = list.find(item => item.dayRef === dayRef);
-          if (day) {
+            setCurrentMsgList(prev => {
+                // newMsgList[0].id
+                let newList = prev.filter(item => item.id !== "temp-id-2" && item.id !== "temp-id")
+                return [...newList, userMsg, newMsgList[0]]
+            });
+
+        // update origin list data
+            const day = list.find(item => item.dayRef === dayRef);
+            if (day) {
+                const conversation = day.conversationList.find(con => con.id === id);
+                if (conversation) conversation.messages = [...conversation.messages, ...newMsgList];
+                setList([...list]);
+            }
+        }
+      }
+
+    const updateConUser = async ({id, dayRef, newMsgList}) => {
+
+        // Update current message list screen 
+        setCurrentMsgList(prev => [...prev, ...newMsgList]);
+
+        // Find the day from the list and update the conversation if found
+        const day = list.find(item => item.dayRef === dayRef);
+        if (day) {
             const conversation = day.conversationList.find(con => con.id === id);
             if (conversation) conversation.messages = [...conversation.messages, ...newMsgList];
             setList([...list]);
-          }
         }
-      }
+        
+    }
 
     const updateLastCon = async ({ newConversation }) => {
         setList(prevList => {
@@ -152,6 +176,7 @@ export const ConversationProvider = (p) => {
         createNewConversation,
         isWaiting,
         setIsWaiting,
+        updateConUser
     }
 
     return (

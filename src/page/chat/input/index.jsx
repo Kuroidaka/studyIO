@@ -14,7 +14,7 @@ import utils from "../../../utils"
 
 const InputBox = () => {
 
-    const { updatedCon, selectedCon, setCurrentMsgList, currentMsgList } = useContext(ConversationContext);
+    const { updatedCon, updateConUser, selectedCon, setCurrentMsgList, currentMsgList } = useContext(ConversationContext);
     const { filesDocs, setFilesDocs, delFile, isLoadingFile, uploadFile } = useContext(FileContext);
     const [loadingFileList, setLoadingFileList] = useState([]);
     // file image for upload at the input box
@@ -132,7 +132,7 @@ const InputBox = () => {
             "imgList": blobImages.length > 0 ? blobImages : [],
         }
 
-        await updatedCon({
+        await updateConUser({
             id: selectedCon.id,
             dayRef: selectedCon.dayRef,
             newMsgList: [newTempMsg],
@@ -163,31 +163,22 @@ const InputBox = () => {
         }
         await conversationApi.createChatStream(
             data,
-            ({data}) => {
+            ({data}) => {//update final data from server
                 updatedCon({ 
                     id: selectedCon.id,
                     dayRef: selectedCon.dayRef,
                     newMsgList: data.bot,
                     newCon: data.newConversation,
-                    isNewConversation: data.isNewConversation
+                    isNewConversation: data.isNewConversation,
+                    userMsg: data.user
                 })
                 if(typeof enableSend === 'function') {
                     enableSend()
                 }
             },
-            ({text}) => {
-                const newTempBotMsg = {
-                    "id": "temp-id-2",
-                    "createdAt": new Date().toISOString(),
-                    "updatedAt": new Date().toISOString(),
-                    "text": "",
-                    "sender": "bot",
-                    "senderID": "-2",
-                    "conversationId": selectedCon.id,
-                    "imgList": blobImages.length > 0 ? blobImages : [],
-                }
-               
-                const newCurrentMsgList = [...currentMsgList, newTempMsg, newTempBotMsg]
+            ({text}) => {//update stream text
+                   
+            const newCurrentMsgList = [...currentMsgList, newTempMsg ]
 
             let updatedMsgList = [...newCurrentMsgList];
 
@@ -201,10 +192,10 @@ const InputBox = () => {
                 "createdAt": new Date().toISOString(),
                 "updatedAt": new Date().toISOString(),
                 "text": text, // Join the chunk list into a string
-                "sender": "user",
-                "senderID": "-1",
+                "sender": "bot",
+                "senderID": "-2",
                 "conversationId": selectedCon.id,
-                "imgList": [], // Assuming no images for this new message
+                "imgList": blobImages.length > 0 ? blobImages : [], // Assuming no images for this new message
                 });
             }
             // If the object does exist, update it
@@ -217,7 +208,7 @@ const InputBox = () => {
             // Update the state
             setCurrentMsgList(updatedMsgList);
             },
-            enableSend
+            enableSend //enable send button after send
         )
 
     };

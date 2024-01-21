@@ -101,7 +101,8 @@ const conversationApi = {
             }
             try {
                 console.log("Received value", value)
-                const parsedValue = JSON.parse(value);
+                const parsedValue = value.split("__FIN__")[1] ? JSON.parse(value.split("__FIN__")[1]) : JSON.parse(value)
+
                 if(typeof parsedValue === 'object'){
                     if(
                         Object.prototype.hasOwnProperty.call(parsedValue, 'data') && 
@@ -116,8 +117,10 @@ const conversationApi = {
                     } else {
                         console.log("Received an unknown object: ", parsedValue)
                     }
-                } else {
-                    console.log("Received an unknown value: ", parsedValue)
+                } else if(typeof parsedValue === 'string'){ 
+                    
+                    // contentFull += value
+                    // updateCurrentMsgList && updateCurrentMsgList({text: contentFull})
                 }
             } catch (error) {
                 console.log("Received string: ", value)
