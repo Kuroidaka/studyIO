@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import './style/sidebar.scss'
 import SidebarNav from "./sidebar_nav";
+import Load from "../../../component/Load";
 
 
 const Sidebar = (p) => {
@@ -28,13 +29,7 @@ const Sidebar = (p) => {
                 <h2>History</h2>
     { isLoading ?
             (
-                <>
-                    <div className="body">
-                        <div className="spinner-wrapper">
-                            <div className="spinner"></div>
-                        </div>
-                    </div>
-                </> 
+                <Load minSize="35px"/> 
             ) : (
                 <div className="conversation-list" aria-hidden="true">
                 {(conList && conList.length > 0 ) ?

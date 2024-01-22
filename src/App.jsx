@@ -11,7 +11,7 @@ function App() {
     <>
 
       <GlobalStyles />
-      <Suspense fallback={<LoadingContainer><Load /></LoadingContainer>}>
+      <Suspense fallback={<LoadingContainer><Load minSize="35px"/></LoadingContainer>}>
         <Routes>
           {routes.map((route, idx) => {
             return (<Route
