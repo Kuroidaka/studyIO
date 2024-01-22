@@ -1,5 +1,5 @@
 
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useState } from "react";
 import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from 'react-feather';
 
@@ -7,6 +7,8 @@ import Sidebar from "./component/sidebar/Sidebar";
 import ConversationContext from '../context/Conversation.Context';
 import { ConversationProvider } from "../context/Conversation.Context";
 import { FileProvider } from "../context/File.Context";
+import Load from "../component/Load";
+
 
 const DefaultLayout = ( p ) => {
     const { children } = p
@@ -46,15 +48,17 @@ const DefaultLayoutComponent = (p) => {
         
         <div className="body">
             {sidebarOpen && <Sidebar {...sidebarProps}/>}
-            <div className="page-content">
-                <div className="icon-wrapper" onClick={handleChevronClick}>
-                    {isChevronRight
-                    ? <ChevronRight className='chevron-icon'/>
-                    : <ChevronLeft className='chevron-icon'/>
-                    }
+            <Suspense fallback={<LoadingContainer><Load minSize="35px"/></LoadingContainer>}>
+                <div className="page-content">
+                    <div className="icon-wrapper" onClick={handleChevronClick}>
+                        {isChevronRight
+                        ? <ChevronRight className='chevron-icon'/>
+                        : <ChevronLeft className='chevron-icon'/>
+                        }
+                    </div>
+                    {children}
                 </div>
-                {children}
-            </div>
+            </Suspense>
         </div>
     
        </Container>
@@ -104,4 +108,12 @@ const Container = styled.div`
     }
     
 
+`
+
+const LoadingContainer = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `

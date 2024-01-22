@@ -1,5 +1,5 @@
 import { Navigate } from "react-router"
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 
 import DefaultLayout from "../layout/index.jsx"
 
