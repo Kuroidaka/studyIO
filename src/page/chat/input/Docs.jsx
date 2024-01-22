@@ -65,11 +65,11 @@ const DocsUploaded = (p) => {
                     onMouseEnter={() => handleMouseEnter(file.id)}
                     onMouseLeave={handleMouseLeave}
                 >
-                    {
+                {
                     (isLoadingFile && selectFile === file.name) || loadingFileList.indexOf(file.name) !== -1? 
                     (
                         <span className="load_button">
-                            <Load type="small"/>
+                            <Load minSize="15px"/>
                         </span>
                     ) : (
                         hoveredFile === file.id ? (
@@ -85,10 +85,7 @@ const DocsUploaded = (p) => {
                             </span>
                         ) 
                     )
-
-  
-                    }
-
+                }
                     <p className="file_name">{file.name}</p>
                 </div>
                 ))}
