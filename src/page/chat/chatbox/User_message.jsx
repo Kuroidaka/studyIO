@@ -2,20 +2,20 @@ import styled from "styled-components";
 import { User } from 'react-feather';
 import { useEffect, useRef } from "react";
 
+import Img from '../../../assets/img'
+import Image from "../../../component/Image";
+
 const UserMsg = (p) => {
 
     const { text, imgList=[] } = p;
+    const { imgPlaceHolder } = Img
 
-    const messagesEndRef = useRef(null);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useEffect(scrollToBottom, [text]);
+    const convertStringToHtml = (str) => {
+        return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
+    }
 
     return ( 
-    <Container className='chat-msg human-chat' ref={messagesEndRef}>
+    <Container className='chat-msg human-chat' >
         <div className='icon'>
             <div className='human-icon-wrapper'>
                 <User className='human-icon'/>
@@ -25,12 +25,17 @@ const UserMsg = (p) => {
             <p className='chat-person'>{"You"}</p>
             <div className="human-text-wrapper">
                 <div className='human-text'>
-                    <div className="img_list-wrapper">
-                        {imgList.length > 0 && imgList.map((img, index) => (
-                            <img key={index} src={img.url} alt="img" />
+                   {imgList.length > 0 && <div className="img_list-wrapper">
+                        {imgList.map((img, index) => (
+                            <Image 
+                                key={index}
+                                src={img.url}
+                                imgPlaceHolder={imgPlaceHolder}
+                                />
                         ))}
-                    </div>
-                    <p>{text}</p>
+
+                    </div>}
+                    <p dangerouslySetInnerHTML={{ __html: convertStringToHtml(text) }} />
                 </div>
             </div>
         </div>
@@ -71,9 +76,7 @@ const Container = styled.div`
             font-weight: bold;
         }
         .human-text-wrapper{
-            padding-bottom: 10px;
-            padding-right: 10px;
-            padding-left: 10px;
+            padding: 10px;
             border-radius: 10px;
             background: #484856;
             display: flex;
@@ -87,19 +90,22 @@ const Container = styled.div`
                     flex-wrap: wrap;
                     justify-content: center;
                     align-items: center;
+                    gap: 10px;
+                    margin: 10px 0;
                     img {
+                        border-radius: 10px;
+                        cursor: pointer;
                         width: 100%;
-                        max-width: 350px;
-                        margin: 10px 0;
+                        max-width: 200px;
                     }
                 
                 }
                 p {
                     font-size: 15px;
                     font-weight: 500;
-                    margin-top: 10px;
                 }
             }
         }
     }
 `
+

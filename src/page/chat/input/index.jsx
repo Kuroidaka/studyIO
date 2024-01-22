@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { nanoid } from 'nanoid'
+import { parse } from 'best-effort-json-parser'
+
 
 import '../style/index.scss'
 import DocsUploaded from "./Docs";
@@ -8,11 +10,11 @@ import conversationApi from '../../../api/conversation';
 import ConversationContext from '../../../context/Conversation.Context';
 import FileContext from '../../../context/File.Context';
 import fileApi from '../../../api/file';
-import filesToBase64 from '../../../utils/fileToBase64';
+import utils from "../../../utils"
 
 const InputBox = () => {
 
-    const { updatedCon, selectedCon } = useContext(ConversationContext);
+    const { updatedCon, updateConUser, selectedCon, setCurrentMsgList, currentMsgList } = useContext(ConversationContext);
     const { filesDocs, setFilesDocs, delFile, isLoadingFile, uploadFile } = useContext(FileContext);
     const [loadingFileList, setLoadingFileList] = useState([]);
     // file image for upload at the input box
@@ -22,6 +24,9 @@ const InputBox = () => {
         // { id: 3, type: 'file', name: 'chinh_sach_moi.pdf' }
     ]
     )
+    
+
+    const { filesToBase64, hostImages, filesToBlobURLs } = utils
 
     const imageFile = {
         setFileImg: (e) => {
@@ -42,7 +47,10 @@ const InputBox = () => {
         //         console.log(entry);
         //     }
             // const { imgList } = await imageFile.sendToBE(formData)
-            await filesToBase64(filesImages)
+            setFilesImages([])
+            const listBase64 = await filesToBase64(filesImages)
+            
+            const imgList = await hostImages(listBase64)
 
             return imgList
         },
@@ -107,32 +115,43 @@ const InputBox = () => {
 
     const handleSend = async (inputValue, enableSend) => {
   
-        // API FILE IMG
-        let imgList = []
-        if(filesImages.length > 0) {
-            imgList = await imageFile.handleProcess()
-        }
-        // create new array to store image object, each object has id, url
-        let newImgList = []
-        for (let i = 0; i < imgList.length; i++) {
-            const newFile = { url: imgList[i], id: nanoid() };   
-            newImgList.push(newFile)
-        }
+
+        let blobImages = await filesToBlobURLs(filesImages)
+
+        blobImages = blobImages.map(img => ({url: img, id: nanoid()}))
         // update current user msg 
-        await updatedCon({
+
+        const newTempMsg = {
+            "id": "temp-id",
+            "createdAt": new Date().toISOString(),
+            "updatedAt": new Date().toISOString(),
+            "text": inputValue,
+            "sender": "user",
+            "senderID": "-1",
+            "conversationId": selectedCon.id,
+            "imgList": blobImages.length > 0 ? blobImages : [],
+        }
+
+        await updateConUser({
             id: selectedCon.id,
             dayRef: selectedCon.dayRef,
-            newMsgList: [{
-                "id": "temp-id",
-                "createdAt": new Date().toISOString(),
-                "updatedAt": new Date().toISOString(),
-                "text": inputValue,
-                "sender": "user",
-                "senderID": "-1",
-                "conversationId": selectedCon.id,
-                "imgList": newImgList.length > 0 ? newImgList : [],
-            }],
+            newMsgList: [newTempMsg],
         })
+
+        // API FILE IMG
+        let imgUrlList = []
+        let newImgList = []
+        if(filesImages.length > 0) {
+            imgUrlList = await imageFile.handleProcess()
+
+            if(imgUrlList) {
+                // create new array to store image object, each object has id, url
+                newImgList = imgUrlList.map((img) => {
+                    const newFile = { url: img, id: nanoid() };   
+                    return newFile
+                })
+            }
+        }
 
         // API CHAT
         const data ={
@@ -142,23 +161,55 @@ const InputBox = () => {
             isAttachedFile: filesDocs.length > 0 ? true : false,
             imgFiles: newImgList.length > 0 ? newImgList : [],
         }
-        await sendChat(data)
-        .then(res => {
-            if(res.statusText === "OK"){
-                console.log(res.data.data)
-                // update Bot msg
-                updatedCon({
+        await conversationApi.createChatStream(
+            data,
+            ({data}) => {//update final data from server
+                updatedCon({ 
                     id: selectedCon.id,
                     dayRef: selectedCon.dayRef,
-                    newMsgList: res.data.data.bot,
-                    newCon: res.data.data.newConversation,
-                    isNewConversation: res.data.data.isNewConversation
+                    newMsgList: data.bot,
+                    newCon: data.newConversation,
+                    isNewConversation: data.isNewConversation,
+                    userMsg: data.user
                 })
                 if(typeof enableSend === 'function') {
-                     enableSend()
+                    enableSend()
                 }
+            },
+            ({text}) => {//update stream text
+                   
+            const newCurrentMsgList = [...currentMsgList, newTempMsg ]
+
+            let updatedMsgList = [...newCurrentMsgList];
+
+            // Find the index of the object you want to update
+            let index = updatedMsgList.findIndex(msg => msg.id === 'temp-id-2');
+
+            // If the object doesn't exist in the state, create it
+            if (index === -1) {
+                updatedMsgList.push({
+                "id": "temp-id-2",
+                "createdAt": new Date().toISOString(),
+                "updatedAt": new Date().toISOString(),
+                "text": text, // Join the chunk list into a string
+                "sender": "bot",
+                "senderID": "-2",
+                "conversationId": selectedCon.id,
+                "imgList": blobImages.length > 0 ? blobImages : [], // Assuming no images for this new message
+                });
             }
-        })
+            // If the object does exist, update it
+            else {
+                // Update the 'text' key of the object
+                updatedMsgList[index].text = text;
+                // Update the 'updatedAt' key of the object
+            }
+
+            // Update the state
+            setCurrentMsgList(updatedMsgList);
+            },
+            enableSend //enable send button after send
+        )
 
     };
 

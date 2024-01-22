@@ -1,37 +1,41 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
 const Load = () => {
-    return ( 
-        <Container>
-            <span className="loader"></span>
-        </Container>
-     );
+  return (
+    <Container>
+      <div className="spinner-wrapper">
+        <div className="spinner"></div>
+      </div>
+    </Container>
+  )
 }
- 
-export default Load;
+
+export default Load
 
 const Container = styled.div`
-    height: 100%;
-    width: 100%;
-    .loader {
-    width: 100%;
-    height: 100%;
-    border: 4px solid #FFF;    
-    border-bottom-color: transparent;
-    border-radius: 10px;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    }
+  height: 100%;
+  width: 100%;
 
-    @keyframes rotation {
-    0% {
-        transform: rotate(0deg);
+  .spinner-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .spinner {
+      width: 35px;
+      height: 35px;
+      display: inline-block;
+      border: 4px solid white;
+      border-radius: 50%;
+      border-top: 4px solid #ff8000;
+      animation: spinner 1.5s linear infinite;
     }
-    100% {
+    @keyframes spinner {
+      to {
         transform: rotate(360deg);
+      }
     }
-    } 
-
-
+  }
 `

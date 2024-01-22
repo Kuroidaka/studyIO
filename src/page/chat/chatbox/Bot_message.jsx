@@ -3,25 +3,44 @@ import { Tv } from 'react-feather';
 import DOMPurify from "dompurify";
 
 import utils from '../../../utils';
-import { useEffect, useRef } from "react";
+import Img from '../../../assets/img'
+import Image from "../../../component/Image";
+import { useEffect, useRef, useState } from "react";
 
 const BotMsg = (p) => {
     const { text, className, isWaiting=false } = p
     // const { isWaiting, selectedCon } = useContext(ConversationContext);
 
-    const { convertStringToHtml } = utils
-    const sanitizedHTML = DOMPurify.sanitize(convertStringToHtml(text));
+    const { imgPlaceHolder } = Img
 
-    const messagesEndRef = useRef(null);
+    const [newText, setNewText] = useState({
+        status: false,
+        text: "",
+        isImg: false
+    });
+    const { convertStringToHtml, checkIsImgLink } = utils
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
 
-    useEffect(scrollToBottom, [text]);
+    useEffect(() => {
+
+        if(checkIsImgLink(text)) {
+            setNewText({
+                status: true,
+                text: text,
+                isImg: true
+            });
+        }
+        else {
+            setNewText({
+                status: true,
+                text: DOMPurify.sanitize(convertStringToHtml(text)),
+                isImg: false
+            });
+        }
+    }, [text]);
 
     return ( 
-    <Container className={`chat-msg bot-chat ${className}`} ref={messagesEndRef}>
+    <Container className={`chat-msg bot-chat ${className}`} >
         <div className='icon'>
             <div className='bot-icon-wrapper'>
                 <Tv className='bot-icon'/>
@@ -31,14 +50,15 @@ const BotMsg = (p) => {
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
             <div className="bot-text-wrapper">
-            { isWaiting.isWait ? (
+            { 
+                (newText.status && newText.isImg) ? (
                     <div className='bot-text'>
-                        <div className="chat-dot"></div>
-                        <div className="chat-dot"></div>
-                        <div className="chat-dot"></div>
+                        <Image 
+                            src={newText.text}
+                            imgPlaceHolder={imgPlaceHolder} />
                     </div>
                 ) : (
-                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: sanitizedHTML }} ></div>
+                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: newText.text }} ></div>
                 )
             }
             </div>
@@ -82,9 +102,7 @@ const Container = styled.div`
             margin-bottom: 7px;
         }
         .bot-text-wrapper{
-            padding-bottom: 10px;
-            padding-right: 10px;
-            padding-left: 10px;
+            padding: 10px;
             border-radius: 10px;
             background: #151515;
             display: flex;
@@ -102,7 +120,6 @@ const Container = styled.div`
                 p {
                     font-size: 15px;   /* Thay đổi kích thước của chữ StudyIO */
                     font-weight: 500;
-                    margin: 10px 0;
                 }
     
                 ol {

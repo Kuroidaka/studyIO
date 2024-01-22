@@ -1,5 +1,8 @@
 import axiosClient from "./axiosClient";
+import utils from "../utils";
+import { parse } from 'best-effort-json-parser'
 
+const { isObject } = utils;
 const conversationApi = {
 
     getConversation: async () => {
@@ -58,6 +61,77 @@ const conversationApi = {
         return {text: response.data.text};
 
     },
+    createChatStream: async ({text, sender, conversationId, isAttachedFile, imgFiles}, updateWholeChatData, updateCurrentMsgList, enableSend) => {
+
+        const data = {
+            conversationId: conversationId,
+            from: "StudyIO",
+            text: text,
+            sender: sender,
+            senderID: "-1",
+            maxToken: 2000,
+            isAttachedFile: isAttachedFile,
+            imgFiles: imgFiles
+        }
+
+        const url = `http://localhost:8001/api/v1/studyio/create`;
+        const params = new URLSearchParams(data).toString();
+
+        const response = await fetch(
+            `${url}?${params}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/event-stream',
+              }
+            }
+          )
+          const reader = response.body
+            .pipeThrough(new TextDecoderStream())
+            .getReader()
+            let contentFull = ''
+          // eslint-disable-next-line no-constant-condition
+          while (true) {
+            const { value, done } = await reader.read()
+            if (done) {
+                if(typeof enableSend === 'function') {
+                    enableSend()
+                }
+                break
+            }
+            try {
+                console.log("Received value", value)
+                const parsedValue = value.split("__FIN__")[1] ? JSON.parse(value.split("__FIN__")[1]) : JSON.parse(value)
+
+                if(typeof parsedValue === 'object'){
+                    if(
+                        Object.prototype.hasOwnProperty.call(parsedValue, 'data') && 
+                        Object.prototype.hasOwnProperty.call(parsedValue, 'func') 
+                    ) {
+                        updateWholeChatData && updateWholeChatData(parsedValue)
+                    } else if(
+                        Object.prototype.hasOwnProperty.call(parsedValue, 'name')  &&
+                        Object.prototype.hasOwnProperty.call(parsedValue, 'arguments')  
+                    ) {
+                        console.log("Received a function object: ", parsedValue)
+                    } else {
+                        console.log("Received an unknown object: ", parsedValue)
+                    }
+                } else if(typeof parsedValue === 'string'){ 
+                    
+                    // contentFull += value
+                    // updateCurrentMsgList && updateCurrentMsgList({text: contentFull})
+                }
+            } catch (error) {
+                console.log("Received string: ", value)
+                contentFull += value
+                updateCurrentMsgList && updateCurrentMsgList({text: contentFull})
+            }
+
+            // if(typeof callback === 'function') callback()
+            // setResponse((prev) => prev + value)  
+          }
+    }
 }
 
 export default conversationApi

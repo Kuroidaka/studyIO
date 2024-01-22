@@ -44,9 +44,10 @@ const Input = (p) => {
     const handleEnterKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
+            document.getElementById('myTextarea').style.height = 'auto';
             handleSendButtonClick();
         } else if (e.key === 'Enter' && e.shiftKey) {
-            setInputValue((prevValue) => prevValue);
+            setInputValue((prevValue) => prevValue); 
         }
     };
 
@@ -111,6 +112,16 @@ const Input = (p) => {
                 }
 
             </div>
+            {(isWaiting.isWait && isWaiting.conId === selectedCon.id) 
+            && 
+            <div className="chatting-dot">
+                <div className='bot-text'>
+                    <div className="chat-dot"></div>
+                    <div className="chat-dot"></div>
+                    <div className="chat-dot"></div>
+                </div>
+            </div>
+            }
         </div>
     );
 }

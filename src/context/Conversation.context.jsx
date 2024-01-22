@@ -1,3 +1,4 @@
+import axios from "axios";
 import conversationApi from "../api/conversation";
 
 import { createContext, useEffect, useState } from "react";
@@ -15,10 +16,18 @@ export const ConversationProvider = (p) => {
         isWait: false,
         conId: ""
     });
+    const [valueBot, setValueBot] = useState({
+        value: "",
+        func: [{
+            name: "",
+            content: ""
+        }]
+    })
 
     useEffect(() => {
         getCon()
     }, []);
+
 
     const getCon = () => {
         setIsLoading(true); // Set loading to true when the API call starts
@@ -65,41 +74,52 @@ export const ConversationProvider = (p) => {
 
     }
 
-    const updatedCon = async ({id, dayRef, newMsgList, newCon, isNewConversation}) => {
-        // update current msg list screen 
-        setCurrentMsgList(prev => [...prev, ...newMsgList])
-
-        // if is new conversation for Bot
+    const updatedCon = async ({id, dayRef, newMsgList, newCon, isNewConversation, userMsg}) => {
+              
+        // If it's a new conversation for Bot
         if(newCon && newCon.length > 0 && isNewConversation)  {
-            setList(prevList => {
-                return prevList.map(item => {
-                    console.log("item", item)
-                  if (item.dayRef === "Today") {
-                    return {
-                      ...item,
-                      conversationList: [newCon[0],...item.conversationList]
-                    };
-                  } else {
-                    return item;
-                  }
-                });
+            setList(prevList => prevList.map(item => item.dayRef === "Today" 
+                ? {...item, conversationList: [newCon[0], ...item.conversationList]} 
+                : item)
+            );
+            setSelectedCon({id: newCon[0].id, dayRef: "Today"});
+
+            setCurrentMsgList(prev => {
+                // newMsgList[0].id
+                let newList = prev.filter(item => item.id !== "temp-id" && item.id !== "temp-id-2")
+                return [...newList, ...newCon[0].messages]
+            });
+        } else {// if not new conversation for Bot
+            // Update current message list screen 
+            setCurrentMsgList(prev => {
+                // newMsgList[0].id
+                let newList = prev.filter(item => item.id !== "temp-id-2" && item.id !== "temp-id")
+                return [...newList, userMsg, newMsgList[0]]
             });
 
-            setSelectedCon({id: newCon[0].id, dayRef: "Today"})
-           } else {
+        // update origin list data
             const day = list.find(item => item.dayRef === dayRef);
+            if (day) {
+                const conversation = day.conversationList.find(con => con.id === id);
+                if (conversation) conversation.messages = [...conversation.messages, ...newMsgList];
+                setList([...list]);
+            }
+        }
+      }
 
-                if (day) {
-                    const conversation = day.conversationList.find(con => con.id === id);
-                    if (conversation) {
-                        conversation.messages = [...conversation.messages, ...newMsgList];
-                        setList([...list]);
-                        console.log('Conversation updated successfully.');
-                    } else {
-                        console.log('No conversation found with the given id.');
-                    }
-                }
-           }
+    const updateConUser = async ({id, dayRef, newMsgList}) => {
+
+        // Update current message list screen 
+        setCurrentMsgList(prev => [...prev, ...newMsgList]);
+
+        // Find the day from the list and update the conversation if found
+        const day = list.find(item => item.dayRef === dayRef);
+        if (day) {
+            const conversation = day.conversationList.find(con => con.id === id);
+            if (conversation) conversation.messages = [...conversation.messages, ...newMsgList];
+            setList([...list]);
+        }
+        
     }
 
     const updateLastCon = async ({ newConversation }) => {
@@ -155,7 +175,8 @@ export const ConversationProvider = (p) => {
         setCurrentMsgList,
         createNewConversation,
         isWaiting,
-        setIsWaiting
+        setIsWaiting,
+        updateConUser
     }
 
     return (

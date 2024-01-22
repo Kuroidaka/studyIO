@@ -72,7 +72,6 @@ const imagesGrid = async ({
   
 
 const CamChat = () => {
-    // console.log("api:", process?.env?.REACT_APP_OPENAI_API_KEY)
     const id = useId();
     const maxVolumeRef = useRef(0);
     const minVolumeRef = useRef(-100);
@@ -461,7 +460,7 @@ const BtnSection = styled.div `
 
 const VideoContainer = styled.div`
     width: 100%;
-    background-color: #A0A0A0;
+    background-color: black;
     height: 80%;
     position: relative;
     margin: 30px;
