@@ -7,8 +7,8 @@ import '../style/index.scss'
 import DocsUploaded from "./Docs";
 import Input from './Input';
 import conversationApi from '../../../api/conversation';
-import ConversationContext from '../../../context/Conversation.Context';
-import FileContext from '../../../context/File.Context';
+import ConversationContext from '../../../context/Conversation.context';
+import FileContext from '../../../context/File.context';
 import fileApi from '../../../api/file';
 import utils from "../../../utils"
 
@@ -109,13 +109,8 @@ const InputBox = () => {
         }
     }, [isLoadingFile]);
 
-    const sendChat = (data) => {
-        return conversationApi.createChat(data)
-    }
-
     const handleSend = async (inputValue, enableSend) => {
   
-
         let blobImages = await filesToBlobURLs(filesImages)
 
         blobImages = blobImages.map(img => ({url: img, id: nanoid()}))
@@ -161,22 +156,8 @@ const InputBox = () => {
             isAttachedFile: filesDocs.length > 0 ? true : false,
             imgFiles: newImgList.length > 0 ? newImgList : [],
         }
-        await conversationApi.createChatStream(
-            data,
-            ({data}) => {//update final data from server
-                updatedCon({ 
-                    id: selectedCon.id,
-                    dayRef: selectedCon.dayRef,
-                    newMsgList: data.bot,
-                    newCon: data.newConversation,
-                    isNewConversation: data.isNewConversation,
-                    userMsg: data.user
-                })
-                if(typeof enableSend === 'function') {
-                    enableSend()
-                }
-            },
-            ({text}) => {//update stream text
+
+        const updateStreamText = ({text}) => {//update stream text
                    
             const newCurrentMsgList = [...currentMsgList, newTempMsg ]
 
@@ -195,21 +176,39 @@ const InputBox = () => {
                 "sender": "bot",
                 "senderID": "-2",
                 "conversationId": selectedCon.id,
-                "imgList": blobImages.length > 0 ? blobImages : [], // Assuming no images for this new message
                 });
             }
             // If the object does exist, update it
             else {
                 // Update the 'text' key of the object
                 updatedMsgList[index].text = text;
-                // Update the 'updatedAt' key of the object
             }
 
             // Update the state
             setCurrentMsgList(updatedMsgList);
-            },
-            enableSend //enable send button after send
-        )
+        }
+        const updateFinalData = ({data}) => {//update final data from server
+            updatedCon({ 
+                id: selectedCon.id,
+                dayRef: selectedCon.dayRef,
+                newMsgList: data.bot,
+                newCon: data.newConversation,
+                isNewConversation: data.isNewConversation,
+                userMsg: data.user
+            })
+            if(typeof enableSend === 'function') {
+                enableSend()
+            }
+        }
+
+        await conversationApi.createChatStream(
+            data,
+            {
+                updateFinalData,//update final data from server
+                updateStreamText,//update stream text
+                enableSend //enable send button after send
+            }
+        )       
 
     };
 

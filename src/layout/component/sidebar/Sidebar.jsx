@@ -16,12 +16,9 @@ const Sidebar = (p) => {
     const navigate = useNavigate()
 
     const hdlSelCon = ({id, dayRef}) => {
-        console.log("select side bar")
         selectCon({id, dayRef})
         navigate('/chat')
     }
-
-    console.log("reload sidebar")
 
     return ( 
         <div className="container">
@@ -29,7 +26,7 @@ const Sidebar = (p) => {
                 <h2>History</h2>
     { isLoading ?
             (
-                <Load minSize="35px"/> 
+                <Load minsize="35px"/> 
             ) : (
                 <div className="conversation-list" aria-hidden="true">
                 {(conList && conList.length > 0 ) ?

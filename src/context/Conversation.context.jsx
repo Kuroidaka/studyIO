@@ -33,8 +33,10 @@ export const ConversationProvider = (p) => {
         setIsLoading(true); // Set loading to true when the API call starts
         conversationApi.getConversation()
         .then(({data}) => {
-            setList(data.data);
-            setIsLoading(false); // Set loading to false when the API call finishes
+            if(data.data) {
+                setList(data.data);
+                setIsLoading(false); // Set loading to false when the API call finishes
+            }
         })
         .catch((error) => {
             console.error(error);
@@ -68,7 +70,8 @@ export const ConversationProvider = (p) => {
         await conversationApi.delChat({ conversationId: id })
         .then(res => {
             if(res.statusText === "OK"){
-                console.log(res.data.data)
+                // console.log(res.data.data)
+                console.log("deleted id:", JSON.parse(res.data.data).id)
             }
         })
 
@@ -91,13 +94,14 @@ export const ConversationProvider = (p) => {
             });
         } else {// if not new conversation for Bot
             // Update current message list screen 
+            let botMsg = newMsgList[0]
             setCurrentMsgList(prev => {
                 // newMsgList[0].id
                 let newList = prev.filter(item => item.id !== "temp-id-2" && item.id !== "temp-id")
-                return [...newList, userMsg, newMsgList[0]]
+                return [...newList, userMsg, botMsg]
             });
 
-        // update origin list data
+            // update origin list data
             const day = list.find(item => item.dayRef === dayRef);
             if (day) {
                 const conversation = day.conversationList.find(con => con.id === id);
@@ -105,7 +109,7 @@ export const ConversationProvider = (p) => {
                 setList([...list]);
             }
         }
-      }
+    }
 
     const updateConUser = async ({id, dayRef, newMsgList}) => {
 

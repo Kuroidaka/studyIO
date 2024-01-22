@@ -48,7 +48,7 @@ const DefaultLayoutComponent = (p) => {
         
         <div className="body">
             {sidebarOpen && <Sidebar {...sidebarProps}/>}
-            <Suspense fallback={<LoadingContainer><Load minSize="35px"/></LoadingContainer>}>
+            <Suspense fallback={<LoadingContainer><Load minsize="35px"/></LoadingContainer>}>
                 <div className="page-content">
                     <div className="icon-wrapper" onClick={handleChevronClick}>
                         {isChevronRight

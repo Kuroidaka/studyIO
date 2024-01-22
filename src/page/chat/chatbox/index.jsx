@@ -9,11 +9,10 @@ import ConversationContext from '../../../context/Conversation.Context';
 const ChatBox = () => {
 
 
-    const { currentMsgList, isWaiting, selectedCon } = useContext(ConversationContext);  
+    const { currentMsgList } = useContext(ConversationContext);  
     const pageRef = useRef(null); 
 
     const scrollToBottom = () => {
-        console.log("scroll")
         // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
         const div = document.querySelector('.list-chat');
         div.scrollTop = div.scrollHeight - div.clientHeight;
