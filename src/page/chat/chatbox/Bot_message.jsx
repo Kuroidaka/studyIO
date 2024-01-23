@@ -43,13 +43,7 @@ const BotMsg = (p) => {
                         <ImageCom 
                             src={text}
                             imgPlaceHolder={imgPlaceHolder} 
-                            // imgsize={
-                            //     imgList.length === 1 ? 
-                            //     '423px' :
-                            //     imgList.length === 2 ?
-                            //     '250px' :
-                            //     '171px'
-                            // }
+                            imgsize={'423px' }
                         />
                     </div>
                 ) : (

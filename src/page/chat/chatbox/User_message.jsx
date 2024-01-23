@@ -7,15 +7,19 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import Img from '../../../assets/img'
 import ImageCom from "../../../component/Image";
+import { useEffect } from "react";
 
 const UserMsg = (p) => {
 
     const { text, imgList=[] } = p;
     const { imgPlaceHolder } = Img
 
-    const convertStringToHtml = (str) => {
-        return str.replace(/(?:\r\n|\r|\n)/g, '<br>');
-    }
+    const scrollToBottom = () => {
+        // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+        const div = document.querySelector('.list-chat');
+        div.scrollTop = div.scrollHeight - div.clientHeight + 1000;
+    };
+    useEffect(scrollToBottom, [text]);
 
     return ( 
     <Container className='chat-msg human-chat'>

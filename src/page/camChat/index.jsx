@@ -1,12 +1,13 @@
 import { nanoid } from 'nanoid'
 import mergeImages from "merge-images";
 import { motion } from "framer-motion";
+import { Mic } from 'react-feather';
 import { ArrowLeft } from 'react-feather';
-import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import useMediaRecorder from "@wmik/use-media-recorder";
-import useSilenceAwareRecorder from "silence-aware-recorder/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState, useContext } from "react";
+import useSilenceAwareRecorder from "silence-aware-recorder/react";
 
 import func from "./function"
 import common from "./common";
@@ -409,12 +410,15 @@ const CamChat = () => {
                   ref={videoRef}
                   autoPlay
                   />
+
                   <RecordDot isrecording={audio.isRecording.toString()} volumepercentage={volumePercentage}>
                       <div>
                           {audio.isRecording ? '' : '⏸'}
                       </div>
                   </RecordDot>
-
+                      <ActionContainer>
+                    
+                  </ActionContainer>
               </VideoContainer>
               <div className="action">
                 <BtnSection>
@@ -427,14 +431,12 @@ const CamChat = () => {
                 </BtnSection>
 
                 <AiResponseContainer>
-                        <div className="ai-text">
-                        {!isWaiting ? (
-                             <p>{botText}</p>
-                          ) : (
-                            <Typing who="Bot" text="is thinking..."/>
-                          )
-                            }
-                        </div>
+                  <div className="ai-text">
+                    {isWaiting &&
+                        <Typing who="Bot" text="is thinking..."/>
+                    }
+                    <p>{botText}</p>
+                  </div>
                 </AiResponseContainer>
               </div>
 
@@ -520,18 +522,19 @@ const BtnSection = styled.div `
 `
 
 const VideoContainer = styled.div`
-    width: 80%;
-    background-color: black;
-    height: 100%;
-    position: relative;
-    border-radius: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex-direction: column;
+  width: 80%;
+  background-color: black;
+  height: 100%;
+  position: relative;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: space-between;
 
     video {
         width: 100%;
-        height: 100%;
+        height: 93%;
         border-radius: 0.5rem;
         
     }
@@ -613,7 +616,7 @@ const DebugContainer = styled.div`
       opacity: 0.5;
     }
     img {
-        object-fit: contain;
+      object-fit: contain;
       width: 100%;
       border: 1px solid #9CA3AF;
     }
@@ -621,7 +624,33 @@ const DebugContainer = styled.div`
 `;
 
 const AiResponseContainer = styled.div `
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+
   .ai-text {
-    color: white
+    color: white;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    overflow: scroll;
+    p {
+      font-weight: 600;
+      padding: 10px;
+      font-size: 1.2rem;
+    }
   }
+`
+
+const ActionContainer = styled.div `
+  width: 100%;
+  height: 7%;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
