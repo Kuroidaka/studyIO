@@ -1,19 +1,19 @@
-import fs from "fs";
 import { nanoid } from 'nanoid'
 import mergeImages from "merge-images";
 import { motion } from "framer-motion";
 import { ArrowLeft } from 'react-feather';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import useMediaRecorder from "@wmik/use-media-recorder";
 import useSilenceAwareRecorder from "silence-aware-recorder/react";
-import { useId, useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 
 import func from "./function"
 import common from "./common";
 import conversationApi from "../../api/conversation"
-import ConversationContext from "../../context/Conversation.Context";
+import ConversationContext from "../../context/Conversation.context";
 import utils from "../../utils/index";
+import Typing from '../../component/Typing';
 
 const INTERVAL = 250;
 const IMAGE_WIDTH = 512;
@@ -72,7 +72,7 @@ const imagesGrid = async ({
   
 
 const CamChat = () => {
-    const id = useId();
+    // const id = useId();
     const maxVolumeRef = useRef(0);
     const minVolumeRef = useRef(-100);
     const isBusy = useRef(false);
@@ -81,10 +81,12 @@ const CamChat = () => {
     const canvasRef = useRef();
     const navigate = useNavigate();
 
+    const location = useLocation()
     const { hostImages } = utils
 
-    const { updatedCon, selectedCon } = useContext(ConversationContext);
+    const { selectedCon, updateConUser } = useContext(ConversationContext);
 
+    const [botText, setBotText] = useState("")
     const [displaydebug, setDisplayDebug] = useState(false);
     const [isStarted, setIsStarted] = useState(false);
     const [phase, setPhase] = useState("not inited");
@@ -92,13 +94,8 @@ const CamChat = () => {
     const [imagesGridUrl, setImagesGridUrl] = useState(null);
     const [currentVolume, setCurrentVolume] = useState(-50);
     const [volumePercentage, setVolumePercentage] = useState(0);
-    const [lang, setLang] = useState("en") 
+    const [lang] = useState("en") 
     const [isWaiting, setIsWaiting] = useState(false)
-    const [tmpConversation, setTmpConversation] = useState({
-        user: {},
-        bot: {}
-    })
-    // const [lang, setLang] = useLocalStorage("lang", "");
 
     // Define recorder for video
     let { liveStream, ...video } = useMediaRecorder({
@@ -116,14 +113,16 @@ const CamChat = () => {
     });
     
     async function onSpeech(data) { //on speeching
+      try {
         if (isBusy.current) return;
-    
+          
         isBusy.current = true;
         audio.stopRecording();
         
         // send audio to whisper
         setPhase("user: processing speech to text");
         setIsWaiting(true)
+        setBotText("")
 
         const speechtotextFormData = new FormData();
         speechtotextFormData.append("file", data, "audio.webm");
@@ -135,139 +134,193 @@ const CamChat = () => {
             formData: speechtotextFormData
         });
 
-        setIsWaiting(false)
-        setTranscription(result.text);
-    
-        setPhase("user: uploading video captures");
-      
-        // gen img grid
-         // Keep only the last XXX screenshots
-        screenshotsRef.current = screenshotsRef.current.slice(-MAX_SCREENSHOTS);
-
-        const imageUrl = await imagesGrid({
-            base64Images: screenshotsRef.current,
-        });
-
-        screenshotsRef.current = [];
-
-        const uploadUrls = await hostImages([imageUrl]);
-
-        setImagesGridUrl(imageUrl);
-
-        setTmpConversation({// store user tmp msg
-            user: {
-                text: result.text,
-                image: uploadUrls[0]
-            },
-        })
-
-        setPhase("user: processing completion");
-
-        // send chat
-        const { content } = await handleSendChat({ uploadUrl: uploadUrls[0], text: result.text })
-        // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
-
-        if(content) {
-            setPhase("assistant: processing text to speech");
-            setTmpConversation({//store AI tmp msg
-                bot: {
-                    text: content,
-                },
+        console.log("transcript", result.text)
+        if(result.text.length > 0) {
+          setTranscription(result.text);
+          setImagesGridUrl(null);
+          setPhase("user: uploading video captures");
+        
+          // gen img grid
+          
+          screenshotsRef.current = screenshotsRef.current.slice(-MAX_SCREENSHOTS); // Keep only the last XXX screenshots
+  
+          const imageUrl = await imagesGrid({
+              base64Images: screenshotsRef.current,
+          });
+  
+          screenshotsRef.current = [];
+  
+          const uploadUrls = await hostImages([imageUrl]);
+  
+          setImagesGridUrl(imageUrl);
+  
+          setPhase("user: processing completion");
+  
+          // send chat
+          // const { content } = await handleSend({ uploadUrl: uploadUrls[0], inputValue: result.text, turnOffWait: () => {
+          //   setIsWaiting(false)
+          // } })
+          const { content }  = await handleSendClient({ 
+            uploadUrl: uploadUrls[0],
+            inputValue: result.text,
+            turnOffWait: () => {
+              setIsWaiting(false)}
             })
 
-            const ttsFormData = new FormData();
-            ttsFormData.append("input", content);
-            
-            const { blobURL } = await func.textToSpeech({ formData: ttsFormData })
-
-            setPhase("assistant: playing audio");
-
-            await playAudio(blobURL);
-      
-            audio.startRecording();
-            isBusy.current = false;
-      
-            setPhase("user: waiting for speech");
+          // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
+  
+          if(content && typeof content === "string") {
+              setPhase("assistant: processing text to speech");
+  
+              const ttsFormData = new FormData();
+              ttsFormData.append("input", content);
+              
+              const { blobURL } = await func.textToSpeech({ formData: ttsFormData })
+  
+              setPhase("assistant: playing audio");
+  
+              await playAudio(blobURL);
+        
+              // continue recording
+              audio.startRecording();
+              isBusy.current = false;
+              setPhase("user: waiting for speech");
+          }
+        }
+        else { // continue recording
+          isBusy.current = false;
+          audio.startRecording();
+          setPhase("user: waiting for speech");
         }
         
+      } catch (error) {
+        console.log(error)
+        setIsWaiting(false)
+        setPhase("error occur");
+      }
+    
     }
 
-    const handleSendChat = async ({ text, uploadUrl, enableSend=null }) => {
-  
-        // create new array to store image object, each object has id, url
-        let newImgList = [{
-            url: uploadUrl,
-            id: nanoid(),
-        }]
+    const handleSend = async ({inputValue, uploadUrl, turnOffWait}) => {
+      
+      let newImgList = [{
+        url: uploadUrl,
+        id: nanoid(),
+      }]
 
-        // update current user msg 
-        await updatedCon({
-            id: selectedCon.id,
-            dayRef: selectedCon.dayRef,
-            newMsgList: [{
-                "id": "temp-id",
-                "createdAt": new Date().toISOString(),
-                "updatedAt": new Date().toISOString(),
-                "text": text,
-                "sender": "user",
-                "senderID": "-1",
-                "conversationId": selectedCon.id,
-                "imgList": newImgList.length > 0 ? newImgList : [],
-            }],
-        })
+      // API CHAT
+      const data ={
+          text: inputValue,
+          sender: "user",
+          imgFiles: newImgList.length > 0 ? newImgList : [],
+          maxToken: 1000
+      }
+      const updateStreamText = ({text}) => {//update stream text
+        setBotText(prev => prev + text)
+      }
 
-        // API CHAT
-        const data ={
-            text: text,
-            sender: "user",
-            conversationId: selectedCon.id || "",
-            isAttachedFile: false,
-            imgFiles: newImgList.length > 0 ? newImgList : [],
-        }
-        const result = await conversationApi.createChat(data)
-        .then(res => {
-            if(res.statusText === "OK"){
-                console.log(res.data.data)
-                // update Bot msg
-                updatedCon({
-                    id: selectedCon.id,
-                    dayRef: selectedCon.dayRef,
-                    newMsgList: res.data.data.bot,
-                    newCon: res.data.data.newConversation,
-                    isNewConversation: res.data.data.isNewConversation
-                })
-                if(typeof enableSend === 'function') {
-                     enableSend()
-                }
-                console.log(res.data.data.bot[0])
-                return res.data.data.bot[0]
-            }
-        })
+      const result = await conversationApi.createCamChatStream(
+          data,
+          {
+            updateStreamText,//update stream text
+            turnOffWait 
+          }
+      )
+      console.log("final response: ", result)
 
-        return {
-          content: result.text
-        }
+      return {
+        content: result.content
+      }
 
     };
 
+    const handleSendClient = async ({inputValue, uploadUrl, turnOffWait}) => {
+      const messages = [
+        {
+          role: "user",
+          content: [
+            { type: "text", text: inputValue },
+            {
+              type: "image_url",
+              image_url: {
+                "url": uploadUrl,
+              },
+            },
+          ],
+        },
+      ]
+
+      const result = await func.sendChat({ messages, lang, setBotText })
+      console.log("final response: ", result.data)
+      await turnOffWait()
+      return {
+        content: result.data
+      }
+    }
+
+
     const handleClickBack = () => {
+      conversationApi.deleteCamChatStream()
+      recorder.stop()
       navigate("/chat")
     }
 
     const recorder = {//recorder object
         start: () => {
-            audio.startRecording();
-            video.startRecording();
-    
-            setIsStarted(true);
-            setPhase("user: waiting for speech");
+          console.log("start: Video + voice")
+          video.startRecording();
         },
-        stop: () => {
-            document.location.reload();
+        stop: async () => {
+          
+          console.log("stop: Video + voice")
+          video.stopRecording();
+          recorder.stopStreamedVideo(videoRef.current);
+          voiceRecorder.stop()
+          // video.clearMediaStream()
+          // document.location.reload();
         },
+        stopStreamedVideo(videoElem) {
+          if(videoElem) {
+            const stream = videoElem.srcObject;
+            const tracks = stream.getTracks();
+          
+            tracks.forEach((track) => {
+              track.stop();
+            });
+          
+            videoElem.srcObject = null;
+          }
+        }
     };
 
+    const voiceRecorder = {
+        start: () => {
+          console.log("start: voice")
+          audio.startRecording();
+          setPhase("user: waiting for speech");
+          setIsStarted(true);
+        },
+        stop: () => {
+          console.log("stop: voice")
+          audio.stopRecording();
+          setPhase("user: stop meeting");
+          setIsStarted(false);
+        },
+    }
 
+    useEffect(() => {
+      // start record Video + voice
+      console.log("location.pathname", location.pathname)
+      if(location.pathname === "/cam-chat") {
+        recorder.start()
+      }
+      // else {
+      //   recorder.stop()
+      // }
+      return () => {
+        recorder.stop()
+      }
+    }, []);
     useEffect(() => {//stream video
         if (videoRef.current && liveStream && !videoRef.current.srcObject) {
           videoRef.current.srcObject = liveStream;
@@ -288,55 +341,54 @@ const CamChat = () => {
     
           if (maxVolumeRef.current !== minVolumeRef.current) {
             setVolumePercentage(
-              (currentVolume - minVolumeRef.current) /
-                (maxVolumeRef.current - minVolumeRef.current)
+              (currentVolume - minVolumeRef.current) / (maxVolumeRef.current - minVolumeRef.current)
             );
           }
         }
     }, [currentVolume, audio.isRecording]);
     
     useEffect(() => {//capture frame
-        const captureFrame = () => {
-          if (video.status === "recording" && audio.isRecording) {
-            const targetWidth = IMAGE_WIDTH;
-    
-            const videoNode = videoRef.current;
-            const canvasNode = canvasRef.current;
-    
-            if (videoNode && canvasNode) {
-              const context = canvasNode.getContext("2d");
-              const originalWidth = videoNode.videoWidth;
-              const originalHeight = videoNode.videoHeight;
-              const aspectRatio = originalHeight / originalWidth;
-    
-              // Set new width while maintaining aspect ratio
-              canvasNode.width = targetWidth;
-              canvasNode.height = targetWidth * aspectRatio;
-    
-              context.drawImage(
-                videoNode,
-                0,
-                0,
-                canvasNode.width,
-                canvasNode.height
-              );
-              // Compress and convert image to JPEG format
-              const quality = 1; // Adjust the quality as needed, between 0 and 1
-              const base64Image = canvasNode.toDataURL("image/jpeg", quality);
-    
-              if (base64Image !== "data:,") {
-                screenshotsRef.current.push(base64Image);
-              }
+      const captureFrame = () => {
+        if (video.status === "recording" && audio.isRecording) {
+          const targetWidth = IMAGE_WIDTH;
+  
+          const videoNode = videoRef.current;
+          const canvasNode = canvasRef.current;
+  
+          if (videoNode && canvasNode) {
+            const context = canvasNode.getContext("2d");
+            const originalWidth = videoNode.videoWidth;
+            const originalHeight = videoNode.videoHeight;
+            const aspectRatio = originalHeight / originalWidth;
+  
+            // Set new width while maintaining aspect ratio
+            canvasNode.width = targetWidth;
+            canvasNode.height = targetWidth * aspectRatio;
+  
+            context.drawImage(
+              videoNode,
+              0,
+              0,
+              canvasNode.width,
+              canvasNode.height
+            );
+            // Compress and convert image to JPEG format
+            const quality = 1; // Adjust the quality as needed, between 0 and 1
+            const base64Image = canvasNode.toDataURL("image/jpeg", quality);
+  
+            if (base64Image !== "data:,") {
+              screenshotsRef.current.push(base64Image);
             }
           }
-        };
-    
-        const intervalId = setInterval(captureFrame, INTERVAL);
-    
-        return () => {
-          clearInterval(intervalId);
-        };
-      }, [video.status, audio.isRecording]);
+        }
+      };
+  
+      const intervalId = setInterval(captureFrame, INTERVAL);
+  
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, [video.status, audio.isRecording]);
     
 
     return ( 
@@ -352,41 +404,44 @@ const CamChat = () => {
             </motion.div>
             <canvas ref={canvasRef} style={{ display: "none" }} />
             <div className="content">
-                <VideoContainer>
-                    <video
-                    ref={videoRef}
-                    autoPlay
-                    />
-                    <RecordDot isRecording={audio.isRecording} volumePercentage={volumePercentage}>
-                        <div>
-                            {audio.isRecording ? '' : '⏸'}
-                        </div>
-                    </RecordDot>
+              <VideoContainer>
+                  <video
+                  ref={videoRef}
+                  autoPlay
+                  />
+                  <RecordDot isrecording={audio.isRecording.toString()} volumepercentage={volumePercentage}>
+                      <div>
+                          {audio.isRecording ? '' : '⏸'}
+                      </div>
+                  </RecordDot>
 
-                </VideoContainer>
+              </VideoContainer>
+              <div className="action">
+                <BtnSection>
+                  {isStarted ? (
+                    <button onClick={voiceRecorder.stop}>Stop session</button>
+                    ) : (
+                    <button onClick={voiceRecorder.start}>Start session</button>
+                  )}
+                  <DebugBtn onClick={() => setDisplayDebug(prev => !prev)}>Debug</DebugBtn>
+                </BtnSection>
+
+                <AiResponseContainer>
+                        <div className="ai-text">
+                        {!isWaiting ? (
+                             <p>{botText}</p>
+                          ) : (
+                            <Typing who="Bot" text="is thinking..."/>
+                          )
+                            }
+                        </div>
+                </AiResponseContainer>
+              </div>
+
             </div>
 
-        <BtnSection>
-          {isStarted ? (
-            <button onClick={recorder.stop}>Stop session</button>
-            ) : (
-            <button onClick={recorder.start}>Start session</button>
-          )}
-          <DebugBtn onClick={() => setDisplayDebug(prev => !prev)}>Debug</DebugBtn>
-        </BtnSection>
 
-        <AiResponseContainer>
-                <div className="ai-text">
-                {!isWaiting ? (
-                    <p>{transcription}</p>
-                ) : (
-                    <>...loading</>
-                )
-                }
-                </div>
-        </AiResponseContainer>
-
-        <DebugContainer displaydebug={displaydebug}>
+        <DebugContainer displaydebug={displaydebug.toString()}>
            <CloseButton onClick={() => setDisplayDebug(false)}>
              ⛌
            </CloseButton>
@@ -445,12 +500,18 @@ const Container = styled.div`
 
 
     .content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 60%;
-        width: 100%;
-    
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      height: 90%;
+      margin: 0px 27px;
+      width: auto;
+
+      .action {
+        height: 100%;
+        flex: 1
+      }
     }
 `
 
@@ -459,12 +520,11 @@ const BtnSection = styled.div `
 `
 
 const VideoContainer = styled.div`
-    width: 100%;
+    width: 80%;
     background-color: black;
-    height: 80%;
+    height: 100%;
     position: relative;
-    margin: 30px;
-    border-radius: 0.5rem;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -486,20 +546,20 @@ const RecordDot = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${props => props.isRecording ? 'default' : 'pointer'};
+  cursor: ${props => props.isrecording === "true" ? 'default' : 'pointer'};
 
-  ${props => props.isRecording && css`
+  ${props => props.isrecording && css`
     div {
       width: 4rem;
       height: 4rem;
       background-color: #f56565;
       opacity: 0.5;
       border-radius: 50%;
-      transform: scale(${Math.pow(props.volumePercentage, 4).toFixed(4)});
+      transform: scale(${Math.pow(props.volumepercentage, 4).toFixed(4)});
     }
   `}
 
-  ${props => !props.isRecording && css`
+  ${props => props.isrecording === "false" && css`
     div {
       font-size: 3.125rem;
       color: #f56565;
@@ -531,7 +591,7 @@ const DebugContainer = styled.div`
     @media (min-width: 640px) {
         width: 33vw;
     }
-    ${props => props.displaydebug ? css`
+    ${props => props.displaydebug === "true" ? css`
       transform: translateX(0);
     ` : css`
       transform: translateX(-100%);
@@ -561,5 +621,7 @@ const DebugContainer = styled.div`
 `;
 
 const AiResponseContainer = styled.div `
-
+  .ai-text {
+    color: white
+  }
 `

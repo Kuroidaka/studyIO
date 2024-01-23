@@ -3,7 +3,8 @@ import {
     Send, File1, Image, Delete, AttachFile
 } from "../../../assets/Icons/index";
 import { motion } from "framer-motion";
-import ConversationContext from "../../../context/Conversation.Context";
+import ConversationContext from "../../../context/Conversation.context";
+import Typing from "../../../component/Typing";
 
 const Input = (p) => {
     const { filesImages, uploadFileImg, setFilesImages, handleSend } = p;
@@ -60,7 +61,6 @@ const Input = (p) => {
         document.getElementById('myTextarea').addEventListener('input', autoResize);
 
         function autoResize() {
-            console.log("resize")
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
         }
@@ -69,8 +69,8 @@ const Input = (p) => {
     return (
         <div className="Input_content">
             <div className="File_area">
-                {filesImages.map((file) => (
-                    <div className="file_container" key={file.id}>
+                {filesImages.map((file, idx) => (
+                    <div className="file_container" key={idx}>
                         <div className="file_info">
                             {file.type === 'file' ? <File1 /> : <Image />}
                             <p className="file_name">{file.name}</p>
@@ -112,14 +112,12 @@ const Input = (p) => {
                 }
 
             </div>
+
+            
             {(isWaiting.isWait && isWaiting.conId === selectedCon.id) 
             && 
-            <div className="chatting-dot">
-                <div className='bot-text'>
-                    <div className="chat-dot"></div>
-                    <div className="chat-dot"></div>
-                    <div className="chat-dot"></div>
-                </div>
+            <div className="typing">
+                <Typing who="Bot" text="is typing..." />
             </div>
             }
         </div>

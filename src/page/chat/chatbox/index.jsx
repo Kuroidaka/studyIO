@@ -4,22 +4,13 @@ import UserMsg from './User_message';
 import BotMsg from './Bot_message';
 import EmptyBox from './EmptyBox';
 import { useContext, useEffect, useRef } from 'react';
-import ConversationContext from '../../../context/Conversation.Context';
+import ConversationContext from '../../../context/Conversation.context';
 
 const ChatBox = () => {
 
 
-    const { currentMsgList, isWaiting, selectedCon } = useContext(ConversationContext);  
+    const { currentMsgList } = useContext(ConversationContext);  
     const pageRef = useRef(null); 
-
-    const scrollToBottom = () => {
-        console.log("scroll")
-        // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
-        const div = document.querySelector('.list-chat');
-        div.scrollTop = div.scrollHeight - div.clientHeight;
-    };
-
-    useEffect(scrollToBottom, [currentMsgList]);
 
     return (
         <Conversation ref={pageRef} className='list-chat'>
@@ -44,10 +35,10 @@ const ChatBox = () => {
 export default ChatBox;
 
 const Conversation = styled.div`
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: flex-start; */
     margin: 18px;
     height: 100%;
     width: 100%;

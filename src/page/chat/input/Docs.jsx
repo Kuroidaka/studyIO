@@ -69,7 +69,7 @@ const DocsUploaded = (p) => {
                     (isLoadingFile && selectFile === file.name) || loadingFileList.indexOf(file.name) !== -1? 
                     (
                         <span className="load_button">
-                            <Load minSize="15px"/>
+                            <Load minsize="15px"/>
                         </span>
                     ) : (
                         hoveredFile === file.id ? (

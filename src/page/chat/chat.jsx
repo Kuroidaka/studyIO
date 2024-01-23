@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 import ChatBox from './chatbox';
 import InputBox from "./input/index";
-import ConversationContext from '../../context/Conversation.Context';
+import ConversationContext from '../../context/Conversation.context';
 
 const ChatPage = () => {
     
@@ -18,6 +18,7 @@ const ChatPage = () => {
         createNewConversation()
     }
     const handleSwitchVideoChat = () => {
+        createNewConversation()
         navigate("/cam-chat")
     }
 

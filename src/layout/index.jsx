@@ -1,26 +1,37 @@
 
-import { useContext, useEffect, useState } from "react";
+import { Fragment, Suspense, useContext, useState } from "react";
 import styled from "styled-components";
 import { ChevronRight, ChevronLeft } from 'react-feather';
 
 import Sidebar from "./component/sidebar/Sidebar";
-import ConversationContext from '../context/Conversation.Context';
-import { ConversationProvider } from "../context/Conversation.Context";
-import { FileProvider } from "../context/File.Context";
+import ConversationContext from '../context/Conversation.context';
+import { ConversationProvider } from "../context/Conversation.context";
+import { FileProvider } from "../context/File.context";
+import Load from "../component/Load";
+
 
 const DefaultLayout = ( p ) => {
-    const { children } = p
+    const { children, sidebar=true } = p
 
     return (
         <FileProvider>
             <ConversationProvider>
-                <DefaultLayoutComponent>{children}</DefaultLayoutComponent>
+                <Container>
+                    <div className="body">
+                    <Suspense fallback={<LoadingContainer><Load minsize="35px"/></LoadingContainer>}>
+                    {   sidebar ?
+                        <SidebarLayout >{children}</SidebarLayout>
+                        : <Fragment>{children}</Fragment>
+                    }
+                    </Suspense>
+                    </div>
+                </Container>
             </ConversationProvider>
         </FileProvider>
     )
 }
 
-const DefaultLayoutComponent = (p) => {
+const SidebarLayout = (p) => {
     const { children } = p
 
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -31,21 +42,11 @@ const DefaultLayoutComponent = (p) => {
         setSidebarOpen(prevState => !prevState)
     };
     
-    // conversation
-    const { conList, isLoading, selectedCon, selectCon } = useContext(ConversationContext);
 
-    const sidebarProps = {
-        isLoading,
-        conList,
-        selectedCon,
-        selectCon
-    }
 
     return (
-       <Container>
-        
-        <div className="body">
-            {sidebarOpen && <Sidebar {...sidebarProps}/>}
+        <Fragment>
+            {sidebarOpen && <Sidebar />}
             <div className="page-content">
                 <div className="icon-wrapper" onClick={handleChevronClick}>
                     {isChevronRight
@@ -55,9 +56,7 @@ const DefaultLayoutComponent = (p) => {
                 </div>
                 {children}
             </div>
-        </div>
-    
-       </Container>
+        </Fragment>
     )
 }
  
@@ -104,4 +103,12 @@ const Container = styled.div`
     }
     
 
+`
+
+const LoadingContainer = styled.div`
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 `

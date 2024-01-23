@@ -1,5 +1,5 @@
 import { Navigate } from "react-router"
-import React, { lazy } from 'react';
+import { lazy } from 'react';
 
 import DefaultLayout from "../layout/index.jsx"
 
@@ -25,7 +25,7 @@ export const routes = [
     },
     {
         name: "cam-chat",
-        page: <DefaultLayout><CamChat /></DefaultLayout>,
+        page: <DefaultLayout sidebar={false}><CamChat /></DefaultLayout>,
         path: paths.camChat, 
         exact: true,
     }

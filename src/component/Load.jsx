@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components'
 
 const Load = (p) => {
-  const { minSize="15px" } = p
+  const { minsize="15px" } = p
   return (
-    <Container minSize={minSize}>
+    <Container minsize={minsize}>
       <div className="spinner-wrapper">
         <div className="spinner"></div>
       </div>
@@ -31,9 +31,9 @@ const Container = styled.div`
       border-radius: 50%;
       border-top: 4px solid #3d80ff;
       animation: spinner 1.5s linear infinite;
-      ${props => props.minSize && css`
-        min-width: ${props.minSize};
-        min-height: ${props.minSize};
+      ${props => props.minsize && css`
+        min-width: ${props.minsize};
+        min-height: ${props.minsize};
       `}
     }
     @keyframes spinner {

@@ -1,64 +1,83 @@
 import styled from "styled-components";
 import { Tv } from 'react-feather';
-import DOMPurify from "dompurify";
+// import DOMPurify from "dompurify";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import utils from '../../../utils';
 import Img from '../../../assets/img'
-import Image from "../../../component/Image";
-import { useEffect, useRef, useState } from "react";
+import ImageCom from "../../../component/Image";
+import { useEffect,  } from "react";
 
 const BotMsg = (p) => {
-    const { text, className, isWaiting=false } = p
-    // const { isWaiting, selectedCon } = useContext(ConversationContext);
-
+    const { text, className } = p
     const { imgPlaceHolder } = Img
 
-    const [newText, setNewText] = useState({
-        status: false,
-        text: "",
-        isImg: false
-    });
-    const { convertStringToHtml, checkIsImgLink } = utils
+    const { checkIsImgLink } = utils
 
 
-    useEffect(() => {
 
-        if(checkIsImgLink(text)) {
-            setNewText({
-                status: true,
-                text: text,
-                isImg: true
-            });
-        }
-        else {
-            setNewText({
-                status: true,
-                text: DOMPurify.sanitize(convertStringToHtml(text)),
-                isImg: false
-            });
-        }
-    }, [text]);
+    const scrollToBottom = () => {
+        // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+        const div = document.querySelector('.list-chat');
+        div.scrollTop = div.scrollHeight - div.clientHeight + 1000;
+    };
+
+    useEffect(scrollToBottom, [text]);
 
     return ( 
     <Container className={`chat-msg bot-chat ${className}`} >
         <div className='icon'>
             <div className='bot-icon-wrapper'>
                 <Tv className='bot-icon'/>
-                
             </div>
         </div>
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
             <div className="bot-text-wrapper">
             { 
-                (newText.status && newText.isImg) ? (
+                checkIsImgLink(text) ? (
                     <div className='bot-text'>
-                        <Image 
-                            src={newText.text}
-                            imgPlaceHolder={imgPlaceHolder} />
+                        <ImageCom 
+                            src={text}
+                            imgPlaceHolder={imgPlaceHolder} 
+                            // imgsize={
+                            //     imgList.length === 1 ? 
+                            //     '423px' :
+                            //     imgList.length === 2 ?
+                            //     '250px' :
+                            //     '171px'
+                            // }
+                        />
                     </div>
                 ) : (
-                    <div className='bot-text' dangerouslySetInnerHTML={{ __html: newText.text }} ></div>
+                    <div className='bot-text'>
+                        <ReactMarkdown
+                            // eslint-disable-next-line react/no-children-prop
+                            children={text}
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                                code({ inline, className, children, ...props }) {
+                                const match = /language-(\w+)/.exec(className || "");
+                                return !inline && match ? (
+                                    <SyntaxHighlighter
+                                    style={dracula} // theme
+                                    // eslint-disable-next-line react/no-children-prop
+                                    children={String(children).replace(/\n$/, "")}
+                                    language={match[1]}
+                                    {...props}
+                                    />
+                                ) : (
+                                    <code className={className} {...props}>
+                                    {children}
+                                    </code>
+                                );
+                                },
+                            }}
+                            />
+                    </div>
                 )
             }
             </div>
@@ -110,7 +129,14 @@ const Container = styled.div`
             justify-content: center;
             .bot-text {
                 width:100%;
-
+                pre {
+                    overflow-x: scroll;
+                }
+                a {
+                    color: #00a5ff;
+                    text-decoration: none;
+                    font-weight: 500;
+                }
                 img {
                     width: 100%;
                     max-width: 350px;
@@ -118,20 +144,24 @@ const Container = styled.div`
                     /* cursor: pointer; */
                 }
                 p {
-                    font-size: 15px;   /* Thay đổi kích thước của chữ StudyIO */
                     font-weight: 500;
                 }
-    
-                ol {
-                    list-style: inside;
+                ol,ul {
                     padding: 6px 25px;
                     li {
                         font-size: 15px;   /* Thay đổi kích thước của chữ StudyIO */
                         font-weight: 500;
                         margin: 10px 0;
+
+                        a {
+                            color: #00a5ff;
+                            text-decoration: none;
+                            font-weight: 500;
+                        
+                        }
                     }
     
-                }
+                } 
             }
         }
     }
