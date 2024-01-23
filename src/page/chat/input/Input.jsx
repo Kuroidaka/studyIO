@@ -4,6 +4,7 @@ import {
 } from "../../../assets/Icons/index";
 import { motion } from "framer-motion";
 import ConversationContext from "../../../context/Conversation.context";
+import Typing from "../../../component/Typing";
 
 const Input = (p) => {
     const { filesImages, uploadFileImg, setFilesImages, handleSend } = p;
@@ -111,14 +112,12 @@ const Input = (p) => {
                 }
 
             </div>
+
+            
             {(isWaiting.isWait && isWaiting.conId === selectedCon.id) 
             && 
-            <div className="chatting-dot">
-                <div className='bot-text'>
-                    <div className="chat-dot"></div>
-                    <div className="chat-dot"></div>
-                    <div className="chat-dot"></div>
-                </div>
+            <div className="typing">
+                <Typing who="Bot" text="is typing..." />
             </div>
             }
         </div>

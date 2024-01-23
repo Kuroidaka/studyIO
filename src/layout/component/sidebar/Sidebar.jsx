@@ -4,15 +4,14 @@ import { useNavigate } from "react-router-dom";
 import './style/sidebar.scss'
 import SidebarNav from "./sidebar_nav";
 import Load from "../../../component/Load";
+import { useContext } from "react";
+import ConversationContext from "../../../context/Conversation.context";
 
 
-const Sidebar = (p) => {
-    const {
-        isLoading,
-        conList,
-        selectedCon,
-        selectCon
-    } = p
+const Sidebar = () => {
+
+    // conversation
+    const { conList, isLoading, selectedCon, selectCon } = useContext(ConversationContext);
     const navigate = useNavigate()
 
     const hdlSelCon = ({id, dayRef}) => {

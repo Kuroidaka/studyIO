@@ -59,7 +59,7 @@ const conversationApi = {
 
     },
     createChatStream: async (
-        { text, sender, conversationId, isAttachedFile, imgFiles },
+        { text, sender, conversationId, isAttachedFile, imgFiles, isTalking=false, maxToken=2000 },
         { updateFinalData, updateStreamText, enableSend }
     ) => {
 
@@ -69,9 +69,11 @@ const conversationApi = {
             text: text,
             sender: sender,
             senderID: "-1",
-            maxToken: 2000,
+            maxToken: maxToken,
             isAttachedFile: isAttachedFile,
-            imgFiles: JSON.stringify(imgFiles)
+            imgFiles: JSON.stringify(imgFiles),
+            isTalking: isTalking,
+            stream: true
         }
 
         const url = `http://localhost:8001/api/v1/studyio/create`;
@@ -114,6 +116,12 @@ const conversationApi = {
                     Object.prototype.hasOwnProperty.call(parsedValue, 'arguments')  
                 ) {
                     console.log("Received a function object: ", parsedValue)
+                } else if(
+                    Object.prototype.hasOwnProperty.call(parsedValue, 'finishReason') &&
+                    parsedValue.finishReason === "length"
+                ) {
+                    contentFull += "\nDo you want to continue generating?"
+                    updateStreamText && updateStreamText({text: contentFull})
                 } else {
                     console.log("Received an unknown object: ", parsedValue)
                 }
@@ -132,6 +140,60 @@ const conversationApi = {
         // setResponse((prev) => prev + value)  
         }
         return { content: contentFull }
+    },
+    createCamChatStream: async (
+        { text, sender, imgFiles, maxToken },
+        { updateStreamText, turnOffWait }
+    ) => {
+
+        const data = {
+            text: text,
+            sender: sender,
+            senderID: "-1",
+            maxToken: maxToken,
+            imgFiles: JSON.stringify(imgFiles)
+        }
+
+        const url = `http://localhost:8001/api/v1/studyio/cam`;
+        const params = new URLSearchParams(data).toString();
+
+        const response = await fetch(
+            `${url}?${params}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/event-stream',
+              }
+            }
+        )
+        const reader = response.body
+        .pipeThrough(new TextDecoderStream())
+        .getReader()
+        let contentFull = ''
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+            const { value, done } = await reader.read()
+            if (done) {
+                turnOffWait()
+                break
+            }
+            console.log("Received value", value)
+            const isEnded = value.includes("__CAM_FIN__")
+
+            if(isEnded){
+                turnOffWait()
+                contentFull += value.split("__CAM_FIN__")[0]
+                updateStreamText && updateStreamText({text: value.split("__CAM_FIN__")[0]})
+            } else { 
+                contentFull += value
+                updateStreamText && updateStreamText({text: value})
+            }
+        }
+        return { content: contentFull }
+    },
+    deleteCamChatStream: async () => {
+        const url = `/studyio/cam/delete`;
+        return axiosClient.post(url)
     }
 }
 

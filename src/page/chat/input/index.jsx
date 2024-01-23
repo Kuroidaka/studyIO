@@ -127,7 +127,7 @@ const InputBox = () => {
             "imgList": blobImages.length > 0 ? blobImages : [],
         }
 
-        await updateConUser({
+        updateConUser({
             id: selectedCon.id,
             dayRef: selectedCon.dayRef,
             newMsgList: [newTempMsg],
@@ -155,6 +155,7 @@ const InputBox = () => {
             conversationId: selectedCon.id || "",
             isAttachedFile: filesDocs.length > 0 ? true : false,
             imgFiles: newImgList.length > 0 ? newImgList : [],
+            maxToken: 2000
         }
 
         const updateStreamText = ({text}) => {//update stream text

@@ -1,4 +1,3 @@
-import axios from "axios";
 import conversationApi from "../api/conversation";
 
 import { createContext, useEffect, useState } from "react";
@@ -16,13 +15,6 @@ export const ConversationProvider = (p) => {
         isWait: false,
         conId: ""
     });
-    const [valueBot, setValueBot] = useState({
-        value: "",
-        func: [{
-            name: "",
-            content: ""
-        }]
-    })
 
     useEffect(() => {
         getCon()
