@@ -122,6 +122,7 @@ const Container = styled.div`
             justify-content: center;
             
             .human-text {
+                overflow-x: scroll;
                 width:100%;
                 direction: ltr;
                 .img_list-wrapper {

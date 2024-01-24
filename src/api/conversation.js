@@ -60,7 +60,7 @@ const conversationApi = {
     },
     createChatStream: async (
         { text, sender, conversationId, isAttachedFile, imgFiles, isTalking=false, maxToken=2000 },
-        { updateFinalData, updateStreamText, enableSend }
+        { updateFinalData, updateStreamText, enableSend, updateStreamFunc }
     ) => {
 
         const data = {
@@ -102,7 +102,7 @@ const conversationApi = {
             break
         }
         try {
-            console.log("Received value", value)
+            // console.log("Received value", value)
             const parsedValue = value.split("__FIN__")[1] ? JSON.parse(value.split("__FIN__")[1]) : JSON.parse(value)
 
             if(typeof parsedValue === 'object'){
@@ -116,6 +116,7 @@ const conversationApi = {
                     Object.prototype.hasOwnProperty.call(parsedValue, 'arguments')  
                 ) {
                     console.log("Received a function object: ", parsedValue)
+                    updateStreamFunc && updateStreamFunc({func: parsedValue})
                 } else if(
                     Object.prototype.hasOwnProperty.call(parsedValue, 'finishReason') &&
                     parsedValue.finishReason === "length"
@@ -131,7 +132,7 @@ const conversationApi = {
                 // updateStreamText && updateStreamText({text: contentFull})
             }
         } catch (error) {
-            console.log("Received string: ", value)
+            // console.log("Received string: ", value)
             contentFull += value
             updateStreamText && updateStreamText({text: contentFull})
         }

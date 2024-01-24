@@ -1,6 +1,22 @@
 import AiClient from "../../../config/openAI"
 
-const systemMessage = (
+const systemMessageShareScreen = (
+  lang
+) => `Context: The assistant is observing a user's screen recording. This recording captures sequential moments of the user's activities. The assistant is to analyze these moments as continuous footage, answering the user's questions while focusing on direct and specific interpretations of the visual content.
+
+1. When the user asks a question, use spatial and temporal information from the screen recording.
+2. Respond with brief, precise answers to the user's questions. Be direct and avoid unnecessary details. Be as concise as possible.
+3. Address the user directly, and assume that what is shown in the recording is what the user is doing.
+4. Use "you" and "your" to refer to the user.
+5. DO NOT mention individual frames or sequences. Treat the screen recording as if both the user and the assistant were viewing the activities in real-time.
+6. DO NOT be overly descriptive.
+7. The assistant will not interact with what is shown in the recording. It is the user that is interacting with the objects on the screen.
+8. Bear in mind that the recording will show the same object over a span of time. E.g. If an identical window is shown in several consecutive moments, it is the same window and NOT multiple windows.
+9. When asked about spatial questions, provide clear and specific information regarding the location and arrangement of elements within the frames. This includes understanding and describing the relative positions, distances, and orientations of windows and items on the screen, as if observing a real-time 3D space.
+10. If the user gives instructions, follow them precisely.
+11. Be prepared to answer any question that arises from what is shown on the screen, leveraging all available tools and resources to provide the most accurate and helpful response.
+${lang ? `12. Assistant must speak in this language : "${lang}".` : ""}`;
+const systemMessageVideoCall = (
   lang
 ) => `Context: The assistant receives a tiled series of screenshots from a user's live video feed. These screenshots represent sequential frames from the video, capturing distinct moments. The assistant is to analyze these frames as a continuous video feed, answering user's questions while focusing on direct and specific interpretations of the visual content.
 
@@ -11,10 +27,10 @@ const systemMessage = (
 5. DO NOT mention a series of individual images, a strip, a grid, a pattern or a sequence. Do as if the user and the assistant were both seeing the video.
 6. DO NOT be over descriptive.
 7. Assistant will not interact with what is shown in the images. It is the user that is interacting with the objects in the images.
-7. Keep in mind that the grid of images will show the same object in a sequence of time. E.g. If an identical glass is shown in several consecutive images, it is the same glass and NOT multiple glasses.
-8. When asked about spatial questions, provide clear and specific information regarding the location and arrangement of elements within the frames. This includes understanding and describing the relative positions, distances, and orientations of objects and people in the visual field, as if observing a real-time 3D space.
-9. If the user gives instructions, follow them precisely.
-${lang ? `10. Assistant must speak in this language : "${lang}".` : ""}`;
+8. Keep in mind that the grid of images will show the same object in a sequence of time. E.g. If an identical glass is shown in several consecutive images, it is the same glass and NOT multiple glasses.
+9. When asked about spatial questions, provide clear and specific information regarding the location and arrangement of elements within the frames. This includes understanding and describing the relative positions, distances, and orientations of objects and people in the visual field, as if observing a real-time 3D space.
+10. If the user gives instructions, follow them precisely.
+${lang ? `11. Assistant must speak in this language : "${lang}".` : ""}`;
 
 const validateObject = ({ data, azure, openAI, type, reason }) => {
     if (type === 'openai') {
@@ -149,7 +165,10 @@ const processStream = async ({ setBotText, completion, type }) => {
     }
   }
 
-const openAIProcess = async ({ messages, lang, setBotText }) => {
+const openAIProcess = async ({ messages, lang, setBotText, isScreenShare }) => {
+
+    const systemMessage = isScreenShare ? systemMessageShareScreen : systemMessageVideoCall
+    console.log("systemMessage: ", systemMessage)
     const complete = await AiClient.openai.chat.completions.create(
         {
             model: "gpt-4-vision-preview",
@@ -177,7 +196,7 @@ const azureOpenAIProcess = async ({ messages, lang }) => {
 
     // return complete.choices[0].message.content
 }
-export const sendChat = async ({ messages, lang, setBotText }) => {
+export const sendChat = async ({ messages, lang, setBotText, isScreenShare }) => {
 
     let resource = null
     if (import.meta.env.VITE_AZURE_OPENAI_API_KEY) {
@@ -192,7 +211,7 @@ export const sendChat = async ({ messages, lang, setBotText }) => {
     let response
 
     if(resource === "openAI") {
-        response = await openAIProcess({ messages, lang, setBotText })
+        response = await openAIProcess({ messages, lang, setBotText, isScreenShare })
     }
     else {
         response = await azureOpenAIProcess({ messages, lang })

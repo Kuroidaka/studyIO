@@ -19,7 +19,7 @@ const ChatBox = () => {
                     msg.sender === "user" ? (
                         <UserMsg pageRef={pageRef} key={index} text={msg.text} imgList={msg.imgList} />
                     ) : (
-                        <BotMsg key={index} text={msg.text}/>
+                        <BotMsg key={index} text={msg.text} functionList={msg.functionList}/>
                     )
                 ))
 
@@ -42,7 +42,7 @@ const Conversation = styled.div`
     margin: 18px;
     height: 100%;
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
     overflow-y: scroll;
     overflow-x: hidden;
     -ms-overflow-style: none;  /* IE and Edge */
