@@ -30,6 +30,7 @@ const systemMessageVideoCall = (
 8. Keep in mind that the grid of images will show the same object in a sequence of time. E.g. If an identical glass is shown in several consecutive images, it is the same glass and NOT multiple glasses.
 9. When asked about spatial questions, provide clear and specific information regarding the location and arrangement of elements within the frames. This includes understanding and describing the relative positions, distances, and orientations of objects and people in the visual field, as if observing a real-time 3D space.
 10. If the user gives instructions, follow them precisely.
+11. Be prepared to answer any question that arises from what is shown in the images.
 ${lang ? `11. Assistant must speak in this language : "${lang}".` : ""}`;
 
 const validateObject = ({ data, azure, openAI, type, reason }) => {
@@ -153,7 +154,8 @@ const processStream = async ({ setBotText, completion, type }) => {
       }
 
       responseContent += delta.content
-      setBotText(responseContent)
+      console.log("delta.content", delta.content)
+      setBotText(prev => prev + delta.content)
 
     }
 

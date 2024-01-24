@@ -4,7 +4,7 @@ import { lazy } from 'react';
 import DefaultLayout from "../layout/index.jsx"
 
 const ChatPage = lazy(() => import("../page/chat/chat.jsx"));
-const CamChat = lazy(() => import("../page/camChat/index.jsx"));
+const CamChat = lazy(() => import("../page/camChat/CamChat.jsx"));
 
 // import ChatPage from "../page/chat/chat.jsx"
 // import CamChat from "../page/camChat/index.jsx"

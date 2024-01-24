@@ -1,7 +1,6 @@
-import { motion } from "framer-motion";
-import { ArrowLeft } from 'react-feather';
+
 import useMediaRecorder from "@wmik/use-media-recorder";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import useSilenceAwareRecorder from "silence-aware-recorder/react";
 import func from "./function";
@@ -9,24 +8,39 @@ import conversationApi from "../../api/conversation";
 import utils from "../../utils/index";
 import CamScreen from './camScreen';
 import LogScreen from './logScreen';
-import { callConfig, imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel } from '.';
+import { imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel, DebugImg } from '.';
+
+const INTERVAL = 250
+const SILENCE_DURATION = 2500
+const SILENT_THRESHOLD = -30
+
+const SCREEN_IMAGE_WIDTH = 512
+const SCREEN_MAX_SCREENSHOTS = 1
+const SCREEN_IMAGE_QUALITY = 1
+const SCREEN_COLUMNS = 1
+
+const IMAGE_WIDTH = 1080
+const MAX_SCREENSHOTS = 10
+const IMAGE_QUALITY = 1
+const COLUMNS = 3
 
 
-export const CamChat = () => {
+const CamChat = () => {
   // const id = useId();
   const maxVolumeRef = useRef(0);
   const minVolumeRef = useRef(-100);
   const isBusy = useRef(false);
+  const isScreenShare = useRef(false);
   const screenshotsRef = useRef([]);
   const videoRef = useRef();
+  const screenRef = useRef();
   const canvasRef = useRef();
-  const navigate = useNavigate();
 
   const location = useLocation();
   const { hostImages } = utils;
 
   // const { selectedCon, updateConUser } = useContext(ConversationContext);
-  const [isScreenShare, setIsScreenShare] = useState(false);
+
   const [botText, setBotText] = useState("");
   const [displaydebug, setDisplayDebug] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
@@ -39,17 +53,25 @@ export const CamChat = () => {
   const [isWaiting, setIsWaiting] = useState(false);
 
   // Define recorder for video
-  let { liveStream, ...video } = useMediaRecorder({
-    recordScreen: isScreenShare,
+  let screenObject = useMediaRecorder({
+    recordScreen: true,
     blobOptions: { type: "video/webm" },
     mediaStreamConstraints: { audio: false, video: true },
   });
+
+  let { liveStream, ...video } = useMediaRecorder({
+    recordScreen: false,
+    blobOptions: { type: "video/webm" },
+    mediaStreamConstraints: { audio: false, video: true },
+  });
+
+  
   // Define recorder for audio
   const audio = useSilenceAwareRecorder({
     onDataAvailable: onSpeech,
     onVolumeChange: setCurrentVolume,
-    silenceDuration: callConfig().SILENCE_DURATION,
-    silentThreshold: callConfig().SILENT_THRESHOLD,
+    silenceDuration: SILENCE_DURATION,
+    silentThreshold: SILENT_THRESHOLD,
     minDecibels: -100,
   });
 
@@ -82,12 +104,19 @@ export const CamChat = () => {
         setPhase("user: uploading video captures");
 
         // gen img grid
+
+        const maxScreenshots = isScreenShare.current ? SCREEN_MAX_SCREENSHOTS : MAX_SCREENSHOTS
+        console.log("MAX_SCREENSHOTS", isScreenShare.current)
+
         screenshotsRef.current = screenshotsRef.current.slice(
-          -callConfig(isScreenShare).MAX_SCREENSHOTS
+          -maxScreenshots
         ); // Keep only the last XXX screenshots
 
         const imageUrl = await imagesGrid({
           base64Images: screenshotsRef.current,
+          columns: isScreenShare.current ? SCREEN_COLUMNS : COLUMNS,
+          gridImageWidth: isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH ,
+          quality: isScreenShare.current ? SCREEN_IMAGE_QUALITY : IMAGE_QUALITY,
         });
 
         screenshotsRef.current = [];
@@ -186,7 +215,7 @@ export const CamChat = () => {
       },
     ];
 
-    const result = await func.sendChat({ messages, lang, setBotText, isScreenShare });
+    const result = await func.sendChat({ messages, lang, setBotText, isScreenShare:isScreenShare.current });
     console.log("final response: ", result.data);
     await turnOffWait();
     return {
@@ -195,30 +224,19 @@ export const CamChat = () => {
   };
 
 
-  const handleClickBack = async () => {
-    conversationApi.deleteCamChatStream();
-    await recorder.stop();
-    await navigate("/chat");
-  };
 
-  const handleSwitchShare = () => {
-    setIsScreenShare(prev => !prev);
-    if (isScreenShare) {
-      videoRecorder.start();
-    }
-    else {
-      videoRecorder.stop();
-    }
 
+  const toggleScreenShare = (toggle) => {
+    isScreenShare.current = toggle;
   };
 
   const recorder = {
-    start: () => {
-      videoRecorder.start();
+    start: (vi, ref) => {
+      videoRecorder.start(vi, ref);
       voiceRecorder.start();
     },
-    stop: async () => {
-      videoRecorder.stop();
+    stop: async (vi, ref) => {
+      videoRecorder.stop(vi, ref);
       voiceRecorder.stop();
       // video.clearMediaStream()
       // document.location.reload();
@@ -226,19 +244,15 @@ export const CamChat = () => {
   };
 
   const videoRecorder = {
-    start: () => {
-      if (video.status === "idle" ||
-        video.status === "stopped") {
-        console.log("start: video");
-        video.startRecording();
-      }
+    start: (vi, ref) => {
+      if(vi.status === "recording") return;
+      console.log("start: video", ref.current);
+      vi.startRecording();
     },
-    stop: () => {
-      if (video.status === "recording") {
-        console.log("stop: video");
-        video.stopRecording();
-        videoRecorder.stopStreamedVideo(videoRef.current);
-      }
+    stop: (vi, ref) => {
+      if(vi.status === "idle") return;
+      vi.stopRecording();
+      videoRecorder.stopStreamedVideo(ref.current);
     },
     stopStreamedVideo(videoElem) {
       if (videoElem) {
@@ -271,18 +285,25 @@ export const CamChat = () => {
 
   useEffect(() => {
     // start record Video + voice
-    console.log("location.pathname", location.pathname);
-    if (location.pathname === "/cam-chat") {
-      videoRecorder.start();
+
+    const initCam = async () => {
+      console.log("location.pathname", location.pathname);
+      if (location.pathname === "/cam-chat") {
+        videoRecorder.start(video, videoRef);
+        // videoRecorder.start(screen, screenRef);
+      }
+      else {
+        recorder.stop(screenObject, screenRef);
+        recorder.stop(video, videoRef);
+      }
+      
     }
-    else {
-      recorder.stop();
-    }
+    initCam();
     return () => {
-      recorder.stop();
+      recorder.stop(screenObject, screenRef);
+      recorder.stop(video, videoRef);
     };
   }, []);
-
 
   useEffect(() => {
     if (!audio.isRecording) {
@@ -306,10 +327,11 @@ export const CamChat = () => {
 
   useEffect(() => {
     const captureFrame = () => {
-      if (video.status === "recording" && audio.isRecording) {
-        const targetWidth = callConfig(isScreenShare).IMAGE_WIDTH;
+      if (video.status === "recording" || screenObject.status === "recording" && audio.isRecording) {
+        const targetWidth = isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH;
 
-        const videoNode = videoRef.current;
+        const videoNode = isScreenShare.current ? screenRef.current : videoRef.current;
+        
         const canvasNode = canvasRef.current;
 
         if (videoNode && canvasNode) {
@@ -340,27 +362,55 @@ export const CamChat = () => {
       }
     };
 
-    const intervalId = setInterval(captureFrame, callConfig(isScreenShare).INTERVAL);
+    const intervalId = setInterval(captureFrame, INTERVAL);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [video.status, audio.isRecording, isScreenShare]);
+  }, [video.status, screenObject.status, audio.isRecording, isScreenShare]);
 
   useEffect(() => {
+
+    // console.log("------------------------- VIDEO")
+    // console.log("ref:",videoRef.current)
+    // console.log("livestream", liveStream)
+    // console.log("object src: ", videoRef.current.srcObject)
+    // console.log("------------------------- END VIDEO")
     if (videoRef.current && liveStream && !videoRef.current.srcObject) {
       videoRef.current.srcObject = liveStream;
+      console.log("load video" )
     }
+
+
   }, [liveStream]);
+  useEffect(() => {
+
+    // console.log("------------------------- SCREEN")
+    // console.log("ref:",screenRef.current)
+    // console.log("livestream", screenObject.liveStream)
+    // console.log("object src: ", screenRef.current.srcObject)
+    // console.log("------------------------- END SCREEN")
+    if (screenRef.current && screenObject.liveStream && !screenRef.current.srcObject) {
+      console.log("load screen")
+      screenRef.current.srcObject = screenObject.liveStream;
+    }
+  }, [screenObject.liveStream]);
 
 
   const camScreenProp = {
     videoRef,
+    screenRef,
     // canvasRef,
-    // isScreenShare,
-    handleSwitchShare,
+    isScreenShare,
+    videoRecorder,
+    toggleScreenShare,
     volumePercentage,
     audio,
+    video,
+    screenObject,
+    voiceRecorder,
+    isStarted,
+    recorder
   };
 
   const logScreenProp = {
@@ -372,15 +422,7 @@ export const CamChat = () => {
   };
   return (
     <Container>
-      <motion.div
-        className='title'
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}>
-        <motion.div className='back-icon' onClick={handleClickBack}>
-          <ArrowLeft />
-        </motion.div>
-      </motion.div>
+     
       <canvas ref={canvasRef} style={{ display: "none" }} />
       <div className="content">
         <CamScreen {...camScreenProp} />
@@ -392,7 +434,7 @@ export const CamChat = () => {
         <CloseButton onClick={() => setDisplayDebug(false)}>
           ⛌
         </CloseButton>
-        <div>
+        <div className="debug-content">
           <DebugItem>
             <div>Phase:</div>
             <p>{phase}</p>
@@ -401,12 +443,14 @@ export const CamChat = () => {
             <div>Transcript:</div>
             <p>{transcription || "--"}</p>
           </DebugItem>
-          <DebugItem>
+          <DebugImg >
             <div>Captures:</div>
             <img alt="Grid" src={imagesGridUrl || transparentPixel} />
-          </DebugItem>
+          </DebugImg>
         </div>
       </DebugContainer>
     </Container>
   );
 };
+
+export default CamChat

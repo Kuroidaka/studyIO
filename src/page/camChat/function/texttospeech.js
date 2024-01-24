@@ -1,12 +1,11 @@
-// import OpenAI from "openai";
+import OpenAI from "openai";
 import axios from 'axios';
 
-export const textToSpeech = async({formData}) => {
 
-  const input = formData.get("input");
+const ellTTS = async({input}) => {
 
-  const API_KEY = "99797dd516a8b062ec2566218723b917";
-  const VOICE_ID = 'm1jIBSEarJzEVnddD9tW';
+  const API_KEY = import.meta.env.VITE_ELL_API_KEY;
+  const VOICE_ID = import.meta.env.VITE_ELL_VOICE_ID;
 
   const options = {
     method: 'POST',
@@ -30,43 +29,55 @@ export const textToSpeech = async({formData}) => {
     // Create a URL for the blob object
     const url = URL.createObjectURL(blob);
   // Return the binary audio data received from the API response.
-  return { blobURL: url };
+  return { url: url };
 
 }
-// export const textToSpeech = async({formData}) => {
 
-//   const input = formData.get("input");
+const openAiTTS = async({input}) => {
 
-//   if (!import.meta.env.VITE_OPENAI_API_KEY) {
-//     return Response.json({
-//       error: "No API key provided.",
-//     });
-//   }
+  if (!import.meta.env.VITE_OPENAI_API_KEY) {
+    return Response.json({
+      error: "No API key provided.",
+    });
+  }
 
-//   const openai = new OpenAI({
-//     apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-//     dangerouslyAllowBrowser: true
-//   });
+  const openai = new OpenAI({
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+    dangerouslyAllowBrowser: true
+  });
 
-//   const mp3 = await openai.audio.speech.create({
-//     model: "tts-1",
-//     voice: "nova",
-//     input,
-//     speed: 1.1,
-//     response_format: "opus",
-//   });
+  const mp3 = await openai.audio.speech.create({
+    model: "tts-1",
+    voice: "nova",
+    input,
+    speed: 1.1,
+    response_format: "opus",
+  });
 
-//  // Fetching the audio data as an ArrayBuffer
-//  const arrayBuffer = await mp3.arrayBuffer();
+ // Fetching the audio data as an ArrayBuffer
+ const arrayBuffer = await mp3.arrayBuffer();
 
-//  // Converting ArrayBuffer to Blob
-//  const blob = new Blob([arrayBuffer], { type: "audio/mpeg" });
+ // Converting ArrayBuffer to Blob
+ const blob = new Blob([arrayBuffer], { type: "audio/mpeg" });
 
-//  // Creating a blob URL from the blob
-//  const blobURL = URL.createObjectURL(blob);
+ // Creating a blob URL from the blob
+ const blobURL = URL.createObjectURL(blob);
 
-//  console.log("blobURL", blobURL)
+ console.log("blobURL", blobURL)
 
-//  // Returning the Blob URL directly to the client
-//  return { blobURL }
-// }
+ // Returning the Blob URL directly to the client
+ return { url: blobURL }
+}
+
+export const textToSpeech = async({formData}) => {
+
+  const input = formData.get("input");
+
+  const { url } = await Promise.any([
+    ellTTS({input}),
+    openAiTTS({input})
+  ])
+
+  return { blobURL: url };
+}
+
