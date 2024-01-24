@@ -22,6 +22,7 @@
     "dompurify": "^3.0.8",
     "elevenlabs-node": "^2.0.3",
     "framer-motion": "^10.18.0",
+    "franc": "^6.2.0",
     "github-markdown-css": "^5.5.0",
     "html-react-parser": "^5.1.0",
     "marked": "^11.1.1",

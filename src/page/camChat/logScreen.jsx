@@ -1,5 +1,7 @@
 import styled from 'styled-components'
+
 import Typing from '../../component/Typing'
+import EmptyBox from '../chat/chatbox/EmptyBox'
 
 const LogScreen = (p) => {
     const {
@@ -12,21 +14,20 @@ const LogScreen = (p) => {
   return (
     <LogScreenContainer>
       <BtnSection>
-        {isStarted ? (
-          <button onClick={voiceRecorder.stop}>Stop session</button>
-        ) : (
-          <button onClick={voiceRecorder.start}>Start session</button>
-        )}
         <DebugBtn onClick={() => setDisplayDebug((prev) => !prev)}>
-          Debug
+          Show Log
         </DebugBtn>
       </BtnSection>
 
       <AiResponseContainer>
-        <div className="ai-text">
-          {isWaiting && <Typing who="Bot" text="is thinking..." />}
-          <p>{botText}</p>
-        </div>
+      <div className="ai-text">
+      {isWaiting &&
+        <Typing who="Bot" text="is thinking..." /> 
+      }
+      {botText.length === 0 && !isWaiting && isStarted && <EmptyBox />}
+        <p>{botText}</p> 
+      </div>
+
       </AiResponseContainer>
     </LogScreenContainer>
   )
@@ -42,16 +43,22 @@ const LogScreenContainer = styled.div`
 
 
 const DebugBtn = styled.button`
-    padding: 0.5rem 1rem;
-    background-color: #4A5568;
-    border-radius: 0.375rem;
-    opacity: ${props => props.disabled ? '0.5' : '1'};
+padding: 0.5rem 1rem;
+  background-color: #4A5568;
+  border-radius: 0.375rem;
+  opacity: 1;
+  border: none;
+  color: white;
+  height: 45px;
+  cursor: pointer;
+  opacity: ${props => props.disabled ? '0.5' : '1'};
 `;
 
 const AiResponseContainer = styled.div `
   height: 100%;
   display: flex;
   align-items: center;
+  flex-direction: column;
   width: 100%;
   justify-content: center;
 
@@ -73,5 +80,8 @@ const AiResponseContainer = styled.div `
 `
 
 const BtnSection = styled.div `
-
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 8%;
 `

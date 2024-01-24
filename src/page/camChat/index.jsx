@@ -1,37 +1,9 @@
 import mergeImages from "merge-images";
-import { Mic } from 'react-feather';
+// import { Mic } from 'react-feather';
 import styled, { css } from "styled-components";
 
 import common from "./common";
-// import ConversationContext from "../../context/Conversation.context";
-import { CamChat } from './CamChat';
-
-export const callConfig = (isScreenSharing) => {
-  let commonConfig = {
-    INTERVAL: 250,
-    SILENCE_DURATION: 2500,
-    SILENT_THRESHOLD: -30,
-  };
-
-  if (isScreenSharing) {
-    commonConfig = {
-      ...commonConfig,
-      IMAGE_WIDTH: 1080,
-      MAX_SCREENSHOTS: 1,
-      IMAGE_QUALITY: 1,
-      COLUMNS: 1,
-    };
-  } else {
-    commonConfig = {
-      ...commonConfig,
-      IMAGE_WIDTH: 512,
-      MAX_SCREENSHOTS: 60,
-      IMAGE_QUALITY: 0.6,
-      COLUMNS: 4,
-    };
-  }
-  return commonConfig
-};
+// import ConversationContext from "../../context/Conversation.context"
 
 export const transparentPixel =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/2lXzAAAACV0RVh0ZGF0ZTpjcmVhdGU9MjAyMy0xMC0xOFQxNTo0MDozMCswMDowMEfahTAAAAAldEVYdGRhdGU6bW9kaWZ5PTIwMjMtMTAtMThUMTU6NDA6MzArMDA6MDBa8cKfAAAAAElFTkSuQmCC";
@@ -46,9 +18,9 @@ return new Promise((resolve) => {
 
 export const imagesGrid = async ({
     base64Images,
-    columns = callConfig().COLUMNS,
-    gridImageWidth = callConfig().IMAGE_WIDTH,
-    quality = callConfig().IMAGE_QUALITY,
+    columns,
+    gridImageWidth,
+    quality,
 }) => {
     if (!base64Images.length) {
       return transparentPixel;
@@ -79,9 +51,6 @@ export const imagesGrid = async ({
     });
 }
   
-  
-
-export default CamChat;
 
 export const Container = styled.div`
     height: 100%;
@@ -91,8 +60,7 @@ export const Container = styled.div`
     .title {
         display: flex;
         align-items: center;
-        margin-left: 40px;
-        height: 8vh;
+        height: 8%;
         color: #ffffff;
     
         .back-icon {
@@ -119,8 +87,8 @@ export const Container = styled.div`
       justify-content: space-between;
       gap: 10px;
       align-items: center;
-      height: 90%;
-      margin: 0px 27px;
+      height: 100%;
+      margin: 0px 50px;
       width: auto;
 
     }
@@ -140,6 +108,20 @@ export const DebugContainer = styled.div`
     bottom: 0;
     transition: all 0.2s ease-in-out;
     width: 75vw;
+
+    .debug-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        height: 100%;
+        overflow-y: auto;
+        padding: 10px;
+
+        .debug-images {
+          height: 100%;
+        }
+    }
+
     @media (min-width: 640px) {
         width: 33vw;
     }
@@ -161,7 +143,22 @@ export const DebugContainer = styled.div`
   export const DebugItem = styled.div`
     margin-bottom: 2rem;
     div {
-        font-weight: 600;
+      font-weight: 600;
+      opacity: 0.5;
+    }
+    img {
+      object-fit: contain;
+      width: 100%;
+      border: 1px solid #9CA3AF;
+    }
+
+`;
+  export const DebugImg = styled.div`
+    margin-bottom: 2rem;
+    height: 100%;
+
+    div {
+      font-weight: 600;
       opacity: 0.5;
     }
     img {
