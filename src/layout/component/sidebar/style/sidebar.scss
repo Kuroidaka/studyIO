@@ -94,6 +94,7 @@
                             align-items: center;
                             p {
                                 font-size: 13px;
+                                transition: all 0.3s ease-in-out;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
@@ -104,6 +105,9 @@
 
                         &.selected{
                             background-color: var(--selected-color);
+                            .item p {
+                                font-weight: 700;
+                            }
                             .setting{
                                 display: flex;
                             }

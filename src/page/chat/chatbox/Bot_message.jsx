@@ -10,14 +10,60 @@ import utils from '../../../utils';
 import Img from '../../../assets/img'
 import ImageCom from "../../../component/Image";
 import { useEffect,  } from "react";
+import IconCustom from "../../../assets/Icons/svg";
+
+const functionIcon = {
+    "create_reminder": {
+        "icon": "⏱️",
+        "process": "Reminder Creating",
+        "done": "Reminder Created"
+    },
+    "get_current_weather": {
+        "icon": "☁️",
+        "process": "Weather Getting",
+        "done": "Weather"
+    },
+    "browse": {
+        "icon": "🔍",
+        "process": "Google Browsing",
+        "done": "Google Browsed"
+    },
+    "ask_about_document":{
+        "icon": "📁",
+        "process": "Document Finding",
+        "done": "Document Found"
+    },
+    "database_chat":{
+        "icon": "🛢️",
+        "process": "Document Finding",
+        "done": "Document Found"            
+    },
+    "generate_image":{
+        "icon": "🖼️",
+        "process": "Image Generating",
+        "done": "Image Generated"            
+    },
+    "follow_up_image_in_chat":{
+        "icon": "👁️",
+        "process": "Looking up Image",
+        "done": "Image answered"            
+    },
+    "scrape_website":{
+        "icon": "🔗",
+        "process": "Website Scraping",
+        "done": "Website Scraped"            
+    },
+
+}
 
 const BotMsg = (p) => {
-    const { text, className } = p
+    const { text, className, functionList } = p
     const { imgPlaceHolder } = Img
 
     const { checkIsImgLink } = utils
 
 
+    
 
     const scrollToBottom = () => {
         // pageRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
@@ -25,7 +71,16 @@ const BotMsg = (p) => {
         div.scrollTop = div.scrollHeight - div.clientHeight + 1000;
     };
 
-    useEffect(scrollToBottom, [text]);
+    useEffect(scrollToBottom, [text, functionList]);
+
+    const convertDataFuncList = (data) => {
+        // check if the data is a string then json parse it else return the data
+        if (typeof data === 'string' || data instanceof String) {
+            return JSON.parse(data)
+        } else {
+            return data
+        } 
+    }
 
     return ( 
     <Container className={`chat-msg bot-chat ${className}`} >
@@ -36,20 +91,20 @@ const BotMsg = (p) => {
         </div>
         <div className="chat-content">
             <p className='chat-person'>{"StudyIO"}</p>
+            {functionList && convertDataFuncList(functionList).length > 0 && 
+                convertDataFuncList(functionList).map((agent, index) => (
+                <FunctionAgent key={index} agent={agent}/>
+            ))
+            }
+           {text &&
             <div className="bot-text-wrapper">
-            { 
+            {
                 checkIsImgLink(text) ? (
                     <div className='bot-text'>
                         <ImageCom 
                             src={text}
                             imgPlaceHolder={imgPlaceHolder} 
-                            // imgsize={
-                            //     imgList.length === 1 ? 
-                            //     '423px' :
-                            //     imgList.length === 2 ?
-                            //     '250px' :
-                            //     '171px'
-                            // }
+                            imgsize={'423px' }
                         />
                     </div>
                 ) : (
@@ -80,12 +135,33 @@ const BotMsg = (p) => {
                     </div>
                 )
             }
-            </div>
+            </div>}
+
         </div>
     </Container>   
      );
 }
  
+const FunctionAgent = (p) => {
+    const { agent } = p
+    return (
+        <div className="bot-text-wrapper function-agent">
+            <div className='bot-text'>
+                <div className="function">
+                    <div className="function-title">
+                        <IconCustom.task></IconCustom.task>
+                        Task Added:
+                    </div>
+                    <div className="function-name">
+                        <div className="icon">{functionIcon[agent].icon}</div>
+                        <div className="text">{functionIcon[agent].done}</div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    )
+}
+
 export default BotMsg;
 
 const Container = styled.div`
@@ -123,11 +199,12 @@ const Container = styled.div`
         .bot-text-wrapper{
             padding: 10px;
             border-radius: 10px;
-            background: #151515;
+            background: #666666;
             display: flex;
             align-items: center;
             justify-content: center;
             .bot-text {
+                overflow-x: scroll;
                 width:100%;
                 pre {
                     overflow-x: scroll;
@@ -162,6 +239,50 @@ const Container = styled.div`
                     }
     
                 } 
+
+
+            }
+
+            & + .bot-text-wrapper  {
+                margin-top: 10px;
+            
+            }
+
+            &.function-agent {
+                width: fit-content;
+                background-color: #434343;
+                padding: 5px 10px;
+                .function {
+                    display: flex;
+                    .function-title {
+                        font-weight: 800;
+                        gap: 6px;
+                        display: flex;
+                        align-items: center;
+                        font-size: 13px;
+
+                        svg {
+                            &.task {
+                                rotate: -45deg;
+                            }
+                        }
+                    }
+
+                    .function-name {
+                        display: flex;
+                        align-items: center;
+                        margin-left: 10px;
+                        font-weight: 800;
+                        .icon {
+                            font-size: 13px;
+                            margin-right: 5px;
+                        }
+                        .text {
+                            font-size: 13px;
+                        
+                        }
+                    }
+                }
             }
         }
     }

@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
 import { nanoid } from 'nanoid'
-import { parse } from 'best-effort-json-parser'
-
 
 import '../style/index.scss'
 import DocsUploaded from "./Docs";
@@ -14,7 +12,7 @@ import utils from "../../../utils"
 
 const InputBox = () => {
 
-    const { updatedCon, updateConUser, selectedCon, setCurrentMsgList, currentMsgList } = useContext(ConversationContext);
+    const { updatedCon, updateConUser, selectedCon, setCurrentMsgList } = useContext(ConversationContext);
     const { filesDocs, setFilesDocs, delFile, isLoadingFile, uploadFile } = useContext(FileContext);
     const [loadingFileList, setLoadingFileList] = useState([]);
     // file image for upload at the input box
@@ -158,35 +156,34 @@ const InputBox = () => {
             maxToken: 2000
         }
 
-        const updateStreamText = ({text}) => {//update stream text
-                   
-            const newCurrentMsgList = [...currentMsgList, newTempMsg ]
-
-            let updatedMsgList = [...newCurrentMsgList];
-
-            // Find the index of the object you want to update
-            let index = updatedMsgList.findIndex(msg => msg.id === 'temp-id-2');
-
-            // If the object doesn't exist in the state, create it
-            if (index === -1) {
-                updatedMsgList.push({
-                "id": "temp-id-2",
-                "createdAt": new Date().toISOString(),
-                "updatedAt": new Date().toISOString(),
-                "text": text, // Join the chunk list into a string
-                "sender": "bot",
-                "senderID": "-2",
-                "conversationId": selectedCon.id,
-                });
-            }
-            // If the object does exist, update it
-            else {
-                // Update the 'text' key of the object
-                updatedMsgList[index].text = text;
-            }
-
-            // Update the state
-            setCurrentMsgList(updatedMsgList);
+        const updateStreamText = ({text}) => {
+            setCurrentMsgList(prev => {
+                let updatedMsgList = [...prev];
+        
+                // Find the index of the object you want to update
+                let index = updatedMsgList.findIndex(msg => msg.id === 'temp-id-2');
+        
+                // If the object doesn't exist in the state, create it
+                if (index === -1) {
+                    updatedMsgList.push({
+                        "id": "temp-id-2",
+                        "createdAt": new Date().toISOString(),
+                        "updatedAt": new Date().toISOString(),
+                        "text": text,
+                        "sender": "bot",
+                        "senderID": "-2",
+                        "conversationId": selectedCon.id,
+                    });
+                }
+                // If the object does exist, update it
+                else {
+                    // Update the 'text' key of the object
+                    updatedMsgList[index].text = text;
+                }
+        
+                // Return the updated state
+                return updatedMsgList;
+            });
         }
         const updateFinalData = ({data}) => {//update final data from server
             updatedCon({ 
@@ -201,13 +198,43 @@ const InputBox = () => {
                 enableSend()
             }
         }
+        const updateStreamFunc = ({func}) => {//update stream function
+            setCurrentMsgList(prev => {
+                let updatedMsgList = [...prev];
+        
+                // Find the index of the object you want to update
+                let index = updatedMsgList.findIndex(msg => msg.id === 'temp-id-2');
+        
+                // If the object doesn't exist in the state, create it
+                if (index === -1) {
+                    updatedMsgList.push({
+                        "id": "temp-id-2",
+                        "createdAt": new Date().toISOString(),
+                        "updatedAt": new Date().toISOString(),
+                        "sender": "bot",
+                        "senderID": "-2",
+                        "conversationId": selectedCon.id,
+                        "functionList": [func.name]
+                    });
+                }
+                // If the object does exist, update it
+                else {
+                    // Update the new 'func' key into the 'functionList'
+                    updatedMsgList[index].functionList.push(func.name);
+                }
+        
+                // Return the updated state
+                return updatedMsgList;
+            });
+        }
 
         await conversationApi.createChatStream(
             data,
             {
                 updateFinalData,//update final data from server
                 updateStreamText,//update stream text
-                enableSend //enable send button after send
+                enableSend, //enable send button after send
+                updateStreamFunc
             }
         )       
 

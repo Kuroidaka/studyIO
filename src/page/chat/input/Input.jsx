@@ -18,6 +18,7 @@ const Input = (p) => {
     const handleSendButtonClick = () => {
         if(inputValue !== '') {
             if (!isWaiting.isWait) {
+                setInputValue('');
                 setIsWaiting({
                     isWait:true, 
                     conId: selectedCon.id
@@ -28,7 +29,6 @@ const Input = (p) => {
                         conId: ""
                     });
                 });
-                setInputValue('');
             }
         }
         // setFiles([]);
@@ -101,7 +101,8 @@ const Input = (p) => {
                     value={inputValue}
                     onChange={handleInputChange}
                     onKeyDown={handleEnterKeyPress}
-                />
+                >
+                </textarea>
                 {(isWaiting.isWait && selectedCon.id === isWaiting.conId)  ? (
                     <></>
                 ) : (
