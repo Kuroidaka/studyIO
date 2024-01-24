@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react'
 import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
-import { Mic, MicOff, Video, VideoOff, Monitor, ArrowLeft } from 'react-feather'
+import { Mic, MicOff, Video, VideoOff, Monitor, ArrowLeft, Phone } from 'react-feather'
 import { useNavigate } from "react-router-dom";
 
 import conversationApi from "../../api/conversation";
@@ -119,6 +119,10 @@ const CamScreen = (p) => {
                 <Monitor />
             </BtnWrapper>
             )}
+
+            <BtnWrapper onClick={handleClickBack} className="phone-off" >
+                <Phone />
+            </BtnWrapper>
           </ActionContainer>
         </VideoContainer>
   </VideoSection>
@@ -220,7 +224,7 @@ const RecordDot = styled.div`
 
 const ActionContainer = styled.div`
     width: 100%;
-    height: 70px;
+    height: 100px;
     position: absolute;
     display: flex;
     gap: 16px;
@@ -256,6 +260,15 @@ const BtnWrapper = styled.div`
         background-color: #3b82f6;
         &:hover {
             background-color: #2563eb; 
+        }
+    }
+
+    &.phone-off {
+        background-color: #EA4335;
+        width: 70px;
+        border-radius: 27px;
+        svg {
+            rotate: 135deg;
         }
     }
 `
