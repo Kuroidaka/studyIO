@@ -1,34 +1,35 @@
 
-import { Fragment, Suspense, useContext, useState } from "react";
 import styled from "styled-components";
+import { Fragment, Suspense, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
 import { ChevronRight, ChevronLeft } from 'react-feather';
 
 import Sidebar from "./component/sidebar/Sidebar";
-import ConversationContext from '../context/Conversation.context';
+// import ConversationContext from '../context/Conversation.context';
 import { ConversationProvider } from "../context/Conversation.context";
 import { FileProvider } from "../context/File.context";
 import Load from "../component/Load";
 
 
-const DefaultLayout = ( p ) => {
-    const { children, sidebar=true } = p
+function DefaultLayout(p) {
+    const { children, sidebar = true } = p;
 
     return (
         <FileProvider>
             <ConversationProvider>
                 <Container>
+                    <ToastContainer />
                     <div className="body">
-                    <Suspense fallback={<LoadingContainer><Load minsize="35px"/></LoadingContainer>}>
-                    {   sidebar ?
-                        <SidebarLayout >{children}</SidebarLayout>
-                        : <Fragment>{children}</Fragment>
-                    }
-                    </Suspense>
+                        <Suspense fallback={<LoadingContainer><Load minsize="35px" /></LoadingContainer>}>
+                            {sidebar ?
+                                <SidebarLayout>{children}</SidebarLayout>
+                                : <Fragment>{children}</Fragment>}
+                        </Suspense>
                     </div>
                 </Container>
             </ConversationProvider>
         </FileProvider>
-    )
+    );
 }
 
 const SidebarLayout = (p) => {

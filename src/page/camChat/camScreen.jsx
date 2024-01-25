@@ -20,7 +20,8 @@ const CamScreen = (p) => {
     screenObject,
     voiceRecorder,
     isStarted,
-    recorder
+    recorder,
+    isBusy
   } = p
 
   
@@ -58,6 +59,17 @@ const CamScreen = (p) => {
     },
   }
 
+  const micFunc = {
+    open: () => {
+      voiceRecorder.start()
+      isBusy.current = false
+    },
+    close: () => {
+      voiceRecorder.stop()
+      isBusy.current = true
+    },
+  }
+
   const handleClickBack = async () => {
     camApi.deleteCamChatStream();
     recorder.stop(video, videoRef);
@@ -91,11 +103,11 @@ const CamScreen = (p) => {
           <ActionContainer>
     
             {isStarted ? (
-                <BtnWrapper onClick={voiceRecorder.stop}>
+                <BtnWrapper onClick={micFunc.close}>
                     <Mic />
                 </BtnWrapper>
             ) : (
-                <BtnWrapper onClick={voiceRecorder.start} className='off'>
+                <BtnWrapper onClick={micFunc.open} className='off'>
                     <MicOff />
                 </BtnWrapper>
             )}

@@ -1,6 +1,7 @@
-import fileApi from "../api/file";
-
 import { createContext, useEffect, useState } from "react";
+import { toast } from 'react-toastify';
+
+import fileApi from "../api/file";
 
 const FileContext = createContext()
 
@@ -38,10 +39,12 @@ export const FileProvider = (p) => {
                 setList(data.data);
                 setIsLoading(false); // Set loading to false when the API call finishes
                 callBack()
+                toast.success('File deleted successfully')
             })
             .catch((error) => {
                 console.error(error);
                 setIsLoading(false); // Also set loading to false if the API call fails
+                toast.error('Delete file failed')
             });
         }
 
@@ -56,13 +59,15 @@ export const FileProvider = (p) => {
                 .then((data) => {
                     console.log(data.data);
                     setIsLoading(false); // Set loading to false when the API call finishes
+                    toast.success('File uploaded successfully')
                 })
                 .catch((error) => {
                     console.error(error);
                     setIsLoading(false); // Also set loading to false if the API call fails
+                    toast.error('file upload failed')
                 });
             }
-    
+            
             uploadDB(formData) 
     }
 

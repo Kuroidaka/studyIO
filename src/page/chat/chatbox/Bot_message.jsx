@@ -9,7 +9,7 @@ import utils from '../../../utils';
 import Img from '../../../assets/img'
 import IconCustom from "../../../assets/Icons/svg";
 import ImageCom from "../../../component/Image";
-import { useEffect,  } from "react";
+import { useEffect, useState,  } from "react";
 import Logo from "../../../assets/img/Logo";
 import MarkDown from "../../../component/MarkDownChat";
 
@@ -63,7 +63,7 @@ const BotMsg = (p) => {
 
     const { checkIsImgLink } = utils
 
-
+    // const [isScroll, setIsScroll] = useState(false);
     
 
     const scrollToBottom = () => {

@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { routes } from './routes/route';
 import GlobalStyles from './GlobalStyle'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   

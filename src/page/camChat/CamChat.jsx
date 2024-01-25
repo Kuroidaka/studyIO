@@ -13,7 +13,7 @@ import camApi from "../../api/camConversation";
 import { imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel, DebugImg } from '.';
 
 
-const INTERVAL = 250
+const INTERVAL = 1000
 const SILENCE_DURATION = 2500
 const SILENT_THRESHOLD = -30
 
@@ -23,9 +23,9 @@ const SCREEN_IMAGE_QUALITY = 1
 const SCREEN_COLUMNS = 1
 
 const IMAGE_WIDTH = 1080
-const MAX_SCREENSHOTS = 10
+const MAX_SCREENSHOTS = 30
 const IMAGE_QUALITY = 1
-const COLUMNS = 3
+const COLUMNS = 4
 
 
 const CamChat = () => {
@@ -155,10 +155,16 @@ const CamChat = () => {
 
           await playAudio(blobURL);
 
-          // continue recording
-          audio.startRecording();
-          isBusy.current = false;
-          setPhase("user: waiting for speech");
+          if(isStarted) {
+            // continue recording
+            audio.startRecording();
+            setPhase("user: waiting for speech");
+            isBusy.current = true;
+          }
+          else {
+            setPhase("user: mic is muted");
+            isBusy.current = false;
+          }
         }
       }
       else { // continue recording
@@ -425,7 +431,8 @@ const CamChat = () => {
     screenObject,
     voiceRecorder,
     isStarted,
-    recorder
+    recorder,
+    isBusy
   };
 
   const logScreenProp = {

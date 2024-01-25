@@ -18,6 +18,7 @@ const Input = (p) => {
     const handleSendButtonClick = () => {
         if(inputValue !== '') {
             if (!isWaiting.isWait) {
+
                 setInputValue('');
                 setIsWaiting({
                     isWait:true, 
@@ -29,6 +30,7 @@ const Input = (p) => {
                         conId: ""
                     });
                 });
+                setInputValue('');
             }
         }
         // setFiles([]);

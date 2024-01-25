@@ -97,7 +97,7 @@ export const Container = styled.div`
 
 
 export const DebugContainer = styled.div`
-
+    z-index: 100000;
     background: rgba(20,20,20,0.8);
     backdrop-filter: blur(10px);
     padding: 8px;
