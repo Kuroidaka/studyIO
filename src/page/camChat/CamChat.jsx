@@ -6,8 +6,8 @@ import useSilenceAwareRecorder from "silence-aware-recorder/react";
 
 import func from "./function";
 import utils from "../../utils/index";
-import CamScreen from './camScreen';
-import LogScreen from './logScreen';
+import CamScreen from './CamScreen';
+import LogScreen from './LogScr';
 import conversationApi from "../../api/conversation";
 import camApi from "../../api/camConversation";
 import { imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel, DebugImg } from '.';

@@ -1,11 +1,5 @@
 import styled from 'styled-components'
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
-
-
 import Typing from '../../component/Typing'
 import EmptyBox from '../chat/chatbox/EmptyBox'
 import MarkDown from '../../component/MarkDownChat';
