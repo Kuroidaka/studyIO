@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { Mic, MicOff, Video, VideoOff, Monitor, ArrowLeft, Phone } from 'react-feather'
 import { useNavigate } from "react-router-dom";
 
-import conversationApi from "../../api/conversation";
+import camApi from "../../api/camConversation";
 
 const CamScreen = (p) => {
   const {
@@ -59,7 +59,7 @@ const CamScreen = (p) => {
   }
 
   const handleClickBack = async () => {
-    conversationApi.deleteCamChatStream();
+    camApi.deleteCamChatStream();
     recorder.stop(video, videoRef);
     recorder.stop(screenObject, screenRef);
     await navigate("/chat");

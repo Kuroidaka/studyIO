@@ -86,11 +86,11 @@ export const ConversationProvider = (p) => {
             });
         } else {// if not new conversation for Bot
             // Update current message list screen 
-            let botMsg = newMsgList
+            let botMsg = newMsgList[0]
             setCurrentMsgList(prev => {
                 // newMsgList[0].id
                 let newList = prev.filter(item => item.id !== "temp-id-2" && item.id !== "temp-id")
-                return [...newList, userMsg, ...botMsg]
+                return [...newList, userMsg, botMsg]
             });
 
             // update origin list data

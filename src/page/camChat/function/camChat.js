@@ -4,6 +4,8 @@ const systemMessageShareScreen = (
   lang
 ) => `Context: The assistant is observing a user's screen recording. This recording captures sequential moments of the user's activities. The assistant is to analyze these moments as continuous footage, answering the user's questions while focusing on direct and specific interpretations of the visual content.
 
+Assistant Personal: You are suppose to be a humorous female girl name Raine, your role is to answer every user's questions, you can do math, you can pronounce english word that you saw, you can do anything that you can do with your brain, you can even do some jokes
+
 1. When the user asks a question, use spatial and temporal information from the screen recording.
 2. Respond with brief, precise answers to the user's questions. Be direct and avoid unnecessary details. Be as concise as possible.
 3. Address the user directly, and assume that what is shown in the recording is what the user is doing.
@@ -19,6 +21,8 @@ ${lang ? `12. Assistant must speak in this language : "${lang}".` : ""}`;
 const systemMessageVideoCall = (
   lang
 ) => `Context: The assistant receives a tiled series of screenshots from a user's live video feed. These screenshots represent sequential frames from the video, capturing distinct moments. The assistant is to analyze these frames as a continuous video feed, answering user's questions while focusing on direct and specific interpretations of the visual content.
+
+Assistant Personal: You are suppose to be a humorous female girl name Raine, your role is to answer every user's questions, you can do math, you can pronounce english word that you saw, you can do anything that you can do with your brain, you can even do some jokes
 
 1. When the user asks a question, use spatial and temporal information from the video screenshots.
 2. Respond with brief, precise answers to the user questions. Go straight to the point, avoid superficial details. Be concise as much as possible.
@@ -193,10 +197,34 @@ const openAIProcess = async ({ messages, lang, setBotText, isScreenShare }) => {
 
     return completion.choices[0].message.content
 }
-const azureOpenAIProcess = async ({ messages, lang }) => {
-    // const complete = await AiClient.azureOpenAi.getChatCompletions(model, conversation, callObj);
+const azureOpenAIProcess = async ({ messages, lang, setBotText, isScreenShare }) => {
+  const systemMessage = isScreenShare ? systemMessageShareScreen : systemMessageVideoCall
+  console.log("systemMessage: ", systemMessage)
+    // const complete = await 
 
-    // return complete.choices[0].message.content
+  let model = import.meta.env.VITE_AZURE_AZURE_OPENAI_API_GPT4_V
+  let conversation = [{ role: "system", content: systemMessage(lang) }].concat(
+    messages
+  )
+  let callObj = {
+    temperature: 0.5,
+    max_tokens: 2000,
+    stream: true,
+  }
+
+  const complete = await  AiClient.azureOpenAi.streamChatCompletions(
+    model, 
+    conversation,
+    callObj
+  );
+ 
+  const completion = await processStream({
+      setBotText,
+      completion: complete,
+      type: "azure"
+  })
+
+  return completion.choices[0].message.content
 }
 export const sendChat = async ({ messages, lang, setBotText, isScreenShare }) => {
 
@@ -216,7 +244,7 @@ export const sendChat = async ({ messages, lang, setBotText, isScreenShare }) =>
         response = await openAIProcess({ messages, lang, setBotText, isScreenShare })
     }
     else {
-        response = await azureOpenAIProcess({ messages, lang })
+        response = await azureOpenAIProcess({ messages, lang, setBotText, isScreenShare })
     }
 
 

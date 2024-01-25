@@ -191,10 +191,6 @@ const conversationApi = {
             }
         }
         return { content: contentFull }
-    },
-    deleteCamChatStream: async () => {
-        const url = `/studyio/cam/delete`;
-        return axiosClient.post(url)
     }
 }
 

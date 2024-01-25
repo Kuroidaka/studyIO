@@ -3,12 +3,15 @@ import useMediaRecorder from "@wmik/use-media-recorder";
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import useSilenceAwareRecorder from "silence-aware-recorder/react";
+
 import func from "./function";
-import conversationApi from "../../api/conversation";
 import utils from "../../utils/index";
 import CamScreen from './camScreen';
 import LogScreen from './logScreen';
+import conversationApi from "../../api/conversation";
+import camApi from "../../api/camConversation";
 import { imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel, DebugImg } from '.';
+
 
 const INTERVAL = 250
 const SILENCE_DURATION = 2500
@@ -200,24 +203,36 @@ const CamChat = () => {
   //   };
   // };
   const handleSendClient = async ({ inputValue, uploadUrl, turnOffWait }) => {
+
+    // Retrieve data conversation
+    const { data } = await camApi.getConversation()
+    // Append new message into conversation
+
+    const content = [
+      { type: "text", text: inputValue },
+      {
+        type: "image_url",
+        image_url: {
+          "url": uploadUrl,
+        },
+      },
+    ]
     const messages = [
+      ...data.data,
       {
         role: "user",
-        content: [
-          { type: "text", text: inputValue },
-          {
-            type: "image_url",
-            image_url: {
-              "url": uploadUrl,
-            },
-          },
-        ],
-      },
+        content: content
+      }
     ];
 
+    console.log("messages", messages)
+    // API CHAT
     const result = await func.sendChat({ messages, lang, setBotText, isScreenShare:isScreenShare.current });
     console.log("final response: ", result.data);
     await turnOffWait();
+    
+    await camApi.storeConversation({prompt: content})
+    // store conversation
     return {
       content: result.data
     };

@@ -35,7 +35,7 @@ const functionIcon = {
     },
     "database_chat":{
         "icon": "🛢️",
-        "process": "Document Finding",
+        "process": "Database Chatting",
         "done": "Document Found"            
     },
     "generate_image":{

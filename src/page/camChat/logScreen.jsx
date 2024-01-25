@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+
 import Typing from '../../component/Typing'
 import EmptyBox from '../chat/chatbox/EmptyBox'
 
@@ -11,6 +17,7 @@ const LogScreen = (p) => {
         botText,
         setDisplayDebug,
     } = p
+    
   return (
     <LogScreenContainer>
       <BtnSection>
@@ -25,7 +32,31 @@ const LogScreen = (p) => {
         <Typing who="Bot" text="is thinking..." /> 
       }
       {botText.length === 0 && !isWaiting && isStarted && <EmptyBox />}
-        <p>{botText}</p> 
+        <AiResponse>
+          <ReactMarkdown
+            // eslint-disable-next-line react/no-children-prop
+            children={botText}
+            remarkPlugins={[remarkGfm]}
+            components={{
+                code({ inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                return !inline && match ? (
+                    <SyntaxHighlighter
+                    style={dracula} // theme
+                    // eslint-disable-next-line react/no-children-prop
+                    children={String(children).replace(/\n$/, "")}
+                    language={match[1]}
+                    {...props}
+                    />
+                ) : (
+                    <code className={className} {...props}>
+                    {children}
+                    </code>
+                );
+                },
+            }}
+            />
+        </AiResponse>
       </div>
 
       </AiResponseContainer>
@@ -84,4 +115,12 @@ const BtnSection = styled.div `
   align-items: center;
   justify-content: flex-end;
   height: 8%;
+`
+
+const AiResponse = styled.div `
+  width: 100%;
+  background: #5a5959;
+  padding: 10px;
+  border-radius: 12px;
+
 `
