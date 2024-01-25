@@ -32,14 +32,14 @@ const CamScreen = (p) => {
 
   const cam = {
     open: () => {
-        const video = document.querySelector('.video')
-        video.style.display = 'block'
+        const videoElm = document.querySelector('.video')
+        videoElm.style.display = 'block'
         setIsOpenCamBtn(true)
         videoRecorder.start(video, videoRef)
     },
     close: () => {
-        const video = document.querySelector('.video')
-        video.style.display = 'none'
+        const videoElm = document.querySelector('.video')
+        videoElm.style.display = 'none'
         setIsOpenCamBtn(false)
         videoRecorder.stop(video, videoRef)
     },

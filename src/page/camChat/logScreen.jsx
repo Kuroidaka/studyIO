@@ -11,8 +11,8 @@ import EmptyBox from '../chat/chatbox/EmptyBox'
 
 const LogScreen = (p) => {
     const {
-        voiceRecorder,
-        isStarted,
+        // voiceRecorder,
+        // isStarted,
         isWaiting,
         botText,
         setDisplayDebug,
@@ -29,10 +29,10 @@ const LogScreen = (p) => {
       <AiResponseContainer>
       <div className="ai-text">
       {isWaiting &&
-        <Typing who="Bot" text="is thinking..." /> 
+        <Typing who="Raine" text="is thinking..." /> 
       }
-      {botText.length === 0 && !isWaiting && isStarted && <EmptyBox />}
         <AiResponse>
+          {botText.length === 0 && !isWaiting && <EmptyBox />}
           <ReactMarkdown
             // eslint-disable-next-line react/no-children-prop
             children={botText}
