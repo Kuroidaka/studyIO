@@ -8,6 +8,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import Img from '../../../assets/img'
 import ImageCom from "../../../component/Image";
 import { useEffect } from "react";
+import MarkDown from "../../../component/MarkDownChat";
 
 const UserMsg = (p) => {
 
@@ -51,29 +52,8 @@ const UserMsg = (p) => {
                         ))}
 
                     </div>}
-                    <ReactMarkdown
-                            // eslint-disable-next-line react/no-children-prop
-                            children={text}
-                            remarkPlugins={[remarkGfm]}
-                            components={{
-                                code({ inline, className, children, ...props }) {
-                                const match = /language-(\w+)/.exec(className || "");
-                                return !inline && match ? (
-                                    <SyntaxHighlighter
-                                    style={dracula} // theme
-                                    // eslint-disable-next-line react/no-children-prop
-                                    children={String(children).replace(/\n$/, "")}
-                                    language={match[1]}
-                                    {...props}
-                                    />
-                                ) : (
-                                    <code className={className} {...props}>
-                                    {children}
-                                    </code>
-                                );
-                                },
-                            }}
-                            />
+                        
+                    <MarkDown text={text}/>
                 </div>
             </div>
         </div>
@@ -92,16 +72,16 @@ const Container = styled.div`
         align-items: center;
         align-self: flex-start;
         .human-icon-wrapper {
-            height: 28px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
 
-            width: 28px;
+            width: 40px;
             border-radius: 50%;
             background-color: #00a5ff;
             .human-icon {
-                width: 15px;
+                width: 25px;
             }
         }
     }

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Tv } from 'react-feather';
 // import DOMPurify from "dompurify";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -8,9 +7,11 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import utils from '../../../utils';
 import Img from '../../../assets/img'
+import IconCustom from "../../../assets/Icons/svg";
 import ImageCom from "../../../component/Image";
 import { useEffect,  } from "react";
-import IconCustom from "../../../assets/Icons/svg";
+import Logo from "../../../assets/img/Logo";
+import MarkDown from "../../../component/MarkDownChat";
 
 const functionIcon = {
     "create_reminder": {
@@ -36,7 +37,7 @@ const functionIcon = {
     "database_chat":{
         "icon": "🛢️",
         "process": "Database Chatting",
-        "done": "Document Found"            
+        "done": "Database Chat"            
     },
     "generate_image":{
         "icon": "🖼️",
@@ -86,11 +87,12 @@ const BotMsg = (p) => {
     <Container className={`chat-msg bot-chat ${className}`} >
         <div className='icon'>
             <div className='bot-icon-wrapper'>
-                <Tv className='bot-icon'/>
+                {/* <IconCustom.logo/> */}
+                <Logo className='bot-icon'></Logo>
             </div>
         </div>
         <div className="chat-content">
-            <p className='chat-person'>{"StudyIO"}</p>
+            <p className='chat-person'>{"Raine"}</p>
             {functionList && convertDataFuncList(functionList).length > 0 && 
                 convertDataFuncList(functionList).map((agent, index) => (
                 <FunctionAgent key={index} agent={agent}/>
@@ -109,29 +111,7 @@ const BotMsg = (p) => {
                     </div>
                 ) : (
                     <div className='bot-text'>
-                        <ReactMarkdown
-                            // eslint-disable-next-line react/no-children-prop
-                            children={text}
-                            remarkPlugins={[remarkGfm]}
-                            components={{
-                                code({ inline, className, children, ...props }) {
-                                const match = /language-(\w+)/.exec(className || "");
-                                return !inline && match ? (
-                                    <SyntaxHighlighter
-                                    style={dracula} // theme
-                                    // eslint-disable-next-line react/no-children-prop
-                                    children={String(children).replace(/\n$/, "")}
-                                    language={match[1]}
-                                    {...props}
-                                    />
-                                ) : (
-                                    <code className={className} {...props}>
-                                    {children}
-                                    </code>
-                                );
-                                },
-                            }}
-                            />
+                        <MarkDown text={text}/>
                     </div>
                 )
             }
@@ -175,16 +155,16 @@ const Container = styled.div`
         align-items: center;
         align-self: flex-start;
         .bot-icon-wrapper {
-            height: 28px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
 
-            width: 28px;
+            width: 40px;
             border-radius: 50%;
-            background-color: #007517c9;
+            background-color: #D4DBFE;
             .bot-icon {
-                width: 15px;
+                width: 30px;
             }
         }
     }

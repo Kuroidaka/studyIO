@@ -8,6 +8,7 @@ import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 import Typing from '../../component/Typing'
 import EmptyBox from '../chat/chatbox/EmptyBox'
+import MarkDown from '../../component/MarkDownChat';
 
 const LogScreen = (p) => {
     const {
@@ -17,7 +18,8 @@ const LogScreen = (p) => {
         botText,
         setDisplayDebug,
     } = p
-    
+  
+
   return (
     <LogScreenContainer>
       <BtnSection>
@@ -33,29 +35,7 @@ const LogScreen = (p) => {
       }
         <AiResponse>
           {botText.length === 0 && !isWaiting && <EmptyBox />}
-          <ReactMarkdown
-            // eslint-disable-next-line react/no-children-prop
-            children={botText}
-            remarkPlugins={[remarkGfm]}
-            components={{
-                code({ inline, className, children, ...props }) {
-                const match = /language-(\w+)/.exec(className || "");
-                return !inline && match ? (
-                    <SyntaxHighlighter
-                    style={dracula} // theme
-                    // eslint-disable-next-line react/no-children-prop
-                    children={String(children).replace(/\n$/, "")}
-                    language={match[1]}
-                    {...props}
-                    />
-                ) : (
-                    <code className={className} {...props}>
-                    {children}
-                    </code>
-                );
-                },
-            }}
-            />
+          <MarkDown text={botText}/>
         </AiResponse>
       </div>
 
@@ -86,22 +66,20 @@ padding: 0.5rem 1rem;
 `;
 
 const AiResponseContainer = styled.div `
-  height: 100%;
+  height: 92%;
   display: flex;
   align-items: center;
   flex-direction: column;
   width: 100%;
   justify-content: center;
+  overflow: scroll;
+  border-radius: 12px;
+
 
   .ai-text {
     color: white;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    
-    overflow: scroll;
+
     p {
       font-weight: 600;
       padding: 10px;

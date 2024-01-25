@@ -1,8 +1,7 @@
 import imgPlaceHolder from './landscape-placeholder.svg'
 
-
 const Img = {
-    imgPlaceHolder
+    imgPlaceHolder,
 }
 
 export default Img
