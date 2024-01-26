@@ -1,4 +1,7 @@
 import axiosClient from "./axiosClient";
+import { config } from "../config";
+
+const { API_BASE_URL } = config
 
 const conversationApi = {
 
@@ -76,7 +79,7 @@ const conversationApi = {
             stream: true
         }
 
-        const url = `http://localhost:8001/api/v1/studyio/create`;
+        const url = `${API_BASE_URL}studyio/create`;
         const params = new URLSearchParams(data).toString();
 
         const response = await fetch(
