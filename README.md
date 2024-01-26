@@ -22,8 +22,11 @@ Models (DALL·E, GPT35TURBO, GPT35TURBO16K, ADA)
 ## Setup
 ### Prerequisites
 - OpenAI API Key
-- Serper API key
-- Browerless API key
+- AZURE OPENAI API Key
+- Serper API Key
+- Browerless API Key
+- Evenlab API Key
+- Evenlab voice ID
 
 If with discord bot:
 - Discord bot token
@@ -58,53 +61,60 @@ brew services start mysql
 ##### On Windows:
 - Download MySQL Installer from the <a href="https://www.mysql.com/downloads/" target="_blank">official MySQL download page</a>.
 - Run the installer and follow the installation instructions.
-6. Create a .env.developement for dev or .env.production for docker in the root folder and add your API keys in the following format:
+6. Create a .env.developement for dev or .env.production in the root folder and add your API keys in the following format:
 ```sh
 NODE_ENV=statging
- 
+
+
 # OPENAI_API
 OPENAI_API_KEY=YOUR_API_KEY
- 
+
 # AZURE OPENAI_API
 AZURE_OPENAI_API_KEY="YOUR_API_KEY"
 AZURE_OPENAI_API_URL="YOUR_API_URL"
 AZURE_OPENAI_API_INSTANCE_NAME="YOUR_INSTANCE_NAME"
 AZURE_OPENAI_API_VERSION="YOUR_VERSION"
- 
+AZURE_OPENAI_API_GPT4_V="Model Name for vision"
+AZURE_OPENAI_API_GPT35="Model Name"
+
 TEMPLATE_GPT=0.5
- 
+
 # WEATHER_API
 WEATHER_ORIGIN_URL="http://api.weatherapi.com/v1"
 WEATHER_API_KEY="YOUR_API_KEY"
- 
+
 # DISCORD_BOT_TOKEN
 DISCORD_BOT_TOKEN="YOUR_BOT_TOKEN"
 OWNER_ID="YOUR_DISOCRD_ID"
 RAINE_ID="Bot_ID"
-CHANNEL_CRON_ID="YOUR_CHANNEL_DISCORD_ID"
- 
+CHANNEL_NOTIFY_ID="YOUR_CHANNEL_NOTIFY_DISCORD_ID"
+CHANNEL_IMG_ID="YOUR_CHANNEL_IMG_DISCORD_ID"
+GUILD_ID="YOUR_DISCORD_GUILD_ID"
+
 SERVER_PORT="YOUR_SERVER_PORT"
 ORIGIN_URL="YOUR_ORIGIN_URL"
- 
+
 REDIS_PORT=6379
 REDIS_URL="YOUR_REDIS_URL"
- 
+
 TRANSLATE_PROMPT="you are suppose to be an translator, your's job is to translate the text into english, with 5 explaination and usage examples of that case in Japanese, and you are a loyal assistant of Raine"
- 
+
 # DATABASE
- 
+
 DATABASE_ID="Your_Database_ID"
 DATABASE_USERNAME="YOUR_DATABASE_USERNAME"
 DATABASE_NAME="YOUR_DATABASE_NAME"
 DATABASE_PASSWORD="YOUR_DATABASE_PASSWORD"
 FORWARD_DB_PORT=3306
 DATABASE_URL="YOUR_DATABASE_URL"
- 
+
+
 # SERPER
 SERPER_API_KEY="YOUR_API_KEY"
- 
+
 # BROWERLESS
 BROWERLESS_API_KEY="YOUR_API_KEY"
+
 
 ```
 
@@ -131,11 +141,30 @@ git clone https://github.com/idaka123/studyIO
 ```sh
 npm install
 ```
-3. Run the project:
+3. setup env file
+```sh
+VITE_OPENAI_API_KEY="sk-...."
+
+
+VITE_AZURE_OPENAI_API_KEY=""
+VITE_AZURE_OPENAI_API_URL=""
+VITE_AZURE_OPENAI_API_INSTANCE_NAME=""
+VITE_AZURE_OPENAI_API_VERSION="2023-07-01-preview"
+VITE_AZURE_AZURE_OPENAI_API_GPT4_V=""
+VITE_AZURE_AZURE_OPENAI_API_GPT35=""
+
+VITE_ELL_API_KEY=""
+VITE_ELL_VOICE_ID=""
+
+
+```
+
+
+4. Run the project:
 ```sh
 npm run dev
 ```
-4. Now when you navigate to http://localhost:5173 you will see web.
+5. Now when you navigate to http://localhost:5173 you will see web.
 
 
 ## Contributing
