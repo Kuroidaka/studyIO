@@ -135,7 +135,7 @@ npm run dev:prod
 #### Front End: React.js + Vite
 1. Clone the repository:
 ```sh
-git clone https://github.com/idaka123/studyIO
+git clone https://github.com/Kuroidaka/studyIO
 ```
 2. Install the dependencies:
 ```sh
