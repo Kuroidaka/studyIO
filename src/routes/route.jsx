@@ -6,7 +6,7 @@ import DefaultLayout from "../layout/index.jsx"
 const ChatPage = lazy(() => import("../page/chat/chat.jsx"));
 const CamChat = lazy(() => import("../page/camChat/CamChat.jsx"));
 
-// import ChatPage from "../page/chat/chat.jsx"
+import Test from "../page/test.jsx"
 // import CamChat from "../page/camChat/index.jsx"
 import paths from "./path"
 
@@ -28,7 +28,13 @@ export const routes = [
         page: <DefaultLayout sidebar={false}><CamChat /></DefaultLayout>,
         path: paths.camChat, 
         exact: true,
-    }
+    },
+    {
+        name: "test",
+        page: <Test />,
+        path: paths.test, 
+        exact: true,
+    },
 
     // {
     //     name: "noPage",

@@ -8,9 +8,9 @@ import func from "./function";
 import utils from "../../utils/index";
 import CamScreen from './CamScreen';
 import LogScreen from './LogScr';
-import conversationApi from "../../api/conversation";
-import camApi from "../../api/camConversation";
+import conversationApiV2 from "../../api/v2/conversation";
 import { imagesGrid, playAudio, Container, DebugContainer, CloseButton, DebugItem, transparentPixel, DebugImg } from '.';
+import { groqSTT } from "./function/speechtotext";
 
 
 const INTERVAL = 1000
@@ -40,7 +40,7 @@ const CamChat = () => {
   const canvasRef = useRef();
 
   const location = useLocation();
-  const { hostImages } = utils;
+  const { hostImages, downloadImageFromBase64 } = utils;
 
   // const { selectedCon, updateConUser } = useContext(ConversationContext);
 
@@ -92,42 +92,18 @@ const CamChat = () => {
 
       const speechtotextFormData = new FormData();
       speechtotextFormData.append("file", data, "audio.webm");
-      speechtotextFormData.append("model", "whisper-1");
-      speechtotextFormData.append("language", lang);
+      // speechtotextFormData.append("language", lang);
 
 
-      const result = await conversationApi.speechToText({
-        formData: speechtotextFormData
-      });
+      const result = await groqSTT(speechtotextFormData);
 
       console.log("transcript", result.text);
       if (result.text.length > 0) {
         setTranscription(result.text);
-        setImagesGridUrl(null);
-        setPhase("user: uploading video captures");
 
-        // gen img grid
-
-        const maxScreenshots = isScreenShare.current ? SCREEN_MAX_SCREENSHOTS : MAX_SCREENSHOTS
-        console.log("MAX_SCREENSHOTS", isScreenShare.current)
-
-        screenshotsRef.current = screenshotsRef.current.slice(
-          -maxScreenshots
-        ); // Keep only the last XXX screenshots
-
-        const imageUrl = await imagesGrid({
-          base64Images: screenshotsRef.current,
-          columns: isScreenShare.current ? SCREEN_COLUMNS : COLUMNS,
-          gridImageWidth: isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH ,
-          quality: isScreenShare.current ? SCREEN_IMAGE_QUALITY : IMAGE_QUALITY,
-        });
-
-        screenshotsRef.current = [];
-
-        const uploadUrls = await hostImages([imageUrl]);
-
-        setImagesGridUrl(imageUrl);
-
+        const uploadUrls = videoRef.current.srcObject !== null ? await videoProcess() : [null]
+        console.log("videoRef.current.srcObject", videoRef.current.srcObject)
+        console.log("uploadUrls", uploadUrls)
         setPhase("user: processing completion");
 
         // send chat
@@ -137,11 +113,11 @@ const CamChat = () => {
         const { content } = await handleSendClient({
           uploadUrl: uploadUrls[0],
           inputValue: result.text,
-          turnOffWait: () => {
-            setIsWaiting(false);
-          }
         });
+        setIsWaiting(false);
+        console.log("content", content)
 
+        return null
         // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
         if (content && typeof content === "string") {
           setPhase("assistant: processing text to speech");
@@ -181,6 +157,36 @@ const CamChat = () => {
 
   }
 
+  const videoProcess = async () => {
+    setImagesGridUrl(null);
+    setPhase("user: uploading video captures");
+
+    // gen img grid
+
+    const maxScreenshots = isScreenShare.current ? SCREEN_MAX_SCREENSHOTS : MAX_SCREENSHOTS
+    console.log("MAX_SCREENSHOTS", isScreenShare.current)
+
+    screenshotsRef.current = screenshotsRef.current.slice(
+      -maxScreenshots
+    ); // Keep only the last XXX screenshots
+
+    const imageUrl = await imagesGrid({
+      base64Images: screenshotsRef.current,
+      columns: isScreenShare.current ? SCREEN_COLUMNS : COLUMNS,
+      gridImageWidth: isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH ,
+      quality: isScreenShare.current ? SCREEN_IMAGE_QUALITY : IMAGE_QUALITY,
+    });
+
+    screenshotsRef.current = [];
+    // downloadImageFromBase64(imageUrl)
+    
+    const uploadUrls = await hostImages([imageUrl]);
+
+    setImagesGridUrl(imageUrl);
+
+    return uploadUrls
+  }
+
   // const handleSend = async ({ inputValue, uploadUrl, turnOffWait }) => {
   //   let newImgList = [{
   //     url: uploadUrl,
@@ -208,36 +214,42 @@ const CamChat = () => {
   //     content: result.content
   //   };
   // };
-  const handleSendClient = async ({ inputValue, uploadUrl, turnOffWait }) => {
+  const handleSendClient = async ({ inputValue, uploadUrl }) => {
 
     // Retrieve data conversation
-    const { data } = await camApi.getConversation()
-    // Append new message into conversation
+    // const { data } = await camApi.getConversation()
+    // // Append new message into conversation
 
-    const content = [
-      { type: "text", text: inputValue },
-      {
-        type: "image_url",
-        image_url: {
-          "url": uploadUrl,
-        },
-      },
-    ]
-    const messages = [
-      ...data.data,
-      {
-        role: "user",
-        content: content
-      }
-    ];
+    // const content = [
+    //   { type: "text", text: inputValue },
+    //   {
+    //     type: "image_url",
+    //     image_url: {
+    //       "url": uploadUrl,
+    //     },
+    //   },
+    // ]
+    // const messages = [
+    //   ...data.data,
+    //   {
+    //     role: "user",
+    //     content: content
+    //   }
+    // ];
 
-    console.log("messages", messages)
-    // API CHAT
-    const result = await func.sendChat({ messages, lang, setBotText, isScreenShare:isScreenShare.current });
-    console.log("final response: ", result.data);
-    await turnOffWait();
+    // console.log("messages", messages)
+    // // API CHAT
+    // const result = await func.sendChat({ messages, lang, setBotText, isScreenShare:isScreenShare.current });
+    // console.log("final response: ", result.data);
+    // await turnOffWait();
     
-    await camApi.storeConversation({prompt: content})
+    // await camApi.storeConversation({prompt: content})
+
+
+    const result = await conversationApiV2.createChat(
+      {inputValue, conversationId:"78f5cfe3-2553-49bc-ac8f-e28e0708d840" ,uploadUrl},
+      false
+    )
     // store conversation
     return {
       content: result.data

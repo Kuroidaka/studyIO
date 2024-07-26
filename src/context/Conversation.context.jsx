@@ -1,4 +1,4 @@
-import conversationApi from "../api/conversation";
+import conversationApi from "../api/v1/conversation";
 
 import { createContext, useEffect, useState } from "react";
 

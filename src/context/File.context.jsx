@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 
-import fileApi from "../api/file";
+import fileApi from "../api/v1/file";
 
 const FileContext = createContext()
 

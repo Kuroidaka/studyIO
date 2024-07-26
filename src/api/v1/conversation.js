@@ -1,5 +1,5 @@
-import axiosClient from "./axiosClient";
-import { config } from "../config";
+import axiosClient from "../axiosClient";
+import { config } from "../../config";
 
 const { API_BASE_URL } = config
 
@@ -18,19 +18,16 @@ const conversationApi = {
         const url = '/studyio/create';
 
         const dataBody = {
+            conversationId: conversationId,
             data: {
-                conversationId: conversationId,
-                from: "StudyIO",
                 messages: {
                     text: text,
                     sender: sender,
-                    senderID: "-1"
+                    senderID: "canh"
                 },
-                maxToken: 2000,
                 isAttachedFile: isAttachedFile,
                 imgFiles: imgFiles
             }
-
         }
         return axiosClient.post(url, dataBody)
     },

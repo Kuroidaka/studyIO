@@ -4,10 +4,10 @@ import { nanoid } from 'nanoid'
 import '../style/index.scss'
 import DocsUploaded from "./Docs";
 import Input from './Input';
-import conversationApi from '../../../api/conversation';
+import conversationApi from '../../../api/v1/conversation';
 import ConversationContext from '../../../context/Conversation.context';
 import FileContext from '../../../context/File.context';
-import fileApi from '../../../api/file';
+import fileApi from '../../../api/v1/file';
 import utils from "../../../utils"
 
 const InputBox = () => {

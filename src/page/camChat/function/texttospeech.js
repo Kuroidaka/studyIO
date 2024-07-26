@@ -69,14 +69,16 @@ const openAiTTS = async({input}) => {
  return { url: blobURL }
 }
 
+
 export const textToSpeech = async({formData}) => {
 
   const input = formData.get("input");
 
-  const { url } = await Promise.any([
-    ellTTS({input}),
-    openAiTTS({input})
-  ])
+  // const { url } = await Promise.any([
+  //   ellTTS({input}),
+  //   openAiTTS({input})
+  // ])
+  const { url } = await openAiTTS({input})
 
   return { blobURL: url };
 }

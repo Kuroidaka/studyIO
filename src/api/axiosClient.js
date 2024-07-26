@@ -1,33 +1,40 @@
 import axios from "axios";
 import { config } from "../config";
 
-
 const axiosClient = axios.create({
-    baseURL: config.API_BASE_URL,
-    headers: {
-        'content-type': 'application/json',
-    }
-})
+  baseURL: config.API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
-axiosClient.interceptors.request.use(async config => {
+// Request interceptor to insert auth token if available
+axiosClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
-  error => {
-    Promise.reject(error)
-})
+  (error) => Promise.reject(error)
+);
 
-axiosClient.interceptors.response.use((res) => {
-    if( res && res.data ){
-        return res
+// Response interceptor
+axiosClient.interceptors.response.use(
+  (response) => {
+    if (response && response.data) {
+      return response;
     }
+    return response;
+  },
+  (error) => {
+    if (error.response?.data) {
+      throw error.response.data;
+    } else {
+      throw { message: "Server Error" };
+    }
+  }
+);
 
-    return res
-}, error => {
-    
-    // throw error
-    console.log(error.response);
-    
-    return error.response
-})
-
-export default axiosClient
+export default axiosClient;

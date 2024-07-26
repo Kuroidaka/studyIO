@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { Mic, MicOff, Video, VideoOff, Monitor, ArrowLeft, Phone } from 'react-feather'
 import { useNavigate } from "react-router-dom";
 
-import camApi from "../../api/camConversation";
+import camApi from "../../api/v1/camConversation";
 
 const CamScreen = (p) => {
   const {
