@@ -6,8 +6,6 @@ import MarkDown from '../../component/MarkDownChat';
 
 const LogScreen = (p) => {
     const {
-        // voiceRecorder,
-        // isStarted,
         isWaiting,
         botText,
         setDisplayDebug,

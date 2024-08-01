@@ -46,13 +46,12 @@ const CamChat = () => {
 
   const [botText, setBotText] = useState("");
   const [displaydebug, setDisplayDebug] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
   const [phase, setPhase] = useState("not inited");
   const [transcription, setTranscription] = useState("");
   const [imagesGridUrl, setImagesGridUrl] = useState(null);
   const [currentVolume, setCurrentVolume] = useState(-50);
   const [volumePercentage, setVolumePercentage] = useState(0);
-  const [lang] = useState("en");
+  // const [lang] = useState("en");
   const [isWaiting, setIsWaiting] = useState(false);
 
   // Define recorder for video
@@ -78,114 +77,7 @@ const CamChat = () => {
     minDecibels: -100,
   });
 
-  async function onSpeech(data) {
-    try {
-      if (isBusy.current) return;
 
-      isBusy.current = true;
-      audio.stopRecording();
-
-      // send audio to whisper
-      setPhase("user: processing speech to text");
-      setIsWaiting(true);
-      setBotText("");
-
-      const speechtotextFormData = new FormData();
-      speechtotextFormData.append("file", data, "audio.webm");
-      // speechtotextFormData.append("language", lang);
-
-
-      const result = await groqSTT(speechtotextFormData);
-
-      console.log("transcript", result.text);
-      if (result.text.length > 0) {
-        setTranscription(result.text);
-
-        const uploadUrls = videoRef.current.srcObject !== null ? await videoProcess() : [null]
-        console.log("videoRef.current.srcObject", videoRef.current.srcObject)
-        console.log("uploadUrls", uploadUrls)
-        setPhase("user: processing completion");
-
-        // send chat
-        // const { content } = await handleSend({ uploadUrl: uploadUrls[0], inputValue: result.text, turnOffWait: () => {
-        //   setIsWaiting(false)
-        // } })
-        const { content } = await handleSendClient({
-          uploadUrl: uploadUrls[0],
-          inputValue: result.text,
-        });
-        setIsWaiting(false);
-        console.log("content", content)
-
-        return null
-        // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
-        if (content && typeof content === "string") {
-          setPhase("assistant: processing text to speech");
-
-          const ttsFormData = new FormData();
-          ttsFormData.append("input", content);
-
-          const { blobURL } = await func.textToSpeech({ formData: ttsFormData });
-
-          setPhase("assistant: playing audio");
-
-          await playAudio(blobURL);
-
-          if(isStarted) {
-            // continue recording
-            audio.startRecording();
-            setPhase("user: waiting for speech");
-            isBusy.current = true;
-          }
-          else {
-            setPhase("user: mic is muted");
-            isBusy.current = false;
-          }
-        }
-      }
-      else { // continue recording
-        isBusy.current = false;
-        audio.startRecording();
-        setPhase("user: waiting for speech");
-      }
-
-    } catch (error) {
-      console.log(error);
-      setIsWaiting(false);
-      setPhase("error occur");
-    }
-
-  }
-
-  const videoProcess = async () => {
-    setImagesGridUrl(null);
-    setPhase("user: uploading video captures");
-
-    // gen img grid
-
-    const maxScreenshots = isScreenShare.current ? SCREEN_MAX_SCREENSHOTS : MAX_SCREENSHOTS
-    console.log("MAX_SCREENSHOTS", isScreenShare.current)
-
-    screenshotsRef.current = screenshotsRef.current.slice(
-      -maxScreenshots
-    ); // Keep only the last XXX screenshots
-
-    const imageUrl = await imagesGrid({
-      base64Images: screenshotsRef.current,
-      columns: isScreenShare.current ? SCREEN_COLUMNS : COLUMNS,
-      gridImageWidth: isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH ,
-      quality: isScreenShare.current ? SCREEN_IMAGE_QUALITY : IMAGE_QUALITY,
-    });
-
-    screenshotsRef.current = [];
-    // downloadImageFromBase64(imageUrl)
-    
-    const uploadUrls = await hostImages([imageUrl]);
-
-    setImagesGridUrl(imageUrl);
-
-    return uploadUrls
-  }
 
   // const handleSend = async ({ inputValue, uploadUrl, turnOffWait }) => {
   //   let newImgList = [{
@@ -215,7 +107,8 @@ const CamChat = () => {
   //   };
   // };
   const handleSendClient = async ({ inputValue, uploadUrl }) => {
-
+    let isVision = false
+    if(uploadUrl) isVision = true
     // Retrieve data conversation
     // const { data } = await camApi.getConversation()
     // // Append new message into conversation
@@ -247,8 +140,9 @@ const CamChat = () => {
 
 
     const result = await conversationApiV2.createChat(
-      {inputValue, conversationId:"78f5cfe3-2553-49bc-ac8f-e28e0708d840" ,uploadUrl},
-      false
+      {inputValue, conversationId:"3cdae64f-b7f9-4326-b94d-3ee34a0af3f5" ,uploadUrl},
+      false,
+      isVision
     )
     // store conversation
     return {
@@ -306,15 +200,112 @@ const CamChat = () => {
       console.log("start: voice");
       audio.startRecording();
       setPhase("user: waiting for speech");
-      setIsStarted(true);
     },
     stop: () => {
       console.log("stop: voice");
       audio.stopRecording();
       setPhase("user: stop meeting");
-      setIsStarted(false);
     },
   };
+
+  async function onSpeech(data) {
+    try {
+      if (isBusy.current) return;
+
+      isBusy.current = true;
+      audio.stopRecording();
+
+      // send audio to whisper
+      setPhase("user: processing speech to text");
+      setIsWaiting(true);
+      setBotText("");
+
+      const speechtotextFormData = new FormData();
+      speechtotextFormData.append("file", data, "audio.webm");
+      // speechtotextFormData.append("language", lang);
+
+
+      const result = await groqSTT(speechtotextFormData);
+
+      console.log("transcript", result.text);
+      if (result.text.length > 0) {
+        setTranscription(result.text);
+
+        const uploadUrls = videoRef.current.srcObject !== null ? await videoProcess() : [null]
+
+        setPhase("user: processing completion");
+
+        // send chat
+        // const { content } = await handleSend({ uploadUrl: uploadUrls[0], inputValue: result.text, turnOffWait: () => {
+        //   setIsWaiting(false)
+        // } })
+        const { content } = await handleSendClient({
+          uploadUrl: uploadUrls[0],
+          inputValue: result.text,
+        });
+        setIsWaiting(false);
+        console.log("content", content)
+
+        // const AIresult = "Sure, boss! To return a blob URL from the blob object, you can use the URL.createObjectURL() method. This method creates a DOMString containing a URL representing the object given in the parameter. Here's your updated code:"
+        if (content && typeof content === "string") {
+          setPhase("assistant: processing text to speech");
+
+          const ttsFormData = new FormData();
+          ttsFormData.append("input", content);
+
+          const { blobURL } = await func.textToSpeech({ formData: ttsFormData });
+
+          setPhase("assistant: playing audio");
+
+          await playAudio(blobURL);
+
+          voiceRecorder.start()
+          isBusy.current = false;
+        }
+      }
+      else { // continue recording
+        isBusy.current = false;
+        voiceRecorder.start();
+      }
+    } catch (error) {
+      console.log(error);
+      setIsWaiting(false);
+      setPhase("error occur");
+
+      // text to speech to announce error
+    }
+
+  }
+
+  const videoProcess = async () => {
+    setImagesGridUrl(null);
+    setPhase("user: uploading video captures");
+
+    // gen img grid
+
+    const maxScreenshots = isScreenShare.current ? SCREEN_MAX_SCREENSHOTS : MAX_SCREENSHOTS
+    console.log("MAX_SCREENSHOTS", isScreenShare.current)
+
+    screenshotsRef.current = screenshotsRef.current.slice(
+      -maxScreenshots
+    ); // Keep only the last XXX screenshots
+
+    const imageUrl = await imagesGrid({
+      base64Images: screenshotsRef.current,
+      columns: isScreenShare.current ? SCREEN_COLUMNS : COLUMNS,
+      gridImageWidth: isScreenShare.current ? SCREEN_IMAGE_WIDTH : IMAGE_WIDTH ,
+      quality: isScreenShare.current ? SCREEN_IMAGE_QUALITY : IMAGE_QUALITY,
+    });
+
+    screenshotsRef.current = [];
+    // downloadImageFromBase64(imageUrl)
+    
+    const uploadUrls = await hostImages([imageUrl]);
+
+    setImagesGridUrl(imageUrl);
+
+    return uploadUrls
+  }
 
   useEffect(() => {
     // start record Video + voice
@@ -442,14 +433,12 @@ const CamChat = () => {
     video,
     screenObject,
     voiceRecorder,
-    isStarted,
     recorder,
     isBusy
   };
 
   const logScreenProp = {
     voiceRecorder,
-    isStarted,
     isWaiting,
     botText,
     setDisplayDebug,

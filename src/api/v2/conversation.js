@@ -2,14 +2,14 @@ import axiosClient from "../axiosClient";
 
 const conversationApiV2 = {
 
-    createChat: async ({inputValue, conversationId, uploadUrl}, isStream) => {
+    createChat: async ({inputValue, conversationId, uploadUrl}, isStream, isVision) => {
         const url = `/brain/chat`;
 
         // Define query parameters
         const params = {
             isStream: isStream,
             isLTMemo: true,
-            isVision: true,
+            isVision: isVision,
         };
 
         // Define data body

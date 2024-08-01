@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
 import { Mic, MicOff, Video, VideoOff, Monitor, ArrowLeft, Phone } from 'react-feather'
@@ -19,17 +19,16 @@ const CamScreen = (p) => {
     video,
     screenObject,
     voiceRecorder,
-    isStarted,
     recorder,
     isBusy
   } = p
-
+  console.log("audio.isRecording", audio.isRecording)
   
   const navigate = useNavigate();
   
   const [isOpenCamBtn, setIsOpenCamBtn] = useState(true)
   const [isScreenBtn, setIsScreenBtn] = useState(false)
-
+  const [isOnMic, setIsOnMic] = useState(false);
 
   const cam = {
     open: () => {
@@ -63,10 +62,12 @@ const CamScreen = (p) => {
     open: () => {
       voiceRecorder.start()
       isBusy.current = false
+      setIsOnMic(true)
     },
     close: () => {
       voiceRecorder.stop()
       isBusy.current = true
+      setIsOnMic(false)
     },
   }
 
@@ -102,7 +103,7 @@ const CamScreen = (p) => {
           </RecordDot>
           <ActionContainer>
     
-            {isStarted ? (
+            {(isOnMic && !isBusy.current) ? (
                 <BtnWrapper onClick={micFunc.close}>
                     <Mic />
                 </BtnWrapper>
