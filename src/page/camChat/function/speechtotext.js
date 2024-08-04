@@ -52,7 +52,7 @@ export const groqSTT = async (formData) => {
         const transcription = await groq.audio.transcriptions.create({
           file,
           model: "whisper-large-v3",
-          // language: lang || undefined,
+          language: "en",
         });
       
         console.log(transcription)

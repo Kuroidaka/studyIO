@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ReactMediaRecorder } from 'react-media-recorder';
-import { groqSTT } from './camChat/function/speechtotext';
+import { groqSTT } from '../camChat/function/speechtotext';
 
-const Test = () => {
+const VoiceTest = () => {
     const [blobUrl, setBlobUrl] = useState(null);
     const [blob, setBlob] = useState(null);
   
@@ -54,4 +54,4 @@ const Test = () => {
     );
   };
   
-  export default Test;
+  export default VoiceTest;

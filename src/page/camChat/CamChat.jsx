@@ -140,7 +140,7 @@ const CamChat = () => {
 
 
     const result = await conversationApiV2.createChat(
-      {inputValue, conversationId:"3cdae64f-b7f9-4326-b94d-3ee34a0af3f5" ,uploadUrl},
+      {inputValue, conversationId:"3cdae64f-b7f9-4326-b94d-3ee34a0af3f5" , base64Data: uploadUrl},
       false,
       isVision
     )
@@ -232,7 +232,6 @@ const CamChat = () => {
         setTranscription(result.text);
 
         const uploadUrls = videoRef.current.srcObject !== null ? await videoProcess() : [null]
-
         setPhase("user: processing completion");
 
         // send chat
@@ -240,7 +239,7 @@ const CamChat = () => {
         //   setIsWaiting(false)
         // } })
         const { content } = await handleSendClient({
-          uploadUrl: uploadUrls[0],
+          uploadUrl: uploadUrls,
           inputValue: result.text,
         });
         setIsWaiting(false);
@@ -300,11 +299,11 @@ const CamChat = () => {
     screenshotsRef.current = [];
     // downloadImageFromBase64(imageUrl)
     
-    const uploadUrls = await hostImages([imageUrl]);
+    // const uploadUrls = await hostImages([imageUrl]);
 
     setImagesGridUrl(imageUrl);
 
-    return uploadUrls
+    return imageUrl
   }
 
   useEffect(() => {

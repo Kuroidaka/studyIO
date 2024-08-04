@@ -2,7 +2,7 @@ import axiosClient from "../axiosClient";
 
 const conversationApiV2 = {
 
-    createChat: async ({inputValue, conversationId, uploadUrl}, isStream, isVision) => {
+    createChat: async ({inputValue, conversationId, base64Data}, isStream, isVision) => {
         const url = `/brain/chat`;
 
         // Define query parameters
@@ -18,9 +18,11 @@ const conversationApiV2 = {
             conversationID: conversationId,
         };
 
-        if (uploadUrl) {
-            dataBody.imgURL = uploadUrl;
+        if (base64Data) {
+            dataBody.base64Data = base64Data;
         }
+
+        console.log("dataBody", {base64Data})
         // Send POST request with query parameters and data body
         return axiosClient.post(url, dataBody, { params });
     },

@@ -6,7 +6,7 @@ import DefaultLayout from "../layout/index.jsx"
 const ChatPage = lazy(() => import("../page/chat/chat.jsx"));
 const CamChat = lazy(() => import("../page/camChat/CamChat.jsx"));
 
-import Test from "../page/test.jsx"
+import Test from "../page/Test/test.jsx"
 // import CamChat from "../page/camChat/index.jsx"
 import paths from "./path"
 

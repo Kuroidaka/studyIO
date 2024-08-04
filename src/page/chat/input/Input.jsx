@@ -2,11 +2,11 @@ import { useState, useEffect, useContext } from "react";
 import {
     Send, File1, Image, Delete, AttachFile
 } from "../../../assets/Icons/index";
-import { motion } from "framer-motion";
+import * as motion from "framer-motion";
 import ConversationContext from "../../../context/Conversation.context";
 import Typing from "../../../component/Typing";
 
-const Input = (p) => {
+const InputCom = (p) => {
     const { filesImages, uploadFileImg, setFilesImages, handleSend } = p;
     const { isWaiting, setIsWaiting, selectedCon } = useContext(ConversationContext);
     const [inputValue, setInputValue] = useState('');
@@ -85,7 +85,7 @@ const Input = (p) => {
             </div>
             <div className="Input_area">
                 <label className="attach-btn-wrapper" htmlFor="img_file-Input">
-                    <motion.span whileHover={{ y: -3 }} ><AttachFile /></motion.span>
+                    <span ><AttachFile /></span>
                     <input
                         type="file"
                         id="img_file-Input"
@@ -127,4 +127,4 @@ const Input = (p) => {
     );
 }
 
-export default Input;
+export default InputCom;

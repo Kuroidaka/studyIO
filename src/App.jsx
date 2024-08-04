@@ -4,7 +4,6 @@ import GlobalStyles from './GlobalStyle'
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  
   return (
     <>
 

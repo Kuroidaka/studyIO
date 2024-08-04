@@ -149,9 +149,12 @@
                     &:hover {
                         .file_name {
                             color: white;
+
+                            & {
+                              background-color: var(--second-color);
+                            }
                         }
 
-                        background-color: var(--second-color);
                     }
                 }
             }
