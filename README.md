@@ -50,7 +50,7 @@ npm install
 brew install redis
 ```
 ##### On Windows:
-- Download Redis from the <a href="https://redis.io/download/" target="_blank">official Redis download page</a>.
+- Download Redis from the link https://github.com/tporadowski/redis/releases.
 - Extract the downloaded file and run redis-server.exe.
 5. Install MySQL:
 ##### On MacOS:
